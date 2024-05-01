@@ -4,4 +4,7 @@ __pycache__
 # Jupyter Notebook
 .ipynb_checkpoints
 
+# MacOS
+.DS_Store
+
 # --- end of file --- #
