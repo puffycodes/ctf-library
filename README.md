@@ -1,4 +1,4 @@
-# A Library Of Tools and Utilities for CTF
+# A Library of Tools and Utilities for CTF
 
 ## Documentation
 
