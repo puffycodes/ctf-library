@@ -24,7 +24,7 @@ class SubstitutionCipher:
         return SubstitutionCipher.SubstitutionCipherKey(plain, cipher)
     
     @staticmethod
-    def caesar_cipher_key(shift=3):
+    def key_for_caesar_cipher(shift=3):
         lower_case_part = string.ascii_lowercase[shift:] + string.ascii_lowercase[:shift]
         upper_case_part = string.ascii_uppercase[shift:] + string.ascii_uppercase[:shift]
         plain = string.ascii_lowercase + string.ascii_uppercase

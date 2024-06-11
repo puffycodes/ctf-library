@@ -50,9 +50,9 @@ class SubstitutionCipherTest(unittest.TestCase):
         return
     
     def test_caesar_cipher_key(self):
-        key = SubstitutionCipher.caesar_cipher_key()
+        key = SubstitutionCipher.key_for_caesar_cipher()
         print(f'key: {key.plain} -> {key.cipher}')
-        key = SubstitutionCipher.caesar_cipher_key(shift=5)
+        key = SubstitutionCipher.key_for_caesar_cipher(shift=5)
         print(f'key: {key.plain} -> {key.cipher}')
         return
     
