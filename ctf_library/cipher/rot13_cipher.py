@@ -2,6 +2,9 @@
 
 class Rot13Cipher:
 
+    def __init__(self):
+        return
+
     def encrypt(self, plain_text: str, shift=13) -> str:
         return self.rot13(plain_text, shift=shift)
     

@@ -49,6 +49,13 @@ class SubstitutionCipherTest(unittest.TestCase):
                 self.check_encrypt_decrypt(cipher, plain_text.lower())
         return
     
+    def test_caesar_cipher_key(self):
+        key = SubstitutionCipher.caesar_cipher_key()
+        print(f'key: {key.plain} -> {key.cipher}')
+        key = SubstitutionCipher.caesar_cipher_key(shift=5)
+        print(f'key: {key.plain} -> {key.cipher}')
+        return
+    
     def create_cipher_from_key(self, key_text, char_set=SubstitutionCipher.both_cases):
         key = SubstitutionCipher.key_from_keyword(key_text, char_set=char_set)
         cipher = SubstitutionCipher(key)
