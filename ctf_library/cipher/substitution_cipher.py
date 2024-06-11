@@ -1,5 +1,10 @@
 # file: substitution_cipher.py
 
+# Caesar Cipher
+# Ref: https://www.sciencedirect.com/topics/computer-science/caesar-cipher
+# Ref: https://en.wikipedia.org/wiki/Caesar_cipher
+# Ref: Online Decoder https://cryptii.com/pipes/caesar-cipher
+
 import string
 
 class SubstitutionCipher:
