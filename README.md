@@ -2,8 +2,10 @@
 
 ## Documentation
 
-[Documentation for CTF Library](docs/index.md)
+1. [Documentation for CTF Library](docs/index.md)
+
+1. [Known Issues in CTF Library](docs/known_issues.md)
 
 ***
 
-*Updated on 1 May 2024*
+*Updated on 12 June 2024*
