@@ -13,6 +13,8 @@ class HillCipherTest(unittest.TestCase):
     key_inv_02 = [[15, 17], [20, 9]]
 
     def test_encryption_01(self):
+        # Test cases from https://en.wikipedia.org/wiki/Hill_cipher
+        
         key_01 = np.array(HillCipherTest.key_01, dtype=np.int64)
         key_01_inv = np.array(HillCipherTest.key_inv_01, dtype=np.int64)
 
