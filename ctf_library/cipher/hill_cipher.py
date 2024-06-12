@@ -1,6 +1,13 @@
 # file: hill_cipher.py
 
+# Hill Cipher
 # Ref: https://en.wikipedia.org/wiki/Hill_cipher
+
+# Matrix Inverse Modulo
+# Ref: https://www.andreaminini.net/math/modular-inverse-of-a-matrix
+# Ref: https://stackoverflow.com/questions/4287721/easiest-way-to-perform-modular-matrix-inversion-with-python
+# Adjugate
+# Ref: https://stackoverflow.com/questions/51010662/getting-the-adjugate-of-matrix-in-python/75566371#75566371
 
 import numpy as np
 
@@ -12,6 +19,7 @@ class HillCipher:
             raise ValueError('key dimensions are not the same')
         self.block_length = key.shape[0]
         self.key = key
+        # TODO: This computation of self.key_inv is incorrect
         self.key_inv = np.linalg.inv(key).astype(np.int64)
         self.modulo = 26
         self.no_match = no_match
