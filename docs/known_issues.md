@@ -1,4 +1,4 @@
-# Known Issues for CTF Library
+# Known Issues in CTF Library
 
 ## Unimplemented Features
 
@@ -13,4 +13,4 @@
 
 ***
 
-*Updated on 12 June 2024*
+*Updated on 13 June 2024*
