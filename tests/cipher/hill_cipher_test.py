@@ -3,6 +3,7 @@
 import unittest
 import numpy as np
 from ctf_library.cipher.hill_cipher import HillCipher
+from ctf_library.math.integer_matrix_math import IntegerMatrixMath
 
 class HillCipherTest(unittest.TestCase):
 
@@ -59,7 +60,7 @@ class HillCipherTest(unittest.TestCase):
     def test_inverse(self):
         key_01 = np.array(HillCipherTest.key_01, dtype=np.int64)
         key_01_inv = np.array(HillCipherTest.key_inv_01, dtype=np.int64)
-        key_01_computed_inv = HillCipher.matrix_modular_inverse(key_01, 26)
+        key_01_computed_inv = IntegerMatrixMath.matrix_modular_inverse(key_01, 26)
         print(key_01)
         print(key_01_inv)
         print(key_01_computed_inv)
@@ -67,7 +68,7 @@ class HillCipherTest(unittest.TestCase):
         print('==========')
         key_02 = np.array(HillCipherTest.key_02, dtype=np.int64)
         key_02_inv = np.array(HillCipherTest.key_inv_02, dtype=np.int64)
-        key_02_computed_inv = HillCipher.matrix_modular_inverse(key_02, 26)
+        key_02_computed_inv = IntegerMatrixMath.matrix_modular_inverse(key_02, 26)
         print(key_02)
         print(key_02_inv)
         print(key_02_computed_inv)
