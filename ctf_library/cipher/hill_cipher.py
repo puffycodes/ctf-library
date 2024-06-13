@@ -35,8 +35,6 @@ class HillCipher:
         self.block_length = key.shape[0]
         self.key = key
         self.modulo = 26
-        # TODO: This computation of self.key_inv is incorrect
-        #self.key_inv = np.linalg.inv(key).astype(np.int64)
         self.key_inv = HillCipher.matrix_modular_inverse(key, self.modulo)
         self.no_match = no_match
         self.pad_value = 0
