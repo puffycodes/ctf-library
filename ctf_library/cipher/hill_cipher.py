@@ -6,6 +6,9 @@
 # Matrix Inverse Modulo
 # Ref: https://www.andreaminini.net/math/modular-inverse-of-a-matrix
 # Ref: https://stackoverflow.com/questions/4287721/easiest-way-to-perform-modular-matrix-inversion-with-python
+# Matrix Inverse and Cofactor
+# Ref: https://www.geeksforgeeks.org/compute-the-inverse-of-a-matrix-using-numpy/
+# Ref: https://www.geeksforgeeks.org/how-to-find-cofactor-of-a-matrix-using-numpy/
 # Adjugate
 # Ref: https://stackoverflow.com/questions/51010662/getting-the-adjugate-of-matrix-in-python/75566371#75566371
 
@@ -13,15 +16,28 @@ import numpy as np
 
 class HillCipher:
     
+    # Ref: https://www.geeksforgeeks.org/how-to-find-cofactor-of-a-matrix-using-numpy/
+    # Ref: https://stackoverflow.com/questions/4287721/easiest-way-to-perform-modular-matrix-inversion-with-python
+    # Ref: https://math.stackexchange.com/questions/2686150/inverse-of-a-modular-matrix
+    @staticmethod
+    def matrix_modular_inverse(matrix, modulo):
+        matrix_cofactor = np.linalg.inv(matrix).transpose() * np.linalg.det(matrix)
+        matrix_adjucate = matrix_cofactor.transpose()
+        # TODO: There is some rounding issue here?
+        matrix_inverse = (matrix_adjucate * pow(int(np.linalg.det(matrix)), -1, modulo)) % modulo
+        # TODO: This function needs to return intergers
+        return matrix_inverse
+    
     # key should be an numpy.array of dimension n x n
     def __init__(self, key, no_match=None):
         if key.shape[0] != key.shape[1]:
             raise ValueError('key dimensions are not the same')
         self.block_length = key.shape[0]
         self.key = key
-        # TODO: This computation of self.key_inv is incorrect
-        self.key_inv = np.linalg.inv(key).astype(np.int64)
         self.modulo = 26
+        # TODO: This computation of self.key_inv is incorrect
+        #self.key_inv = np.linalg.inv(key).astype(np.int64)
+        self.key_inv = HillCipher.matrix_modular_inverse(key, self.modulo)
         self.no_match = no_match
         self.pad_value = 0
         return

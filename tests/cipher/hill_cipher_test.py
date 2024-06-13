@@ -54,15 +54,19 @@ class HillCipherTest(unittest.TestCase):
     def test_inverse(self):
         key_01 = np.array(HillCipherTest.key_01, dtype=np.int64)
         key_01_inv = np.array(HillCipherTest.key_inv_01, dtype=np.int64)
-        key_01_compute_inv = np.linalg.inv(key_01)
-        key_01_det = np.linalg.det(key_01)
-        key_01_zzz = (key_01_compute_inv*key_01_det).astype(np.int64) % 26
+        key_01_computed_inv = HillCipher.matrix_modular_inverse(key_01, 26)
         print(key_01)
         print(key_01_inv)
-        print(key_01_compute_inv)
-        print(key_01_det)
-        print(key_01_zzz)
-        print(key_01 * key_01_zzz)
+        print(key_01_computed_inv)
+        print(key_01_computed_inv - key_01_inv)
+        print('==========')
+        key_02 = np.array(HillCipherTest.key_02, dtype=np.int64)
+        key_02_inv = np.array(HillCipherTest.key_inv_02, dtype=np.int64)
+        key_02_computed_inv = HillCipher.matrix_modular_inverse(key_02, 26)
+        print(key_02)
+        print(key_02_inv)
+        print(key_02_computed_inv)
+        print(key_02_computed_inv - key_02_inv)
         print('==========')
         return
     
