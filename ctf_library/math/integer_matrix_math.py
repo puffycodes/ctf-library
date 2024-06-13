@@ -13,6 +13,16 @@ import numpy as np
 
 class IntegerMatrixMath:
 
+    @staticmethod
+    def matrix_minor(matrix, i, j):
+        top = matrix[:i,:]
+        bottom = matrix[i+1:,:]
+        minor_step_1 = np.concatenate((top, bottom), axis=0)
+        left = minor_step_1[:,:j]
+        right = minor_step_1[:,j+1:]
+        result = np.concatenate((left, right), axis=1)
+        return result
+
     # Ref: https://www.geeksforgeeks.org/how-to-find-cofactor-of-a-matrix-using-numpy/
     # Ref: https://stackoverflow.com/questions/4287721/easiest-way-to-perform-modular-matrix-inversion-with-python
     # Ref: https://math.stackexchange.com/questions/2686150/inverse-of-a-modular-matrix
@@ -26,6 +36,7 @@ class IntegerMatrixMath:
         # TODO: This function needs to return intergers
         return matrix_inverse
     
+    # Ref: https://stackoverflow.com/questions/6527641/speed-up-python-code-for-computing-matrix-cofactors
     @staticmethod
     def cofactor(matrix):
         det = np.linalg.det(matrix)
