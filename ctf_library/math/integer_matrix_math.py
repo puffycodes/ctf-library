@@ -54,8 +54,7 @@ class IntegerMatrixMath:
     # (TODO: Do those check? Or just catch ValueError?)
     # Modular inverse does not exist if
     #   (a) determinant is zero
-    #   (b) determinant is negative.
-    #   (c) determinant and module are not co-prime.
+    #   (b) determinant and module are not co-prime.
     @staticmethod
     def matrix_modular_inverse(matrix, modulo):
         matrix_cofactor = IntegerMatrixMath.matrix_cofactor(matrix)
