@@ -1,11 +1,15 @@
 # file: integer_matrix_math.py
 
-# Matrix Inverse Modulo
+# Matrix Modular Inverse
 # Ref: https://www.andreaminini.net/math/modular-inverse-of-a-matrix
 # Ref: https://stackoverflow.com/questions/4287721/easiest-way-to-perform-modular-matrix-inversion-with-python
-# Matrix Inverse and Cofactor
+# Ref: https://math.stackexchange.com/questions/2686150/inverse-of-a-modular-matrix
 # Ref: https://www.geeksforgeeks.org/compute-the-inverse-of-a-matrix-using-numpy/
+#
+# Matrix Cofactor
 # Ref: https://www.geeksforgeeks.org/how-to-find-cofactor-of-a-matrix-using-numpy/
+# Ref: https://stackoverflow.com/questions/6527641/speed-up-python-code-for-computing-matrix-cofactors
+#
 # Adjugate
 # Ref: https://stackoverflow.com/questions/51010662/getting-the-adjugate-of-matrix-in-python/75566371#75566371
 
@@ -25,8 +29,6 @@ class IntegerMatrixMath:
         return result
 
     # Return the cofactor matrix of the given matrix.
-    #
-    # Ref: https://stackoverflow.com/questions/6527641/speed-up-python-code-for-computing-matrix-cofactors
     @staticmethod
     def matrix_cofactor(matrix):
         result = np.zeros_like(matrix)
@@ -43,10 +45,6 @@ class IntegerMatrixMath:
         return matrix_cofactor.transpose()
     
     # Ruturn the modular inverse of the given matrix.
-    #
-    # Ref: https://www.geeksforgeeks.org/how-to-find-cofactor-of-a-matrix-using-numpy/
-    # Ref: https://stackoverflow.com/questions/4287721/easiest-way-to-perform-modular-matrix-inversion-with-python
-    # Ref: https://math.stackexchange.com/questions/2686150/inverse-of-a-modular-matrix
     @staticmethod
     def matrix_modular_inverse(matrix, modulo):
         matrix_cofactor = IntegerMatrixMath.matrix_cofactor(matrix)

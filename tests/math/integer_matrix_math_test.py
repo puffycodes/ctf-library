@@ -21,28 +21,39 @@ class IntegerMatrixMathTest(unittest.TestCase):
 
     def setUp(self):
         self.verbose = False
-        self.test_matrix = []
+        self.test_matrix_inverse = []
         for m_data, m_inv_data in IntegerMatrixMathTestData.inverse_matrix_mod_26:
             m = np.array(m_data, dtype=np.int64)
             m_inv = np.array(m_inv_data, dtype=np.int64)
-            self.test_matrix.append([m, m_inv])
+            self.test_matrix_inverse.append([m, m_inv])
             if self.verbose:
                 print(f'matrix:\n{m}')
                 print(f'matrix inverse:\n{m_inv}')
                 print(f'-----')
         if self.verbose:
             print(f'=====')
+        self.test_matrix_cofactor = []
+        for m_data, m_cofactor_data in IntegerMatrixMathTestData.cofactor_matrix:
+            m = np.array(m_data, dtype=np.int64)
+            m_cofactor = np.array(m_cofactor_data, dtype=np.int64)
+            self.test_matrix_cofactor.append([m, m_cofactor])
+            if self.verbose:
+                print(f'matrix:\n{m}')
+                print(f'cofactor:\n{m_cofactor}')
+                print(f'------')
+        if self.verbose:
+            print(f'========')
         return
 
     def test_matrix_multiplication(self):
-        for m, m_inv in self.test_matrix:
+        for m, m_inv in self.test_matrix_inverse:
             mul = np.matmul(m, m_inv) % 26
             print(f'mul:\n{mul}')
         print(f'=====')
         return
     
     def test_matrix_minor(self):
-        for m, _ in self.test_matrix:
+        for m, _ in self.test_matrix_inverse:
             print(f'm:\n{m}')
             for i in range(m.shape[0]):
                 for j in range(m.shape[1]):
@@ -55,7 +66,7 @@ class IntegerMatrixMathTest(unittest.TestCase):
         return
     
     def test_matrix_cofactor(self):
-        for m, _ in self.test_matrix:
+        for m, _ in self.test_matrix_inverse:
             print(f'm:\n{m}')
             cofactor = IntegerMatrixMath.matrix_cofactor(m)
             cofactor_ref = IntegerMatrixMath.matrix_cofactor_ref(m)
@@ -66,7 +77,7 @@ class IntegerMatrixMathTest(unittest.TestCase):
         return
     
     def test_matrix_modular_inverse(self):
-        for m, m_inv in self.test_matrix:
+        for m, m_inv in self.test_matrix_inverse:
             print(f'm:\n{m}')
             m_computed_inv = IntegerMatrixMath.matrix_modular_inverse(m, 26)
             diff = m_computed_inv - m_inv
