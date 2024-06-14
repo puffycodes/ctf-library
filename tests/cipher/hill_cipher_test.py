@@ -21,18 +21,20 @@ class HillCipherTest(unittest.TestCase):
 
         self.check_encryption_01(key_01, 'ACT', 'POH', key_inv=key_01_inv)
         self.check_encryption_01(key_01, 'CAT', 'FIN', key_inv=key_01_inv)
+        self.check_encryption_01(key_01, 'Cat', 'Fin', key_inv=key_01_inv)
 
         key_02 = np.array(HillCipherTest.key_02, dtype=np.int64)
         key_02_inv = np.array(HillCipherTest.key_inv_02, dtype=np.int64)
 
         self.check_encryption_01(key_02, 'HELP', 'HIAT', key_inv=key_02_inv)
+        self.check_encryption_01(key_02, 'hElP', 'hIaT', key_inv=key_02_inv)
 
         return
     
     def check_encryption_01(self, key, plain_text, expected_cipher_text, key_inv):
         cipher = HillCipher(key)
-        print(cipher.key)
-        print(cipher.key_inv)
+        print(f'key:\n{cipher.key}')
+        print(f'key inverse:\n{cipher.key_inv}')
         print('=====')
 
         cipher_text = cipher.encrypt(plain_text)
