@@ -36,15 +36,15 @@ class HillCipherTest(unittest.TestCase):
 
         # TODO:
         # Rounding of the matrix modular inverse is off.
-        print(cipher.key_inv.astype(np.int64))
+        # print(cipher.key_inv.astype(np.int64))
         # *** end of block *** #
 
         # TODO:
         # We have some bug here.
         # The computation of the inverse modulo of the matrix key (cipher.key_inv) is wrong.
         # The following block should not be needed when this is fixed.
-        cipher.key_inv = key_inv
-        print(cipher.key_inv)
+        # cipher.key_inv = key_inv
+        # print(cipher.key_inv)
         # *** end of block *** #
 
         print('=====')

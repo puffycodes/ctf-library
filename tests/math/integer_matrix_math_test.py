@@ -20,15 +20,18 @@ class IntegerMatrixMathTestData:
 class IntegerMatrixMathTest(unittest.TestCase):
 
     def setUp(self):
+        self.verbose = False
         self.test_matrix = []
         for m_data, m_inv_data in IntegerMatrixMathTestData.inverse_matrix_mod_26:
             m = np.array(m_data, dtype=np.int64)
             m_inv = np.array(m_inv_data, dtype=np.int64)
             self.test_matrix.append([m, m_inv])
-            print(f'matrix:\n{m}')
-            print(f'matrix inverse:\n{m_inv}')
-            print(f'-----')
-        print(f'=====')
+            if self.verbose:
+                print(f'matrix:\n{m}')
+                print(f'matrix inverse:\n{m_inv}')
+                print(f'-----')
+        if self.verbose:
+            print(f'=====')
         return
 
     def test_matrix_multiplication(self):
@@ -49,6 +52,27 @@ class IntegerMatrixMathTest(unittest.TestCase):
                     print(f'matrix_minor({i}, {j}):\n{m_minor}')
                     print(f'det(matrix_minor): {m_minor_det} ({m_minor_det_int})')
             print('-----')
+        return
+    
+    def test_matrix_cofactor(self):
+        for m, _ in self.test_matrix:
+            print(f'm:\n{m}')
+            cofactor = IntegerMatrixMath.matrix_cofactor(m)
+            cofactor_ref = IntegerMatrixMath.matrix_cofactor_ref(m)
+            diff = cofactor - cofactor_ref
+            print(f'cofactor:\n{cofactor}')
+            print(f'cofactor ref:\n{cofactor_ref}')
+            print(f'diff:\n{diff}')
+        return
+    
+    def test_matrix_modular_inverse(self):
+        for m, m_inv in self.test_matrix:
+            print(f'm:\n{m}')
+            m_computed_inv = IntegerMatrixMath.matrix_modular_inverse(m, 26)
+            diff = m_computed_inv - m_inv
+            print(f'inverse:\n{m_inv}')
+            print(f'computed inverse:\n{m_computed_inv}')
+            print(f'diff:\n{diff}')
         return
     
 if __name__ == '__main__':
