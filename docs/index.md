@@ -2,15 +2,21 @@
 
 ## Cipher
 
-The following cipher have been implemented. (ctf_library.cipher)
+Implemented in module ctf_library.cipher:
 
-1. Rot 13 Cipher
-1. Substitution Cipher
-1. Rail Fence Cipher
-1. Book Cipher
-1. Hill Cipher
-1. Quagmire Cipher
+1. Rot 13 Cipher (ctf_library.cipher.rot13_cipher.Rot13Cipher)
+1. Substitution Cipher (ctf_library.cipher.rot13_cipher.SubstitutionCipher)
+1. Rail Fence Cipher (ctf_library.cipher.rot13_cipher.RailFenceCipher)
+1. Book Cipher (ctf_library.cipher.rot13_cipher.BookCipher)
+1. Hill Cipher (ctf_library.cipher.rot13_cipher.HillCipher)
+1. Quagmire Cipher (ctf_library.cipher.rot13_cipher.QuagmireCipher)
+
+## Math
+
+Implemented in module ctf_library.math.integer_matrix_math:
+
+1. Matrix Modular Inverse (ctf_library.math.integer_matrix_math.IntegerMatrixMath)
 
 ***
 
-*Updated on 13 June 2024*
+*Updated on 14 June 2024*
