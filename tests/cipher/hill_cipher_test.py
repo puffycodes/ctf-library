@@ -43,23 +43,24 @@ class HillCipherTest(unittest.TestCase):
 
         return
     
-    def test_inverse(self):
-        key_01 = np.array(HillCipherTest.key_01, dtype=np.int64)
-        key_01_inv = np.array(HillCipherTest.key_inv_01, dtype=np.int64)
-        key_01_computed_inv = IntegerMatrixMath.matrix_modular_inverse(key_01, 26)
-        print(key_01)
-        print(key_01_inv)
-        print(key_01_computed_inv)
-        print(key_01_computed_inv - key_01_inv)
-        print('==========')
-        key_02 = np.array(HillCipherTest.key_02, dtype=np.int64)
-        key_02_inv = np.array(HillCipherTest.key_inv_02, dtype=np.int64)
-        key_02_computed_inv = IntegerMatrixMath.matrix_modular_inverse(key_02, 26)
-        print(key_02)
-        print(key_02_inv)
-        print(key_02_computed_inv)
-        print(key_02_computed_inv - key_02_inv)
-        print('==========')
+    def test_key_inverse(self):
+        modulo = 26
+        test_data = [
+            [ HillCipherTest.key_01, HillCipherTest.key_inv_01 ],
+            [ HillCipherTest.key_02, HillCipherTest.key_inv_02 ],
+        ]
+        for key_data, key_inv_data in test_data:
+            key = np.array(key_data, dtype=np.int64)
+            key_inv = np.array(key_inv_data, dtype=np.int64)
+            key_computed_inv = IntegerMatrixMath.matrix_modular_inverse(key, modulo)
+            diff = key_computed_inv - key_inv
+            mul = np.matmul(key, key_computed_inv) % modulo
+            print(f'key:\n{key}')
+            print(f'key inverse (computed):\n{key_computed_inv}')
+            print(f'key inverse (given):\n{key_inv}')
+            print(f'diff:\n{diff}')
+            print(f'mul:\n{mul}')
+            print('=====')
         return
     
     def test_np_array(self):
