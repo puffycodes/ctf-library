@@ -44,7 +44,18 @@ class IntegerMatrixMath:
         matrix_cofactor = IntegerMatrixMath.matrix_cofactor(matrix)
         return matrix_cofactor.transpose()
     
-    # Ruturn the modular inverse of the given matrix.
+    # Return the modulo of the given matrix.
+    @staticmethod
+    def matrix_modulo(matrix, modulo):
+        return matrix % modulo
+    
+    # Return the modular inverse of the given matrix.
+    #
+    # (TODO: Do those check? Or just catch ValueError?)
+    # Modular inverse does not exist if
+    #   (a) determinant is zero
+    #   (b) determinant is negative.
+    #   (c) determinant and module are not co-prime.
     @staticmethod
     def matrix_modular_inverse(matrix, modulo):
         matrix_cofactor = IntegerMatrixMath.matrix_cofactor(matrix)
