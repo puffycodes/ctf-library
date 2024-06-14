@@ -35,7 +35,7 @@ class IntegerMatrixMath:
         for i in range(matrix.shape[0]):
             for j in range(matrix.shape[1]):
                 minor = IntegerMatrixMath.matrix_minor(matrix, i, j)
-                result[i][j] = round(np.linalg.det(minor)) * pow(-1, (i+j))
+                result[i][j] = IntegerMatrixMath.matrix_det(minor) * pow(-1, (i+j))
         return result
     
     # Return the Adjucate of the given matrix.
@@ -49,9 +49,14 @@ class IntegerMatrixMath:
     def matrix_modular_inverse(matrix, modulo):
         matrix_cofactor = IntegerMatrixMath.matrix_cofactor(matrix)
         matrix_adjucate = matrix_cofactor.transpose()
-        det_modular_inverse = pow(int(np.linalg.det(matrix)), -1, modulo)
+        det_modular_inverse = pow(IntegerMatrixMath.matrix_det(matrix), -1, modulo)
         matrix_inverse = (matrix_adjucate * det_modular_inverse) % modulo
         return matrix_inverse
+    
+    # Return the determinant of the matrix, in integer
+    @staticmethod
+    def matrix_det(matrix):
+        return int(round(np.linalg.det(matrix)))
     
     # --- Reference implementation. Do not use.
     
