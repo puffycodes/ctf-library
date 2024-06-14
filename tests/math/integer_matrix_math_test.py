@@ -86,6 +86,18 @@ class IntegerMatrixMathTest(unittest.TestCase):
             print(f'diff:\n{diff}')
         return
     
+    # --- These are some tests to check the numpy behaviour
+    
+    def test_np_array_elements(self):
+        array = np.array(
+            IntegerMatrixMathTestData.inverse_matrix_mod_26[0][0], dtype=np.int64
+        )
+        print(f'array:\n{array}')
+        for i in range(array.shape[0]):
+            for j in range(array.shape[1]):
+                print(f' array[{i}, {j}] = {array[i][j]}')
+        return
+
 if __name__ == '__main__':
     unittest.main()
 

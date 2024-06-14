@@ -65,13 +65,6 @@ class HillCipherTest(unittest.TestCase):
             print('=====')
         return
     
-    def test_np_array(self):
-        array = np.array(HillCipherTest.key_01, dtype=np.int64)
-        for i in range(array.shape[0]):
-            for j in range(array.shape[1]):
-                print(f' array[{i}, {j}] = {array[i][j]}')
-        return
-
 if __name__ == '__main__':
     unittest.main()
 
