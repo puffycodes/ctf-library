@@ -10,30 +10,24 @@ class HillCipher:
 
     class HillCipherKey:
 
+        # encryption matrix should be an numpy.array of dimension n x n
         def __init__(self, encryption_matrix):
             self.valid = False
             self.encryption_matrix = encryption_matrix
             self.modulo = 26
-            if self.encryption_matrix.shape[0] != self.encryption_matrix.shape[1]:
-                raise ValueError(
-                    f'Encryption matrix dimensions are not the same: '
-                    f'{self.encryption_matrix.shape[0]} != {self.encryption_matrix.shape[1]}'
-                )
-            self.block_length = self.encryption_matrix.shape[0]
+            row = self.encryption_matrix.shape[0]
+            col = self.encryption_matrix.shape[1]
+            if row != col:
+                raise ValueError(f'Encryption matrix dimensions are not the same: {row} != {col}')
+            self.block_length = row
+            # The next call may raise ValueError if the inverse does not exist.
             self.decryption_matrix = IntegerMatrixMath.matrix_modular_inverse(
                 self.encryption_matrix, self.modulo
             )
             self.valid = True
             return
     
-    # key should be an numpy.array of dimension n x n
     def __init__(self, key, no_match=None, pad_value=0):
-        # if key.shape[0] != key.shape[1]:
-        #     raise ValueError('key dimensions are not the same')
-        # self.block_length = key.shape[0]
-        # self.key = key
-        # self.modulo = 26
-        # self.key_inv = IntegerMatrixMath.matrix_modular_inverse(key, self.modulo)
         self.key = key
         self.no_match = no_match
         self.pad_value = pad_value
