@@ -14,6 +14,7 @@ class HillCipherTest(unittest.TestCase):
     key_inv_02 = [[15, 17], [20, 9]]
 
     key_invalid_11 = [[6, 24, 1], [13, 16, 10]]
+    key_invalid_12 = [[1, 1], [1, 1]]
 
     def test_encryption_01(self):
         # Test cases from https://en.wikipedia.org/wiki/Hill_cipher
@@ -37,23 +38,30 @@ class HillCipherTest(unittest.TestCase):
 
         self.check_encryption_01(key_invalid_11, 'ACT', 'POH', key_inv=key_invalid_11)
 
+        key_invalid_12 = np.array(HillCipherTest.key_invalid_12, dtype=np.int64)
+
+        self.check_encryption_01(key_invalid_12, 'ACT', 'POH', key_inv=key_invalid_12)
+
         return
     
-    def check_encryption_01(self, key, plain_text, expected_cipher_text, key_inv):
+    def check_encryption_01(self, key_data, plain_text, expected_cipher_text, key_inv):
         try:
-            cipher = HillCipher(key)
+            key = HillCipher.HillCipherKey(key_data)
         except ValueError as e:
             print(f'ValueError: {e}')
             print('-----***--')
             return
         
-        print(f'key:\n{cipher.key}')
-        print(f'key inverse:\n{cipher.key_inv}')
+        cipher = HillCipher(key)
+        # print(f'key:\n{cipher.key}')
+        # print(f'key inverse:\n{cipher.key_inv}')
+        print(f'encryption matrix:\n{cipher.key.encryption_matrix}')
+        print(f'decryption matrix:\n{cipher.key.decryption_matrix}')
         print('=====')
 
         cipher_text = cipher.encrypt(plain_text)
         decrypted_text = cipher.decrypt(cipher_text)
-        print(f'{plain_text} -> {cipher_text} -> {decrypted_text}')
+        print(f'Result: {plain_text} -> {cipher_text} -> {decrypted_text}')
         self.assertEqual(cipher_text, expected_cipher_text)
         self.assertEqual(decrypted_text, plain_text)
         print('=====*****')
