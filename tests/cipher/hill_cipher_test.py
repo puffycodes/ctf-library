@@ -16,6 +16,12 @@ class HillCipherTest(unittest.TestCase):
     matrix_invalid_11 = [[6, 24, 1], [13, 16, 10]]
     matrix_invalid_12 = [[1, 1], [1, 1]]
 
+    modulo = 26
+    valid_matrix_data = [
+        [ matrix_01_data, matrix_01_inv_data ],
+        [ matrix_02_data, matrix_02_inv_data ],
+    ]
+    
     def test_encryption_01(self):
         # Test cases from https://en.wikipedia.org/wiki/Hill_cipher
         
@@ -70,12 +76,9 @@ class HillCipherTest(unittest.TestCase):
         return
     
     def test_key_inverse(self):
-        modulo = 26
-        test_data = [
-            [ HillCipherTest.matrix_01_data, HillCipherTest.matrix_01_inv_data ],
-            [ HillCipherTest.matrix_02_data, HillCipherTest.matrix_02_inv_data ],
-        ]
-        for matrix_data, matrix_inv_data in test_data:
+        modulo = HillCipherTest.modulo
+        valid_matrix_data = HillCipherTest.valid_matrix_data
+        for matrix_data, matrix_inv_data in valid_matrix_data:
             matrix = np.array(matrix_data, dtype=np.int64)
             matrix_inv = np.array(matrix_inv_data, dtype=np.int64)
             matrix_computed_inv = IntegerMatrixMath.matrix_modular_inverse(matrix, modulo)
