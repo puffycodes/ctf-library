@@ -13,6 +13,8 @@ class HillCipherTest(unittest.TestCase):
     key_02 = [[3, 3], [2, 5]]
     key_inv_02 = [[15, 17], [20, 9]]
 
+    key_invalid_11 = [[6, 24, 1], [13, 16, 10]]
+
     def test_encryption_01(self):
         # Test cases from https://en.wikipedia.org/wiki/Hill_cipher
         
@@ -31,6 +33,14 @@ class HillCipherTest(unittest.TestCase):
         self.check_encryption_01(key_02, 'HELP', 'HIAT', key_inv=key_02_inv)
         self.check_encryption_01(key_02, 'hElP', 'hIaT', key_inv=key_02_inv)
 
+        key_invalid_11 = np.array(HillCipherTest.key_invalid_11, dtype=np.int64)
+
+        try:
+            self.check_encryption_01(key_invalid_11, 'ACT', 'POH', key_inv=key_invalid_11)
+        except ValueError as e:
+            print(f'ValueError: {e}')
+            print('-----***--')
+
         return
     
     def check_encryption_01(self, key, plain_text, expected_cipher_text, key_inv):
@@ -44,6 +54,7 @@ class HillCipherTest(unittest.TestCase):
         print(f'{plain_text} -> {cipher_text} -> {decrypted_text}')
         self.assertEqual(cipher_text, expected_cipher_text)
         self.assertEqual(decrypted_text, plain_text)
+        print('=====*****')
 
         return
     
