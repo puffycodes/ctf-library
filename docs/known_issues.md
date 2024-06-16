@@ -7,7 +7,8 @@
 
 ## Known Bugs
 
-1. No known bugs
+1. Hill Cipher (ctf_library.cipher.hill_cipher.py) is not working correctly when the plain text or
+cipher text does not match the block boundary exactly.
 
 ## Resolved Bugs
 
@@ -17,4 +18,4 @@
 
 ***
 
-*Updated on 14 June 2024*
+*Updated on 16 June 2024*
