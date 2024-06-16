@@ -21,6 +21,13 @@ class HillCipherTest(unittest.TestCase):
         [ matrix_01_data, matrix_01_inv_data ],
         [ matrix_02_data, matrix_02_inv_data ],
     ]
+
+    key_code_str_list = [
+        ['GYBNQKURP', 3],
+        ['GybnQKUrp', 3],
+        ['ABCDEFGHI', 3],
+        ['ABCDEFGHJ', 3],
+    ]
     
     def test_encryption_01(self):
         # Test cases from https://en.wikipedia.org/wiki/Hill_cipher
@@ -73,6 +80,44 @@ class HillCipherTest(unittest.TestCase):
         self.assertEqual(decrypted_text, plain_text)
         print('=====*****')
 
+        return
+    
+    def test_key_generation_01(self):
+        print(f'Key Generation Test 01:')
+        test_data = HillCipherTest.valid_matrix_data
+        for matrix_data, _ in test_data:
+            matrix = np.array(matrix_data)
+            print(f'source matrix:\n{matrix}')
+            try:
+                key = HillCipher.key(matrix)
+                print(f'encryption matrix:\n{key.encryption_matrix}')
+                print(f'decryption matrix:\n{key.decryption_matrix}')
+                self.check_encryption_02(key)
+            except ValueError as e:
+                print(f'ValueError: {e}')
+        return
+    
+    def test_key_generation_02(self):
+        print(f'Key Generation Test 02:')
+        for key_string, block_size in HillCipherTest.key_code_str_list:
+            print(f'source key string: {key_string}')
+            try:
+                key = HillCipher.key_from_string(key_string, block_size)
+                print(f'encryption matrix:\n{key.encryption_matrix}')
+                print(f'decryption matrix:\n{key.decryption_matrix}')
+                self.check_encryption_02(key)
+            except ValueError as e:
+                print(f'ValueError: {e}')
+            print('=====^^^===')
+        return
+    
+    def check_encryption_02(self, key):
+        plain_text = 'The quick brown fox JUMPS over the laZy dog.===a'
+        cipher = HillCipher(key)
+        cipher_text = cipher.encrypt(plain_text)
+        deciphered_text = cipher.decrypt(cipher_text)
+        print(f'{plain_text} -> {cipher_text} -> {deciphered_text}')
+        self.assertEqual(deciphered_text, plain_text)
         return
     
     def test_key_inverse(self):

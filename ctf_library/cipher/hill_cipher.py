@@ -26,6 +26,47 @@ class HillCipher:
             )
             self.valid = True
             return
+        
+    @staticmethod
+    def key(encryption_matrix):
+        return HillCipher.HillCipherKey(encryption_matrix)
+    
+    @staticmethod
+    def key_from_string(key_code_str, block_size):
+        key_code_len = len(key_code_str)
+        required_len = block_size * block_size
+        if key_code_len < required_len:
+            raise ValueError(
+                f'Insufficient length for key code.'
+                f' Needs {required_len} but only gets {key_code_len}.'
+            )
+        key_code_list = []
+        for c in key_code_str:
+            c_code = HillCipher.key_code(c)
+            if c_code != -1:
+                key_code_list.append(c_code)
+        key_code_list_len = len(key_code_list)
+        if key_code_list_len < required_len:
+            raise ValueError(
+                f'Insufficient length for key code.'
+                f' Needs {required_len} but only gets {key_code_list_len}.'
+            )
+        key_array = np.array([key_code_list[:required_len]], dtype=np.int64).reshape(
+            (block_size, block_size)
+        )
+        key = HillCipher.HillCipherKey(key_array)
+        return key
+    
+    @staticmethod
+    def key_code(c):
+        result = -1
+        if c >= 'A' and c <= 'Z':
+            result = ord(c) - ord('A')
+        elif c >= 'a' and c <= 'z':
+            result = ord(c) - ord('a')
+        else:
+            pass
+        return result
     
     def __init__(self, key, no_match=None, pad_value=0):
         self.key = key
@@ -72,7 +113,7 @@ class HillCipher:
                 if cv >= ord('A') and cv <= ord('Z'):
                     string += chr(ord('A') + code_list[code_ptr])
                     code_ptr += 1
-                elif cv >= ord('a') and cv < ord('z'):
+                elif cv >= ord('a') and cv <= ord('z'):
                     string += chr(ord('a') + code_list[code_ptr])
                     code_ptr += 1
                 else:
@@ -100,7 +141,7 @@ class HillCipher:
     def pad_block(self, block):
         temp_block = block.copy()
         if len(temp_block) < self.key.block_length:
-            for _ in range(self.block_length):
+            for _ in range(self.key.block_length):
                 temp_block.append(self.pad_value)
             temp_block = temp_block[:self.key.block_length]
         return temp_block
