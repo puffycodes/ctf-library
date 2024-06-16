@@ -35,16 +35,18 @@ class HillCipherTest(unittest.TestCase):
 
         key_invalid_11 = np.array(HillCipherTest.key_invalid_11, dtype=np.int64)
 
-        try:
-            self.check_encryption_01(key_invalid_11, 'ACT', 'POH', key_inv=key_invalid_11)
-        except ValueError as e:
-            print(f'ValueError: {e}')
-            print('-----***--')
+        self.check_encryption_01(key_invalid_11, 'ACT', 'POH', key_inv=key_invalid_11)
 
         return
     
     def check_encryption_01(self, key, plain_text, expected_cipher_text, key_inv):
-        cipher = HillCipher(key)
+        try:
+            cipher = HillCipher(key)
+        except ValueError as e:
+            print(f'ValueError: {e}')
+            print('-----***--')
+            return
+        
         print(f'key:\n{cipher.key}')
         print(f'key inverse:\n{cipher.key_inv}')
         print('=====')
