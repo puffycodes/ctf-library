@@ -77,8 +77,8 @@ class HillCipherTest(unittest.TestCase):
     
     def test_key_inverse(self):
         modulo = HillCipherTest.modulo
-        valid_matrix_data = HillCipherTest.valid_matrix_data
-        for matrix_data, matrix_inv_data in valid_matrix_data:
+        test_data = HillCipherTest.valid_matrix_data
+        for matrix_data, matrix_inv_data in test_data:
             matrix = np.array(matrix_data, dtype=np.int64)
             matrix_inv = np.array(matrix_inv_data, dtype=np.int64)
             matrix_computed_inv = IntegerMatrixMath.matrix_modular_inverse(matrix, modulo)
