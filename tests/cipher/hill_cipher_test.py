@@ -7,49 +7,49 @@ from ctf_library.math.integer_matrix_math import IntegerMatrixMath
 
 class HillCipherTest(unittest.TestCase):
 
-    key_01 = [[6, 24, 1], [13, 16, 10], [20, 17, 15]]
-    key_inv_01 = [[8, 5, 10], [21, 8, 21], [21, 12, 8]]
+    matrix_01_data = [[6, 24, 1], [13, 16, 10], [20, 17, 15]]
+    matrix_01_inv_data = [[8, 5, 10], [21, 8, 21], [21, 12, 8]]
 
-    key_02 = [[3, 3], [2, 5]]
-    key_inv_02 = [[15, 17], [20, 9]]
+    matrix_02_data = [[3, 3], [2, 5]]
+    matrix_02_inv_data = [[15, 17], [20, 9]]
 
-    key_invalid_11 = [[6, 24, 1], [13, 16, 10]]
-    key_invalid_12 = [[1, 1], [1, 1]]
+    matrix_invalid_11 = [[6, 24, 1], [13, 16, 10]]
+    matrix_invalid_12 = [[1, 1], [1, 1]]
 
     def test_encryption_01(self):
         # Test cases from https://en.wikipedia.org/wiki/Hill_cipher
         
-        key_01 = np.array(HillCipherTest.key_01, dtype=np.int64)
+        key_01_array = np.array(HillCipherTest.matrix_01_data, dtype=np.int64)
 
-        self.check_encryption_01(key_01, 'ACT', 'POH')
-        self.check_encryption_01(key_01, 'CAT', 'FIN')
+        self.check_encryption_01(key_01_array, 'ACT', 'POH')
+        self.check_encryption_01(key_01_array, 'CAT', 'FIN')
 
-        self.check_encryption_01(key_01, 'Cat', 'Fin')
-        self.check_encryption_01(key_01, '{CAT}', '{FIN}')
+        self.check_encryption_01(key_01_array, 'Cat', 'Fin')
+        self.check_encryption_01(key_01_array, '{CAT}', '{FIN}')
         self.check_encryption_01(
-            key_01, 'The Quick Brown Fox Jumps.', 'Ajn Mkato Rspye Zjk Tdiel.',
+            key_01_array, 'The Quick Brown Fox Jumps.', 'Ajn Mkato Rspye Zjk Tdiel.',
         )
 
-        key_02 = np.array(HillCipherTest.key_02, dtype=np.int64)
+        key_02_array = np.array(HillCipherTest.matrix_02_data, dtype=np.int64)
 
-        self.check_encryption_01(key_02, 'HELP', 'HIAT')
-        self.check_encryption_01(key_02, 'hElP', 'hIaT')
+        self.check_encryption_01(key_02_array, 'HELP', 'HIAT')
+        self.check_encryption_01(key_02_array, 'hElP', 'hIaT')
 
         # Test cases for invalid encryption matrix
 
-        key_invalid_11 = np.array(HillCipherTest.key_invalid_11, dtype=np.int64)
+        key_invalid_11_array = np.array(HillCipherTest.matrix_invalid_11, dtype=np.int64)
 
-        self.check_encryption_01(key_invalid_11, 'ACT', 'POH')
+        self.check_encryption_01(key_invalid_11_array, 'ACT', 'POH')
 
-        key_invalid_12 = np.array(HillCipherTest.key_invalid_12, dtype=np.int64)
+        key_invalid_12_array = np.array(HillCipherTest.matrix_invalid_12, dtype=np.int64)
 
-        self.check_encryption_01(key_invalid_12, 'ACT', 'POH')
+        self.check_encryption_01(key_invalid_12_array, 'ACT', 'POH')
 
         return
     
-    def check_encryption_01(self, key_data, plain_text, expected_cipher_text):
+    def check_encryption_01(self, key_array, plain_text, expected_cipher_text):
         try:
-            key = HillCipher.HillCipherKey(key_data)
+            key = HillCipher.HillCipherKey(key_array)
         except ValueError as e:
             print(f'ValueError: {e}')
             print('=====***==')
@@ -72,18 +72,18 @@ class HillCipherTest(unittest.TestCase):
     def test_key_inverse(self):
         modulo = 26
         test_data = [
-            [ HillCipherTest.key_01, HillCipherTest.key_inv_01 ],
-            [ HillCipherTest.key_02, HillCipherTest.key_inv_02 ],
+            [ HillCipherTest.matrix_01_data, HillCipherTest.matrix_01_inv_data ],
+            [ HillCipherTest.matrix_02_data, HillCipherTest.matrix_02_inv_data ],
         ]
-        for key_data, key_inv_data in test_data:
-            key = np.array(key_data, dtype=np.int64)
-            key_inv = np.array(key_inv_data, dtype=np.int64)
-            key_computed_inv = IntegerMatrixMath.matrix_modular_inverse(key, modulo)
-            diff = key_computed_inv - key_inv
-            mul = np.matmul(key, key_computed_inv) % modulo
-            print(f'key:\n{key}')
-            print(f'key inverse (computed) (should equal to given):\n{key_computed_inv}')
-            print(f'key inverse (given):\n{key_inv}')
+        for matrix_data, matrix_inv_data in test_data:
+            matrix = np.array(matrix_data, dtype=np.int64)
+            matrix_inv = np.array(matrix_inv_data, dtype=np.int64)
+            matrix_computed_inv = IntegerMatrixMath.matrix_modular_inverse(matrix, modulo)
+            diff = matrix_computed_inv - matrix_inv
+            mul = np.matmul(matrix, matrix_computed_inv) % modulo
+            print(f'matrix:\n{matrix}')
+            print(f'matrix inverse (computed) (should equal to given):\n{matrix_computed_inv}')
+            print(f'matrix inverse (given):\n{matrix_inv}')
             print(f'diff (should be zero):\n{diff}')
             print(f'mul (should be identity matrix):\n{mul}')
             print('=====')
