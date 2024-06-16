@@ -21,7 +21,9 @@ class HillCipherTest(unittest.TestCase):
 
         self.check_encryption_01(key_01, 'ACT', 'POH', key_inv=key_01_inv)
         self.check_encryption_01(key_01, 'CAT', 'FIN', key_inv=key_01_inv)
+
         self.check_encryption_01(key_01, 'Cat', 'Fin', key_inv=key_01_inv)
+        self.check_encryption_01(key_01, '{CAT}', '{FIN}', key_inv=key_01)
 
         key_02 = np.array(HillCipherTest.key_02, dtype=np.int64)
         key_02_inv = np.array(HillCipherTest.key_inv_02, dtype=np.int64)
