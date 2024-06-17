@@ -4,6 +4,7 @@
 # Ref: https://en.wikipedia.org/wiki/Hill_cipher
 
 import numpy as np
+import string
 from ctf_library.math.integer_matrix_math import IntegerMatrixMath
 
 class HillCipher:
@@ -68,10 +69,11 @@ class HillCipher:
             pass
         return result
     
-    def __init__(self, key, no_match=None, pad_value=0):
+    def __init__(self, key, no_match=None, pad_value=0, pad_separator='=-='):
         self.key = key
         self.no_match = no_match
         self.pad_value = pad_value
+        self.pad_separator = pad_separator
         return
     
     def encrypt(self, plain_text):
@@ -89,6 +91,27 @@ class HillCipher:
         plain_list = self.process_code_list(self.key.decryption_matrix, cipher_list)
         plain_text = self.code_to_string(plain_list, cipher_text)
         return plain_text
+    
+    def pad_text(self, text):
+        count = 0
+        for c in text:
+            if c in string.ascii_letters:
+                count += 1
+        pad_count = (self.key.block_length - (count % self.key.block_length))
+        if pad_count == self.key.block_length:
+            pad_text = ''
+        else:
+            pad_text = self.pad_separator + ''.join(['a' for i in range(pad_count)])
+        return text + pad_text
+    
+    def unpad_text(self, text):
+        parts = text.split(self.pad_separator)
+        if len(parts) == 1:
+            # original text has no padding
+            result = parts[0]
+        else:
+            result = self.pad_separator.join(parts[:-1])
+        return result
     
     def string_to_code(self, text):
         code_list = []

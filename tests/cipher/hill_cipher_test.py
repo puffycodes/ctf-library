@@ -112,12 +112,32 @@ class HillCipherTest(unittest.TestCase):
         return
     
     def check_encryption_02(self, key):
-        plain_text = 'The quick brown fox JUMPS over the laZy dog.===a'
+        plain_text = 'The quick brown fox JUMPS over the laZy dog.'
         cipher = HillCipher(key)
+        plain_text = cipher.pad_text(plain_text)
         cipher_text = cipher.encrypt(plain_text)
         deciphered_text = cipher.decrypt(cipher_text)
         print(f'{plain_text} -> {cipher_text} -> {deciphered_text}')
         self.assertEqual(deciphered_text, plain_text)
+        return
+    
+    def test_padding(self):
+        matrix_array = np.array(HillCipherTest.matrix_01_data, dtype=np.int64)
+        key = HillCipher.HillCipherKey(matrix_array)
+        cipher = HillCipher(key)
+        for i in range(20):
+            text = 'b' * i
+            padded_text = cipher.pad_text(text)
+            unpadded_text = cipher.unpad_text(padded_text)
+            print(f'padding: {text} -> {padded_text} -> {unpadded_text}')
+            self.assertEqual(unpadded_text, text)
+        text_without_pad_list = [
+            'abcde', 'abcde=fghij', 'abcde=-asdff-='
+        ]
+        for text in text_without_pad_list:
+            unpadded_text = cipher.unpad_text(text)
+            print(f'unpadding: {text} -> {unpadded_text}')
+            self.assertEqual(text, unpadded_text)
         return
     
     def test_key_inverse(self):
