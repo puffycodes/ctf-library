@@ -87,14 +87,12 @@ class QuagmireCipherTest(unittest.TestCase):
         if verbose:
             print(ciphertext)
             print(original_ciphertext)
-        #assert original_ciphertext == ciphertext
         self.assertEqual(original_ciphertext, ciphertext)
         
         plaintext = enc.decrypt(ciphertext, verbose=verbose)
         if verbose:
             print(plaintext)
             print(original_plaintext)
-        #assert original_plaintext == plaintext
         self.assertEqual(original_plaintext, plaintext)
         
         return
