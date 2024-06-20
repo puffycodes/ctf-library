@@ -13,9 +13,17 @@ Implemented in module ctf_library.cipher:
 
 ## Math
 
-Implemented in module ctf_library.math.integer_matrix_math:
+Implemented in module ctf_library.math:
 
 1. Matrix Modular Inverse (ctf_library.math.integer_matrix_math.IntegerMatrixMath)
+
+## Packet
+
+Implemented in module ctf_library.packet:
+
+1. USB Keystroke Decoder (ctf_library.packet.usb_keystroke_decoder.USBKeystrokeDecoder)
+    - Reference: [Wireshark Sample Captures](https://wiki.wireshark.org/SampleCaptures)
+    - Reference: [kaizen-ctf 2018 — Reverse Engineer usb keystrok from pcap file](https://abawazeeer.medium.com/kaizen-ctf-2018-reverse-engineer-usb-keystrok-from-pcap-file-2412351679f4)
 
 ***
 
