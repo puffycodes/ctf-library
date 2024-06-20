@@ -9,8 +9,7 @@ class USBKeystrokeDecoderTest(unittest.TestCase):
 
     data_file_dir = 'data'
 
-    def test_decoder(self):
-        print('empty test')
+    def test_list_pcap_files(self):
         file_list = DirectoryUtility.list_files(USBKeystrokeDecoderTest.data_file_dir, '*.pcap*', recursive=True)
         for file in file_list:
             print(f'file: {file}')
