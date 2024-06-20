@@ -7,9 +7,10 @@ from common_util.dir_util import DirectoryUtility
 
 class USBKeystrokeDecoderTest(unittest.TestCase):
 
-    data_file_dir = 'data'
+    data_file_dir = 'data/usb_keystroke'
 
     def test_list_pcap_files(self):
+        decoder = USBKeystrokeDecoder()
         file_list = DirectoryUtility.list_files(USBKeystrokeDecoderTest.data_file_dir, '*.pcap*', recursive=True)
         for file in file_list:
             print(f'file: {file}')
@@ -17,6 +18,7 @@ class USBKeystrokeDecoderTest(unittest.TestCase):
             print(len(packets))
             for p in packets[:10]:
                 print(f'{p}')
+            decoder.decode_packets(packets)
         return
     
     def test_print_decoder_string(self):
