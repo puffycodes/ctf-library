@@ -112,7 +112,7 @@ class USBKeystrokeDecoder:
             elif key == 81: # 0x51
                 # Down Arrow
                 print(p_count, modifier, key, 'down arrow not implemented')
-            elif key ==82: # 0x52
+            elif key == 82: # 0x52
                 # Up Arrow
                 print(p_count, modifier, key, 'up arrow not implemented')
 
