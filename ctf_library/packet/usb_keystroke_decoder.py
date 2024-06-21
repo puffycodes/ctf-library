@@ -55,15 +55,15 @@ class USBKeystrokeDecoder:
         
         return
     
-    def decode_packets(self, packets):
+    def decode_packets(self, packets, verbose=False, debug=False):
         result = []
 
         value_list = []
         value_ptr = 0
         caps_lock = False
         
-        # TODO: This is here because of some old code below.
-        value_str = ''
+        # # TODO: This is here because of some old code below.
+        # value_str = ''
 
         for p_count, p, data_length in self.iterate_packets(packets):
             #modifier = p.load[-8]
@@ -71,6 +71,8 @@ class USBKeystrokeDecoder:
             modifier = p.load[27]
             key = p.load[29]
             #print(p.load[-8:-4])
+            if debug:
+                print(f' - {p_count}: {modifier} {key}')
 
             if key == 0:
                 continue
@@ -139,9 +141,9 @@ class USBKeystrokeDecoder:
                     else:
                         if key != 0:
                             print(p_count, modifier, key)
-                            # TODO: Find out what is this doing.
-                            #       Some reminant of an older version of code?
-                            value_str = value_str + '_'
+                            # # TODO: Find out what is this doing.
+                            # #       Some reminant of an older version of code?
+                            # value_str = value_str + '_'
 
         # Remaining, if any
         if len(value_list) > 0:
