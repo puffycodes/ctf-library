@@ -11,6 +11,9 @@
 cipher text does not match the block boundary exactly.
     - [Partial Resolution] Added padding and unpadding functions. Those functions are not called by the encrypt() and decrypt() functions automatically.
 
+1. USB Keystroke Decoder (ctf_library.packet.usb_keystroke_decoder.py) does not process up-arrow and down-arrow correctly.
+    - Captures with those keystroke will not decode correctly.
+
 ## Resolved Issues
 
 1. [Resolved on 14 June 2024] Hill Cipher Decryption (ctf_library.cipher.hill_cipher.py) is not working correctly.

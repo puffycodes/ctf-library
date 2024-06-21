@@ -99,6 +99,12 @@ class USBKeystrokeDecoder:
             elif key == 80:
                 # Left Arrow
                 value_ptr -= 1
+            elif key == 81: # 0x51
+                # Down Arrow
+                print(p_count, modifier, key, 'down arrow not implemented')
+            elif key ==82: # 0x52
+                # Up Arrow
+                print(p_count, modifier, key, 'up arrow not implemented')
 
             else:
                 # TODO: Should take into consideration caps_lock
@@ -108,7 +114,7 @@ class USBKeystrokeDecoder:
                             if key < len(self.shift_table):
                                 char_value = self.shift_table[key]
                                 if char_value == ';':
-                                    print(modifier, key)
+                                    print(p_count, modifier, key)
                                 value_list.insert(value_ptr, char_value)
                                 value_ptr += 1
                             else:
