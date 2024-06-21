@@ -49,6 +49,8 @@ class USBKeystrokeDecoderTest(unittest.TestCase):
         print(f'=====')
         print(f'unshift table: {decoder.unshift_table} ({len(decoder.unshift_table)})')
         print(f'shift table:   {decoder.shift_table} ({len(decoder.shift_table)})')
+        print(f'-----')
+        print(f'numpad table:  {decoder.numpad_table} ({len(decoder.numpad_table)})')
         print(f'=====')
         return
     

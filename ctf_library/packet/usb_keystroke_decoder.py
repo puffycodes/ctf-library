@@ -3,8 +3,15 @@
 class USBKeystrokeDecoder:
     
     def __init__(self):
+        # Keyboard encoding, ranges from 4 to 56.
+        # 40 to 43 are 'Enter', 'ESC', 'DEL' and 'TAB'.
+        # Table offset is 0.
         self.unshift_table = "::::abcdefghijklmnopqrstuvwxyz1234567890:::: -=[]\\#;'`,./"
         self.shift_table =   ';;;;ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*();;;; _+{}|~:"~<>?'
+
+        # Numpad encoding, range from 84 to 99. 88 is 'Enter'.
+        # Table offset is 84.
+        self.numpad_table = '/*-+:1234567890.'
         return
 
     # Ref: USBPcap Capture format specification
@@ -77,7 +84,7 @@ class USBKeystrokeDecoder:
             if key == 0:
                 continue
 
-            if key == 40:
+            if key == 40 or key == 88:
                 # Enter
                 curr_result = ''.join(value_list)
                 result.append(curr_result)
@@ -115,6 +122,16 @@ class USBKeystrokeDecoder:
             elif key == 82: # 0x52
                 # Up Arrow
                 print(p_count, modifier, key, 'up arrow not implemented')
+
+            elif key >= 84 and key <= 99:
+                if modifier == 0 or modifier == 2:
+                    char_value = self.numpad_table[key-84]
+                    if char_value == ':':
+                        print(p_count, modifier, key)
+                    value_list.insert(value_ptr, char_value)
+                    value_ptr += 1
+                else:
+                    print(p_count, modifier, key)
 
             else:
                 # TODO: Should take into consideration caps_lock
