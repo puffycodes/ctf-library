@@ -9,33 +9,41 @@ class USBKeystrokeDecoder:
 
     # Ref: USBPcap Capture format specification
     #      (https://desowin.org/usbpcap/captureformat.html)
-    def iterate_packets(self, packets, verbose=False):
+    def iterate_packets(self, packets, start_count=1, verbose=False):
         # Wireshark packet numbering starts from 1
-        packet_count = 1
+        packet_count = start_count
 
         for p in packets:
+            # Check whether packet is raw data
+            try:
+                data = p.load
+            except AttributeError as e:
+                packet_count += 1
+                continue
+
             # Do not process packet that pseudo header length is not 27 (0x1b00)
-            pseudoheader_length = p.load[0:2]
+            pseudoheader_length = data[0:2]
             if pseudoheader_length != b'\x1b\x00':
                 packet_count += 1
                 continue
 
             # IRP ID does not matter?
-            # irp_id = p.load[2:10]
+            # irp_id = data[2:10]
             # if irp_id != b'\xa0\x49\x4f\x70\x07\x85\xff\xff':
             #     print(f'IRP ID: {irp_id}')
 
             # Do not process packet that is not URB_INTERRUPT (0x01)
-            if p.load[22] != 0x01:
+            if data[22] != 0x01:
                 packet_count += 1
                 continue
 
             # Length of Leftover Capture Data
-            data_length_bytes = p.load[23:27]
+            data_length_bytes = data[23:27]
             data_length = int.from_bytes(data_length_bytes, 'little')
 
             if verbose:
-                print(f'length: {data_length_bytes} -> {data_length}: {p.load[27:27+data_length]}')
+                keystroke_data = data[27:27+data_length]
+                print(f'length: {data_length_bytes} -> {data_length}: {keystroke_data}')
             
             # Do not process packet that is empty
             if data_length <= 0:
