@@ -16,33 +16,33 @@ class USBKeystrokeDecoder:
         for p in packets:
             # Check whether packet is raw data
             try:
-                data = p.load
+                packet_payload = p.load
             except AttributeError as e:
                 packet_count += 1
                 continue
 
             # Do not process packet that pseudo header length is not 27 (0x1b00)
-            pseudoheader_length = data[0:2]
-            if pseudoheader_length != b'\x1b\x00':
+            pseudo_header_length = packet_payload[0:2]
+            if pseudo_header_length != b'\x1b\x00':
                 packet_count += 1
                 continue
 
             # IRP ID does not matter?
-            # irp_id = data[2:10]
+            # irp_id = packet_payload[2:10]
             # if irp_id != b'\xa0\x49\x4f\x70\x07\x85\xff\xff':
             #     print(f'IRP ID: {irp_id}')
 
             # Do not process packet that is not URB_INTERRUPT (0x01)
-            if data[22] != 0x01:
+            if packet_payload[22] != 0x01:
                 packet_count += 1
                 continue
 
             # Length of Leftover Capture Data
-            data_length_bytes = data[23:27]
+            data_length_bytes = packet_payload[23:27]
             data_length = int.from_bytes(data_length_bytes, 'little')
 
             if verbose:
-                keystroke_data = data[27:27+data_length]
+                keystroke_data = packet_payload[27:27+data_length]
                 print(f'length: {data_length_bytes} -> {data_length}: {keystroke_data}')
             
             # Do not process packet that is empty
