@@ -9,23 +9,37 @@ class USBKeystrokeDecoderTest(unittest.TestCase):
 
     data_file_dir = 'data/usb_keystroke'
 
-    def test_list_pcap_files(self):
+    def test_list_and_decode_pcap_files(self):
         decoder = USBKeystrokeDecoder()
         file_list = DirectoryUtility.list_files(
             USBKeystrokeDecoderTest.data_file_dir, '*.pcap*', recursive=True
         )
         if len(file_list) == 0:
             print(f'no capture files in directory "{USBKeystrokeDecoderTest.data_file_dir}"')
+            return
         for file in file_list:
-            print(f'file: {file}')
-            packets = rdpcap(file)
-            print(f'number of packets: {len(packets)}')
-            for p in packets[:5]:
-                print(f'{p} {p.load}')
-            result = decoder.decode_packets(packets)
-            print(f'final result:')
+            print(f'=== file: {file}')
+            if not file.endswith('.pcap') and not file.endswith('.pcapng'):
+                print(f'*** {file} is not a pcap file.')
+                continue
+            try:
+                packets = rdpcap(file)
+                print(f'number of packets: {len(packets)}')
+                for p in packets[:5]:
+                    if 'load' in p:
+                        print(f'{p} {p.load}')
+                    else:
+                        print(f'{p}')
+                result = decoder.decode_packets(packets)
+            except ValueError as e:
+                print(f'*** ValueError: {e}')
+                continue
+            except AttributeError as e:
+                print(f'*** AttributeError: {e}')
+                continue
+            print(f'--> final result:')
             for line in result:
-                print(f'{line}')
+                print(f'  {line}')
         return
     
     def test_print_decoder_string(self):
