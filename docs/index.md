@@ -23,6 +23,7 @@ Implemented in module ctf_library.packet:
 
 1. USB Keystroke Decoder (ctf_library.packet.usb_keystroke_decoder.USBKeystrokeDecoder)
     - Reference: [Wireshark Sample Captures](https://wiki.wireshark.org/SampleCaptures)
+    - Reference: [USBPcap Capture format specification](https://desowin.org/usbpcap/captureformat.html)
     - Reference: [kaizen-ctf 2018 — Reverse Engineer usb keystrok from pcap file](https://abawazeeer.medium.com/kaizen-ctf-2018-reverse-engineer-usb-keystrok-from-pcap-file-2412351679f4)
     - Reference: [USB Keyboard packet capture analysis](https://naykisec.github.io/USB-Keyboard-packet-capture-analysis/)
         - [task.pcap](https://0xd13a.github.io/ctfs/hackit2017/foren100/task.pcap)
