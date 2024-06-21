@@ -16,6 +16,10 @@ class USBKeystrokeDecoder:
         value_str = ''
 
         for p in packets:
+            # Do not process packet that are not URB_INTERRUPT (0x01)
+            if p.load[-15] != 0x01:
+                continue
+
             modifier = p.load[-8]
             key = p.load[-6]
             #print(p.load[-8:-4])
@@ -82,6 +86,8 @@ class USBKeystrokeDecoder:
 
         if len(value_list) > 0:
             print(''.join(value_list))
+        else:
+            print(f'no output')
             
         return
     
