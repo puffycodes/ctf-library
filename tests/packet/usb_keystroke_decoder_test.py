@@ -22,7 +22,10 @@ class USBKeystrokeDecoderTest(unittest.TestCase):
             print(f'number of packets: {len(packets)}')
             for p in packets[:5]:
                 print(f'{p} {p.load}')
-            decoder.decode_packets(packets)
+            result = decoder.decode_packets(packets)
+            print(f'final result:')
+            for line in result:
+                print(f'{line}')
         return
     
     def test_print_decoder_string(self):

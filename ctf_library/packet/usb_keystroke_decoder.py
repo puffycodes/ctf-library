@@ -28,11 +28,13 @@ class USBKeystrokeDecoder:
             if data_length <= 0:
                 continue
 
-            yield p
+            yield (p, data_length)
         
         return
     
     def decode_packets(self, packets):
+        result = []
+
         value_list = []
         value_ptr = 0
         caps_lock = False
@@ -40,7 +42,7 @@ class USBKeystrokeDecoder:
         # TODO: This is here because of some old code below.
         value_str = ''
 
-        for p in self.iterate_packets(packets):
+        for p, data_length in self.iterate_packets(packets):
             #modifier = p.load[-8]
             #key = p.load[-6]
             modifier = p.load[27]
@@ -52,7 +54,9 @@ class USBKeystrokeDecoder:
 
             if key == 40:
                 # Enter
-                print(''.join(value_list))
+                curr_result = ''.join(value_list)
+                result.append(curr_result)
+                print(f'line: {curr_result}')
                 value_list = []
                 value_ptr = 0
             elif key == 42:
@@ -107,12 +111,13 @@ class USBKeystrokeDecoder:
                             #       Some reminant of an older version of code?
                             value_str = value_str + '_'
 
+        # Remaining, if any
         if len(value_list) > 0:
-            print(''.join(value_list))
-        else:
-            print(f'no output')
+            curr_result = ''.join(value_list)
+            result.append(curr_result)
+            print(f'line: {curr_result}')
             
-        return
+        return result
     
 if __name__ == '__main__':
     print('usage:')
