@@ -24,21 +24,14 @@ class USBKeystrokeDecoderTest(unittest.TestCase):
                 continue
             try:
                 packets = rdpcap(file)
-                print(f'number of packets: {len(packets)}')
-                for p in packets[:5]:
-                    self.print_packet(p)
-                    # if 'load' in p:
-                    #     print(f'{p} {p.load}')
-                    # else:
-                    #     print(f'{p}')
-            except ValueError as e:
-                print(f'*** ValueError: {e}')
+            except Exception as e:
+                print(f'*** cannot read pcap file: Error: {e}')
                 continue
-            except AttributeError as e:
-                print(f'*** AttributeError: {e}')
-                continue
+            print(f'number of packets: {len(packets)}')
+            for p in packets[:5]:
+                self.print_packet(p)
             result = decoder.decode_packets(packets)
-            print(f'--> final result:')
+            print(f'==> final result:')
             for line in result:
                 print(f'  {line}')
         return
