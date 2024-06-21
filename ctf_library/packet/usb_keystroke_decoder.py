@@ -10,10 +10,14 @@ class USBKeystrokeDecoder:
     # Ref: USBPcap Capture format specification
     #      (https://desowin.org/usbpcap/captureformat.html)
     def iterate_packets(self, packets, verbose=False):
+        # Wireshark packet numbering starts from 1
+        packet_count = 1
+
         for p in packets:
             # Do not process packet that pseudo header length is not 27 (0x1b00)
             pseudoheader_length = p.load[0:2]
             if pseudoheader_length != b'\x1b\x00':
+                packet_count += 1
                 continue
 
             # IRP ID does not matter?
@@ -23,6 +27,7 @@ class USBKeystrokeDecoder:
 
             # Do not process packet that is not URB_INTERRUPT (0x01)
             if p.load[22] != 0x01:
+                packet_count += 1
                 continue
 
             # Length of Leftover Capture Data
@@ -34,9 +39,11 @@ class USBKeystrokeDecoder:
             
             # Do not process packet that is empty
             if data_length <= 0:
+                packet_count += 1
                 continue
 
-            yield (p, data_length)
+            yield (packet_count, p, data_length)
+            packet_count += 1
         
         return
     
@@ -50,7 +57,7 @@ class USBKeystrokeDecoder:
         # TODO: This is here because of some old code below.
         value_str = ''
 
-        for p, data_length in self.iterate_packets(packets):
+        for p_count, p, data_length in self.iterate_packets(packets):
             #modifier = p.load[-8]
             #key = p.load[-6]
             modifier = p.load[27]
@@ -67,6 +74,9 @@ class USBKeystrokeDecoder:
                 print(f'line: {curr_result}')
                 value_list = []
                 value_ptr = 0
+            elif key == 41:
+                # ESC
+                pass
             elif key == 42:
                 # Del
                 # TODO: Is this correct?
@@ -102,19 +112,19 @@ class USBKeystrokeDecoder:
                                 value_list.insert(value_ptr, char_value)
                                 value_ptr += 1
                             else:
-                                print(modifier, key)
+                                print(p_count, modifier, key)
                     else:
-                        print(modifier, key)
+                        print(p_count, modifier, key)
                 else:
                     if key < len(self.unshift_table):
                         char_value = self.unshift_table[key]
                         if char_value == ':':
-                            print(modifier, key)
+                            print(p_count, modifier, key)
                         value_list.insert(value_ptr, char_value)
                         value_ptr += 1
                     else:
                         if key != 0:
-                            print(modifier, key)
+                            print(p_count, modifier, key)
                             # TODO: Find out what is this doing.
                             #       Some reminant of an older version of code?
                             value_str = value_str + '_'
