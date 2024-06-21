@@ -30,13 +30,13 @@ class USBKeystrokeDecoderTest(unittest.TestCase):
                         print(f'{p} {p.load}')
                     else:
                         print(f'{p}')
-                result = decoder.decode_packets(packets)
             except ValueError as e:
                 print(f'*** ValueError: {e}')
                 continue
             except AttributeError as e:
                 print(f'*** AttributeError: {e}')
                 continue
+            result = decoder.decode_packets(packets)
             print(f'--> final result:')
             for line in result:
                 print(f'  {line}')
