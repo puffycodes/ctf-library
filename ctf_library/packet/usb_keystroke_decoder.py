@@ -7,6 +7,31 @@ class USBKeystrokeDecoder:
         self.shift_table =   ';;;;ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*();;;; _+{}|~:"~<>?'
         return
     
+    def iterate_packets(self, packets, verbose=False):
+        for p in packets:
+            # Do not process packet that is not USBPcap 27 (0x1b00)
+            if p.load[0:2] != b'\x1b\x00':
+                continue
+
+            # Do not process packet that is not URB_INTERRUPT (0x01)
+            if p.load[22] != 0x01:
+                continue
+
+            # Length of Leftover Capture Data
+            data_length_bytes = p.load[23:27]
+            data_length = int.from_bytes(data_length_bytes, 'little')
+
+            if verbose:
+                print(f'length: {data_length_bytes} -> {data_length}: {p.load[27:27+data_length]}')
+            
+            # Do not process packet that is empty
+            if data_length <= 0:
+                continue
+
+            yield p
+        
+        return
+    
     def decode_packets(self, packets):
         value_list = []
         value_ptr = 0
@@ -15,13 +40,11 @@ class USBKeystrokeDecoder:
         # TODO: This is here because of some old code below.
         value_str = ''
 
-        for p in packets:
-            # Do not process packet that are not URB_INTERRUPT (0x01)
-            if p.load[-15] != 0x01:
-                continue
-
-            modifier = p.load[-8]
-            key = p.load[-6]
+        for p in self.iterate_packets(packets):
+            #modifier = p.load[-8]
+            #key = p.load[-6]
+            modifier = p.load[27]
+            key = p.load[29]
             #print(p.load[-8:-4])
 
             if key == 0:

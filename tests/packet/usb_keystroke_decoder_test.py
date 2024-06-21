@@ -20,7 +20,7 @@ class USBKeystrokeDecoderTest(unittest.TestCase):
             print(f'file: {file}')
             packets = rdpcap(file)
             print(f'number of packets: {len(packets)}')
-            for p in packets[:10]:
+            for p in packets[:5]:
                 print(f'{p} {p.load}')
             decoder.decode_packets(packets)
         return
