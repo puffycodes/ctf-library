@@ -1,17 +1,131 @@
 # file: usb_keystroke_decoder.py
 
+class USBKeystrokeTable:
+
+    # Keyboard encoding, ranges from 4 to 56.
+    # 40 to 43 are 'Enter', 'ESC', 'DEL' and 'TAB'.
+    # Table offset is 0.
+
+    unshift_table_str = "::::abcdefghijklmnopqrstuvwxyz1234567890:::: -=[]\\#;'`,./"
+    shift_table_str =   ';;;;ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*();;;; _+{}|~:"~<>?'
+
+    unshift_table_offset = 0
+    shift_table_offset = 0
+
+    unshift_table_exclude_char = ':'
+    shift_table_exclude_char = ';'
+
+    # Numpad encoding, range from 84 to 99. 88 is 'Enter'.
+    # Table offset is 84.
+
+    numpad_table_str = '/*-+:1234567890.'
+    numpad_table_offset = 84
+    numpad_table_exclude_char = ':'
+
+    # Special Key
+
+    Key_Enter = 'Enter' # 40 & 88
+    Key_Esc = 'Esc' # 41
+    Key_Del = 'Del' # 42
+    Key_Tab = 'Tab' # 43
+    Key_CapsLock = 'CapsLock' # 57
+    Key_RightArrow = 'RightArrow' # 79
+    Key_LeftArrow = 'LeftArrow' # 80
+    Key_DownArrow = 'DownArrow' # 81
+    Key_UpArrow = 'UpArrow' # 82'
+
+    special_key_table = {
+        40: Key_Enter, 41: Key_Esc, 42: Key_Del, 43: Key_Tab,
+        57: Key_CapsLock,
+        79: Key_RightArrow, 80: Key_LeftArrow, 81: Key_DownArrow, 82: Key_UpArrow,
+        88: Key_Enter,
+    }
+
+    special_key_list = {
+        Key_Enter, Key_Esc, Key_Del, Key_Tab, Key_CapsLock,
+        Key_RightArrow, Key_LeftArrow, Key_DownArrow, Key_UpArrow,
+    }
+
+    Key_Unknown = 'Unknown'
+
+    def __init__(self):
+        self.init_keystroke_table()
+        return
+    
+    def init_keystroke_table(self):
+        self.unshift_table = {}
+        self.shift_table = {}
+
+        self.expand_keystroke_table(
+            self.unshift_table,
+            USBKeystrokeTable.unshift_table_offset,
+            USBKeystrokeTable.unshift_table_str,
+            USBKeystrokeTable.unshift_table_exclude_char
+        )
+        self.expand_keystroke_table(
+            self.unshift_table,
+            USBKeystrokeTable.numpad_table_offset,
+            USBKeystrokeTable.numpad_table_str,
+            USBKeystrokeTable.numpad_table_exclude_char
+        )
+
+        self.expand_keystroke_table(
+            self.shift_table,
+            USBKeystrokeTable.shift_table_offset,
+            USBKeystrokeTable.shift_table_str,
+            USBKeystrokeTable.shift_table_exclude_char
+        )
+        self.expand_keystroke_table(
+            self.shift_table,
+            USBKeystrokeTable.numpad_table_offset,
+            USBKeystrokeTable.numpad_table_str,
+            USBKeystrokeTable.numpad_table_exclude_char
+        )
+
+        for key_code, key_value in self.special_key_table.items():
+            self.unshift_table[key_code] = key_value
+            self.shift_table[key_code] = key_value
+
+        return
+    
+    def expand_keystroke_table(self, table, start_code, table_str, exclude_char):
+        key_code = start_code
+        for key_value in table_str:
+            if key_value == exclude_char:
+                # do not append key_value, just increase key_code
+                key_code += 1
+                continue
+            table[key_code] = key_value
+            key_code += 1
+        return table
+    
+    def get_key_value(self, key_code, shift=False):
+        key_value = USBKeystrokeTable.Key_Unknown
+        if shift:
+            # Shift
+            if key_code in self.shift_table:
+                key_value = self.shift_table[key_code]
+        else:
+            # Unshift
+            if key_code in self.unshift_table:
+                key_value = self.unshift_table[key_code]
+        return key_value
+    
+    def is_special_key_value(self, key_value):
+        return key_value in USBKeystrokeTable.special_key_list
+
 class USBKeystrokeDecoder:
     
     def __init__(self):
         # Keyboard encoding, ranges from 4 to 56.
         # 40 to 43 are 'Enter', 'ESC', 'DEL' and 'TAB'.
         # Table offset is 0.
-        self.unshift_table = "::::abcdefghijklmnopqrstuvwxyz1234567890:::: -=[]\\#;'`,./"
-        self.shift_table =   ';;;;ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*();;;; _+{}|~:"~<>?'
+        self.unshift_table = USBKeystrokeTable.unshift_table_str
+        self.shift_table = USBKeystrokeTable.shift_table_str
 
         # Numpad encoding, range from 84 to 99. 88 is 'Enter'.
         # Table offset is 84.
-        self.numpad_table = '/*-+:1234567890.'
+        self.numpad_table = USBKeystrokeTable.numpad_table_str
         return
 
     # Ref: USBPcap Capture format specification
