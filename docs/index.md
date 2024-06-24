@@ -28,6 +28,8 @@ Implemented in module ctf_library.packet:
     - Reference: [USB Keyboard packet capture analysis](https://naykisec.github.io/USB-Keyboard-packet-capture-analysis/)
         - [task.pcap](https://0xd13a.github.io/ctfs/hackit2017/foren100/task.pcap)
     - Reference: [Decoding Mixed Case USB Keystrokes from PCAP](https://blog.stayontarget.org/2019/03/decoding-mixed-case-usb-keystrokes-from.html)
+    - Reference: [HackTheBox.eu Deadly Arthropod Write-Up](https://github.com/tanc7/HacktheBox_Deadly_Arthropod_Writeup/tree/master)
+        - [deadly_arthropod.pcap](https://github.com/tanc7/HacktheBox_Deadly_Arthropod_Writeup/blob/master/deadly_arthropod.pcap)
 
 ***
 
