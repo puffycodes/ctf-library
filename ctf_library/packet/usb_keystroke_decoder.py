@@ -173,6 +173,11 @@ class USBKeystrokeDecoder:
                 packet_count += 1
                 continue
 
+            # Only process packet with data length == 8
+            if data_length != 8:
+                packet_count += 1
+                continue
+
             yield (packet_count, p, data_length)
             packet_count += 1
         
@@ -211,7 +216,10 @@ class USBKeystrokeDecoder:
             elif key_value == USBKeystrokeTable.Key_CapsLock:
                 caps_lock = not caps_lock
                 if verbose:
-                    self.show_known_key_code(p_count, modifier, key_code, key_value)
+                    self.show_known_key_code(
+                        p_count, modifier, key_code, key_value,
+                        info=f'CapsLock: {caps_lock}'
+                    )
                 # do not send CapsLock to next stage
                 continue
 
@@ -227,8 +235,10 @@ class USBKeystrokeDecoder:
         print(f'{packet_id}: {reason}: modifier={modifier}, key_code={key_code}')
         return
     
-    def show_known_key_code(self, packet_id, modifier, key_code, key_value):
-        print(f'{packet_id}: {key_value} ({modifier}, {key_code})')
+    def show_known_key_code(self,
+                            packet_id, modifier, key_code, key_value,
+                            info=''):
+        print(f'{packet_id}: {key_value} ({modifier}, {key_code}) {info}')
         return
     
     def decode_packets(self, packets, verbose=False, debug=False):
