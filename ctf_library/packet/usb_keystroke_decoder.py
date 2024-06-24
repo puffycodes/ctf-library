@@ -212,6 +212,7 @@ class USBKeystrokeDecoder:
             key_value = self.keystroke_table.get_key_value(key_code, shift)
             if key_value == USBKeystrokeTable.Key_Unknown:
                 self.show_unknown_key_code(p_count, modifier, key_code)
+                # do not send unknown key to next stage
                 continue
             elif key_value == USBKeystrokeTable.Key_CapsLock:
                 caps_lock = not caps_lock
@@ -220,8 +221,8 @@ class USBKeystrokeDecoder:
                         p_count, modifier, key_code, key_value,
                         info=f'CapsLock: {caps_lock}'
                     )
-                # do not send CapsLock to next stage
-                continue
+                # send CapsLock to next stage
+                #continue
 
             result.append(key_value)
             if verbose:
