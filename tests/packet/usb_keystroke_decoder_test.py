@@ -34,6 +34,9 @@ class USBKeystrokeDecoderTest(unittest.TestCase):
             print(f'==> final result:')
             for line in result:
                 print(f'  {line}')
+            print(f'----------')
+            result = decoder.decode_packets_2(packets, verbose=False, debug=False)
+            print(result)
         return
     
     def print_packet(self, packet):
@@ -59,10 +62,10 @@ class USBKeystrokeTableTest(unittest.TestCase):
     def test_print_keystroke_table(self):
         keystroke_table = USBKeystrokeTable()
         print(f'=====')
-        print(f'= unshift table length: {len(keystroke_table.unshift_table)}')
-        print(f'= unshift table: {keystroke_table.unshift_table}')
-        print(f'= shift table length: {len(keystroke_table.shift_table)}')
-        print(f'= shift table: {keystroke_table.shift_table}')
+        print(f'- unshift table length: {len(keystroke_table.unshift_table)}')
+        print(f'- unshift table: {keystroke_table.unshift_table}')
+        print(f'- shift table length: {len(keystroke_table.shift_table)}')
+        print(f'- shift table: {keystroke_table.shift_table}')
         print(f'=====')
         return
     

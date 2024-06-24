@@ -126,6 +126,8 @@ class USBKeystrokeDecoder:
         # Numpad encoding, range from 84 to 99. 88 is 'Enter'.
         # Table offset is 84.
         self.numpad_table = USBKeystrokeTable.numpad_table_str
+
+        self.keystroke_table = USBKeystrokeTable()
         return
 
     # Ref: USBPcap Capture format specification
@@ -174,6 +176,59 @@ class USBKeystrokeDecoder:
             yield (packet_count, p, data_length)
             packet_count += 1
         
+        return
+    
+    def decode_packets_2(self, packets, verbose=False, debug=False):
+        result = []
+        caps_lock = False
+
+        for p_count, p, data_length in self.iterate_packets(packets):
+            modifier = p.load[27]
+            key_code = p.load[29]
+
+            if key_code == 0:
+                # ignore key_code 0
+                if debug:
+                    self.show_unknown_key_code(
+                        p_count, modifier, key_code, 'no key code'
+                    )
+                continue
+
+            shift = caps_lock
+            if modifier == 0:
+                shift = caps_lock
+            elif modifier == 2 or modifier == 0x20:
+                shift = not caps_lock
+            else:
+                # Unknown/unimplemented modifier
+                self.show_unknown_key_code(p_count, modifier, key_code)
+                continue
+
+            key_value = self.keystroke_table.get_key_value(key_code, shift)
+            if key_value == USBKeystrokeTable.Key_Unknown:
+                self.show_unknown_key_code(p_count, modifier, key_code)
+                continue
+            elif key_value == USBKeystrokeTable.Key_CapsLock:
+                caps_lock = not caps_lock
+                if verbose:
+                    self.show_known_key_code(p_count, modifier, key_code, key_value)
+                # do not send CapsLock to next stage
+                continue
+
+            result.append(key_value)
+            if verbose:
+                self.show_known_key_code(p_count, modifier, key_code, key_value)
+
+        return result
+    
+    def show_unknown_key_code(self,
+                              packet_id, modifier, key_code,
+                              reason='unknown key'):
+        print(f'{packet_id}: {reason}: modifier={modifier}, key_code={key_code}')
+        return
+    
+    def show_known_key_code(self, packet_id, modifier, key_code, key_value):
+        print(f'{packet_id}: {key_value} ({modifier}, {key_code})')
         return
     
     def decode_packets(self, packets, verbose=False, debug=False):
