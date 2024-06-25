@@ -259,7 +259,7 @@ class USBKeystrokeDecoder:
     
     def show_unknown_key_code(self,
                               packet_id, modifier, key_code,
-                              reason='unknown key'):
+                              reason='unknown key code'):
         print(f'{packet_id}: {reason}: modifier={modifier}, key_code={key_code}')
         return
     
