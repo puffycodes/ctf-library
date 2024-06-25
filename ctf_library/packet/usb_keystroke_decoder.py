@@ -191,7 +191,11 @@ class USBKeystrokeDecoder:
                 packet_count += 1
                 continue
 
-            yield (packet_count, p, data_length)
+            # Extract modifier and key code
+            modifier = packet_payload[27]
+            key_code = packet_payload[29]
+
+            yield (packet_count, p, modifier, key_code)
             packet_count += 1
         
         return
@@ -200,12 +204,12 @@ class USBKeystrokeDecoder:
                          verbose=False, debug=False):
         if keystroke_processor == None:
             keystroke_processor = USBKeystrokeDecoder.KeystrokeList()
-            
+
         caps_lock = False
 
-        for p_count, p, data_length in self.iterate_packets(packets):
-            modifier = p.load[27]
-            key_code = p.load[29]
+        for p_count, p, modifier, key_code in self.iterate_packets(packets):
+            # modifier = p.load[27]
+            # key_code = p.load[29]
 
             if key_code == 0:
                 # ignore key_code 0
@@ -275,12 +279,12 @@ class USBKeystrokeDecoder:
         # # TODO: This is here because of some old code below.
         # value_str = ''
 
-        for p_count, p, data_length in self.iterate_packets(packets):
-            #modifier = p.load[-8]
-            #key = p.load[-6]
-            modifier = p.load[27]
-            key = p.load[29]
-            #print(p.load[-8:-4])
+        for p_count, p, modifier, key in self.iterate_packets(packets):
+            # #modifier = p.load[-8]
+            # #key = p.load[-6]
+            # modifier = p.load[27]
+            # key = p.load[29]
+            # #print(p.load[-8:-4])
             if debug:
                 print(f' - {p_count}: {modifier} {key}')
 
