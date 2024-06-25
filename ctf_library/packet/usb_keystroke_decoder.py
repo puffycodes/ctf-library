@@ -193,7 +193,7 @@ class USBKeystrokeDecoder:
             return self.text_buffer
         
         def get_text(self):
-            lines = [''.join(l) for l in self.text_buffer]
+            lines = [''.join(line) for line in self.text_buffer]
             text = '\n'.join(lines)
             return text
         
@@ -294,7 +294,11 @@ class USBKeystrokeDecoder:
             if modifier == 0:
                 shift = caps_lock
             elif modifier == 2 or modifier == 0x20:
-                shift = not caps_lock
+                # TODO: check which of these cases is correct
+                # case 1: shift flip the caps_lock?
+                #shift = not caps_lock
+                # case 2: shift is alway shift, regardless of caps_lock?
+                shift = True
             else:
                 # Unknown/unimplemented modifier
                 self.show_unknown_key_code(
