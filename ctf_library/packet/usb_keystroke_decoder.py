@@ -116,19 +116,92 @@ class USBKeystrokeTable:
 
 class USBKeystrokeDecoder:
 
+    # Simple class to gather keystroke as a list and return the resulted list.
     class KeystrokeList:
 
         def __init__(self):
             self.key_value_list = []
             return
         
-        def process_key_value(self, key_code):
-            self.key_value_list.append(key_code)
+        def process_key_value(self, key_value):
+            self.key_value_list.append(key_value)
             return
         
         def get_result(self):
             return self.key_value_list
+        
+        def get_text(self):
+            return ''.join(self.key_value_list)
+
+    # A class to gather keystroke as they will appear as typed in an editor.
+    class KeystrokeToText:
+
+        def __init__(self):
+            self.text_buffer = []
+            self.line_ptr = 0
+            self.column_ptr = 0
+            self.expand_text_buffer()
+            return
     
+        def process_key_value(self, key_value):
+            if key_value == USBKeystrokeTable.Key_Enter:
+                self.line_ptr += 1
+                self.expand_text_buffer()
+                self.column_ptr = min(
+                    self.column_ptr,
+                    len(self.text_buffer[self.line_ptr])
+                )
+            elif key_value == USBKeystrokeTable.Key_Esc:
+                pass
+            elif key_value == USBKeystrokeTable.Key_Del:
+                self.text_buffer[self.line_ptr].pop(self.column_ptr - 1)
+                self.column_ptr -= 1
+            elif key_value == USBKeystrokeTable.Key_Tab:
+                self.text_buffer[self.column_ptr].insert(self.column_ptr, '\t')
+                self.column_ptr += 1
+            elif key_value == USBKeystrokeTable.Key_CapsLock:
+                pass
+            elif key_value == USBKeystrokeTable.Key_RightArrow:
+                self.column_ptr += 1
+                if self.column_ptr > len(self.text_buffer[self.line_ptr]):
+                    self.column_ptr = len(self.text_buffer[self.line_ptr])
+            elif key_value == USBKeystrokeTable.Key_LeftArrow:
+                self.column_ptr -= 1
+                if self.column_ptr < 0:
+                    self.column_ptr = 0
+            elif key_value == USBKeystrokeTable.Key_DownArrow:
+                self.line_ptr += 1
+                self.expand_text_buffer()
+                self.column_ptr = min(
+                    self.column_ptr,
+                    len(self.text_buffer[self.line_ptr])
+                )
+            elif key_value == USBKeystrokeTable.Key_UpArrow:
+                self.line_ptr -= 1
+                if self.line_ptr < 0:
+                    self.line_ptr = 0
+                self.column_ptr = min(
+                    self.column_ptr,
+                    len(self.text_buffer[self.line_ptr])
+                )
+            else:
+                self.text_buffer[self.line_ptr].insert(self.column_ptr, key_value)
+                self.column_ptr += 1
+            return
+        
+        def get_result(self):
+            return self.text_buffer
+        
+        def get_text(self):
+            lines = [''.join(l) for l in self.text_buffer]
+            text = '\n'.join(lines)
+            return text
+        
+        def expand_text_buffer(self):
+            while self.line_ptr >= len(self.text_buffer):
+                self.text_buffer.append([])
+            return
+
     def __init__(self):
         # Keyboard encoding, ranges from 4 to 56.
         # 40 to 43 are 'Enter', 'ESC', 'DEL' and 'TAB'.
@@ -204,6 +277,7 @@ class USBKeystrokeDecoder:
                          verbose=False, debug=False):
         if keystroke_processor == None:
             keystroke_processor = USBKeystrokeDecoder.KeystrokeList()
+            #keystroke_processor = USBKeystrokeDecoder.KeystrokeTextBuffer()
 
         caps_lock = False
 
@@ -253,7 +327,7 @@ class USBKeystrokeDecoder:
             # send key to keystroke processor
             keystroke_processor.process_key_value(key_value)
 
-        return keystroke_processor.get_result()
+        return keystroke_processor
     
     def show_unknown_key_code(self,
                               packet_id, modifier, key_code,
