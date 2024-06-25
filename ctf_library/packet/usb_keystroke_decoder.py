@@ -207,15 +207,12 @@ class USBKeystrokeDecoder:
 
         caps_lock = False
 
-        for p_count, p, modifier, key_code in self.iterate_packets(packets):
-            # modifier = p.load[27]
-            # key_code = p.load[29]
-
+        for packet_id, packet, modifier, key_code in self.iterate_packets(packets):
             if key_code == 0:
                 # ignore key_code 0
                 if debug:
                     self.show_unknown_key_code(
-                        p_count, modifier, key_code, f'key code is zero'
+                        packet_id, modifier, key_code, f'key code is zero'
                     )
                 continue
 
@@ -227,14 +224,14 @@ class USBKeystrokeDecoder:
             else:
                 # Unknown/unimplemented modifier
                 self.show_unknown_key_code(
-                    p_count, modifier, key_code, f'unknown modifier'
+                    packet_id, modifier, key_code, f'unknown modifier'
                 )
                 continue
 
             key_value = self.keystroke_table.get_key_value(key_code, shift)
             if key_value == USBKeystrokeTable.Key_Unknown:
                 self.show_unknown_key_code(
-                    p_count, modifier, key_code, f'unknown key code'
+                    packet_id, modifier, key_code, f'unknown key code'
                 )
                 # do not send unknown key to next stage
                 continue
@@ -242,7 +239,7 @@ class USBKeystrokeDecoder:
                 caps_lock = not caps_lock
                 if verbose:
                     self.show_known_key_code(
-                        p_count, modifier, key_code, key_value,
+                        packet_id, modifier, key_code, key_value,
                         info=f'CapsLock: {caps_lock}'
                     )
                 # CapsLock will be send to next stage
@@ -250,9 +247,10 @@ class USBKeystrokeDecoder:
             else:
                 if verbose:
                     self.show_known_key_code(
-                        p_count, modifier, key_code, key_value
+                        packet_id, modifier, key_code, key_value
                     )
 
+            # send key to keystroke processor
             keystroke_processor.process_key_value(key_value)
 
         return keystroke_processor.get_result()
@@ -279,92 +277,92 @@ class USBKeystrokeDecoder:
         # # TODO: This is here because of some old code below.
         # value_str = ''
 
-        for p_count, p, modifier, key in self.iterate_packets(packets):
-            # #modifier = p.load[-8]
-            # #key = p.load[-6]
-            # modifier = p.load[27]
-            # key = p.load[29]
-            # #print(p.load[-8:-4])
+        for packet_id, packet, modifier, key_code in self.iterate_packets(packets):
+            # #modifier = packet.load[-8]
+            # #key = packet.load[-6]
+            # modifier = packet.load[27]
+            # key = packet.load[29]
+            # #print(packet.load[-8:-4])
             if debug:
-                print(f' - {p_count}: {modifier} {key}')
+                print(f' - {packet_id}: {modifier} {key_code}')
 
-            if key == 0:
+            if key_code == 0:
                 continue
 
-            if key == 40 or key == 88:
+            if key_code == 40 or key_code == 88:
                 # Enter
                 curr_result = ''.join(value_list)
                 result.append(curr_result)
                 print(f'line: {curr_result}')
                 value_list = []
                 value_ptr = 0
-            elif key == 41:
+            elif key_code == 41:
                 # ESC
                 pass
-            elif key == 42:
+            elif key_code == 42:
                 # Del
                 # TODO: Is this correct?
                 value_list.pop(value_ptr - 1)
                 value_ptr -= 1
                 pass
-            elif key == 43:
+            elif key_code == 43:
                 # Tab
                 value_list.insert(value_ptr, '\t')
                 value_ptr += 1
                 pass
-            elif key == 57:
+            elif key_code == 57:
                 # Caps Lock
                 # TODO: Is this correct?
                 caps_lock = not caps_lock
                 pass
-            elif key == 79:
+            elif key_code == 79:
                 # Right Arrow
                 value_ptr += 1
-            elif key == 80:
+            elif key_code == 80:
                 # Left Arrow
                 value_ptr -= 1
-            elif key == 81: # 0x51
+            elif key_code == 81: # 0x51
                 # Down Arrow
-                print(p_count, modifier, key, 'down arrow not implemented')
-            elif key == 82: # 0x52
+                print(packet_id, modifier, key_code, 'down arrow not implemented')
+            elif key_code == 82: # 0x52
                 # Up Arrow
-                print(p_count, modifier, key, 'up arrow not implemented')
+                print(packet_id, modifier, key_code, 'up arrow not implemented')
 
-            elif key >= 84 and key <= 99:
+            elif key_code >= 84 and key_code <= 99:
                 if modifier == 0 or modifier == 2:
-                    char_value = self.numpad_table[key-84]
+                    char_value = self.numpad_table[key_code-84]
                     if char_value == ':':
-                        print(p_count, modifier, key)
+                        print(packet_id, modifier, key_code)
                     value_list.insert(value_ptr, char_value)
                     value_ptr += 1
                 else:
-                    print(p_count, modifier, key)
+                    print(packet_id, modifier, key_code)
 
             else:
                 # TODO: Should take into consideration caps_lock
                 if modifier != 0:
                     if modifier == 2 or modifier == 0x20:
-                        if key != 0:
-                            if key < len(self.shift_table):
-                                char_value = self.shift_table[key]
+                        if key_code != 0:
+                            if key_code < len(self.shift_table):
+                                char_value = self.shift_table[key_code]
                                 if char_value == ';':
-                                    print(p_count, modifier, key)
+                                    print(packet_id, modifier, key_code)
                                 value_list.insert(value_ptr, char_value)
                                 value_ptr += 1
                             else:
-                                print(p_count, modifier, key)
+                                print(packet_id, modifier, key_code)
                     else:
-                        print(p_count, modifier, key)
+                        print(packet_id, modifier, key_code)
                 else:
-                    if key < len(self.unshift_table):
-                        char_value = self.unshift_table[key]
+                    if key_code < len(self.unshift_table):
+                        char_value = self.unshift_table[key_code]
                         if char_value == ':':
-                            print(p_count, modifier, key)
+                            print(packet_id, modifier, key_code)
                         value_list.insert(value_ptr, char_value)
                         value_ptr += 1
                     else:
-                        if key != 0:
-                            print(p_count, modifier, key)
+                        if key_code != 0:
+                            print(packet_id, modifier, key_code)
                             # # TODO: Find out what is this doing.
                             # #       Some reminant of an older version of code?
                             # value_str = value_str + '_'
