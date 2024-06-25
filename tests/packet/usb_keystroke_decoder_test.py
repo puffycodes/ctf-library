@@ -35,9 +35,9 @@ class USBKeystrokeDecoderTest(unittest.TestCase):
             for line in result:
                 print(f'  {line}')
             print(f'----------')
-            keystroke_processor = USBKeystrokeDecoder.KeystrokeToText()
+            #keystroke_processor = USBKeystrokeDecoder.KeystrokeToText()
             result = decoder.decode_packets_2(
-                packets, keystroke_processor=keystroke_processor,
+                packets, keystroke_processor=None,
                 verbose=False, debug=False
             )
             print(result.get_text())

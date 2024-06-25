@@ -276,8 +276,7 @@ class USBKeystrokeDecoder:
     def decode_packets_2(self, packets, keystroke_processor=None,
                          verbose=False, debug=False):
         if keystroke_processor == None:
-            keystroke_processor = USBKeystrokeDecoder.KeystrokeList()
-            #keystroke_processor = USBKeystrokeDecoder.KeystrokeTextBuffer()
+            keystroke_processor = USBKeystrokeDecoder.KeystrokeToText()
 
         caps_lock = False
 
