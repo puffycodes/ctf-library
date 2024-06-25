@@ -273,8 +273,8 @@ class USBKeystrokeDecoder:
         
         return
     
-    def decode_packets_2(self, packets, keystroke_processor=None,
-                         verbose=False, debug=False):
+    def decode_packets(self, packets, keystroke_processor=None,
+                       verbose=False, debug=False):
         if keystroke_processor == None:
             keystroke_processor = USBKeystrokeDecoder.KeystrokeToText()
 
@@ -344,7 +344,7 @@ class USBKeystrokeDecoder:
         print(f'{packet_id}: {key_value} ({modifier}, {key_code}) {info}')
         return
     
-    def decode_packets(self, packets, verbose=False, debug=False):
+    def decode_packets_old(self, packets, verbose=False, debug=False):
         result = []
 
         value_list = []
