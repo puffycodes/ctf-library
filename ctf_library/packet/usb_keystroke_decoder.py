@@ -198,9 +198,9 @@ class USBKeystrokeDecoder:
     
     def decode_packets_2(self, packets, keystroke_processor=None,
                          verbose=False, debug=False):
-        #result = []
         if keystroke_processor == None:
             keystroke_processor = USBKeystrokeDecoder.KeystrokeList()
+            
         caps_lock = False
 
         for p_count, p, data_length in self.iterate_packets(packets):
@@ -249,7 +249,6 @@ class USBKeystrokeDecoder:
                         p_count, modifier, key_code, key_value
                     )
 
-            #result.append(key_value)
             keystroke_processor.process_key_value(key_value)
 
         return keystroke_processor.get_result()
