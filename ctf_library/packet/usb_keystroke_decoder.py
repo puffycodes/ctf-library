@@ -115,6 +115,19 @@ class USBKeystrokeTable:
         return key_value in USBKeystrokeTable.special_key_list
 
 class USBKeystrokeDecoder:
+
+    class KeystrokeList:
+
+        def __init__(self):
+            self.key_value_list = []
+            return
+        
+        def process_key_value(self, key_code):
+            self.key_value_list.append(key_code)
+            return
+        
+        def get_result(self):
+            return self.key_value_list
     
     def __init__(self):
         # Keyboard encoding, ranges from 4 to 56.
@@ -183,8 +196,11 @@ class USBKeystrokeDecoder:
         
         return
     
-    def decode_packets_2(self, packets, verbose=False, debug=False):
-        result = []
+    def decode_packets_2(self, packets, keystroke_processor=None,
+                         verbose=False, debug=False):
+        #result = []
+        if keystroke_processor == None:
+            keystroke_processor = USBKeystrokeDecoder.KeystrokeList()
         caps_lock = False
 
         for p_count, p, data_length in self.iterate_packets(packets):
@@ -195,7 +211,7 @@ class USBKeystrokeDecoder:
                 # ignore key_code 0
                 if debug:
                     self.show_unknown_key_code(
-                        p_count, modifier, key_code, 'no key code'
+                        p_count, modifier, key_code, f'key code is zero'
                     )
                 continue
 
@@ -206,12 +222,16 @@ class USBKeystrokeDecoder:
                 shift = not caps_lock
             else:
                 # Unknown/unimplemented modifier
-                self.show_unknown_key_code(p_count, modifier, key_code)
+                self.show_unknown_key_code(
+                    p_count, modifier, key_code, f'unknown modifier'
+                )
                 continue
 
             key_value = self.keystroke_table.get_key_value(key_code, shift)
             if key_value == USBKeystrokeTable.Key_Unknown:
-                self.show_unknown_key_code(p_count, modifier, key_code)
+                self.show_unknown_key_code(
+                    p_count, modifier, key_code, f'unknown key code'
+                )
                 # do not send unknown key to next stage
                 continue
             elif key_value == USBKeystrokeTable.Key_CapsLock:
@@ -221,14 +241,18 @@ class USBKeystrokeDecoder:
                         p_count, modifier, key_code, key_value,
                         info=f'CapsLock: {caps_lock}'
                     )
-                # send CapsLock to next stage
+                # CapsLock will be send to next stage
                 #continue
+            else:
+                if verbose:
+                    self.show_known_key_code(
+                        p_count, modifier, key_code, key_value
+                    )
 
-            result.append(key_value)
-            if verbose:
-                self.show_known_key_code(p_count, modifier, key_code, key_value)
+            #result.append(key_value)
+            keystroke_processor.process_key_value(key_value)
 
-        return result
+        return keystroke_processor.get_result()
     
     def show_unknown_key_code(self,
                               packet_id, modifier, key_code,
