@@ -2,7 +2,7 @@
 
 import unittest
 from scapy.all import *
-from ctf_library.packet.usb_keystroke_decoder import USBKeystrokeDecoder, USBKeystrokeTable
+from ctf_library.packet.usb_keystroke_decoder import USBKeystrokeDecoder, USBKeystrokeTable, USBKeyboard
 from common_util.dir_util import DirectoryUtility
 
 class USBKeystrokeDecoderTest(unittest.TestCase):
@@ -31,12 +31,23 @@ class USBKeystrokeDecoderTest(unittest.TestCase):
             print(f'number of packets: {len(packets)}')
             for p in packets[:5]:
                 self.print_packet(p)
-            print(f'---------- output of decode_packets()')
-            result = decoder.decode_packets(
-                packets, keystroke_processor=None,
+            print(f'---------- output of decode_packets(): Keyboard_Type_1')
+            result_01 = decoder.decode_packets(
+                packets, keystroke_processor=None, keyboard_type=USBKeyboard.Keyboard_Type_1,
                 verbose=False, debug=False
             )
-            print(result.get_text())
+            result_text_01 = result_01.get_text()
+            print(result_text_01)
+            print(f'---------- output of decode_packets(): Keyboard_Type_2')
+            result_02 = decoder.decode_packets(
+                packets, keystroke_processor=None, keyboard_type=USBKeyboard.Keyboard_Type_2,
+                verbose=False, debug=False
+            )
+            result_text_02 = result_02.get_text()
+            print(result_text_02)
+            print(f'---------- comparison')
+            result_comparison = result_text_01 == result_text_02
+            print(f'result_text_01 == result_text_02? {result_comparison}')
             print(f'---------- output of decode_packets_old()')
             result = decoder.decode_packets_old(packets)
             print(f'==> final result:')
