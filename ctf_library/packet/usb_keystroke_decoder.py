@@ -1,5 +1,11 @@
 # file: usb_keystroke_decoder.py
 
+class USBKeyboard:
+    # Shift will flip caps lock
+    Keyboard_Type_1 = 1
+    # Shift is independent of caps lock
+    Keyboard_Type_2 = 2
+
 class USBKeystrokeTable:
 
     # Keyboard encoding, ranges from 4 to 56.
@@ -274,6 +280,7 @@ class USBKeystrokeDecoder:
         return
     
     def decode_packets(self, packets, keystroke_processor=None,
+                       keyboard_type=USBKeyboard.Keyboard_Type_1,
                        verbose=False, debug=False):
         if keystroke_processor == None:
             keystroke_processor = USBKeystrokeDecoder.KeystrokeToText()
@@ -294,10 +301,12 @@ class USBKeystrokeDecoder:
                 shift = caps_lock
             elif modifier == 2 or modifier == 0x20:
                 # TODO: check which of these cases is correct
-                # case 1: shift flip the caps_lock?
-                #shift = not caps_lock
-                # case 2: shift is alway shift, regardless of caps_lock?
-                shift = True
+                if keyboard_type == USBKeyboard.Keyboard_Type_1:
+                    # Type 1: shift flip the caps_lock
+                    shift = not caps_lock
+                elif keyboard_type == USBKeyboard.Keyboard_Type_2:
+                    # Type 2: shift is alway shift, regardless of caps_lock
+                    shift = True
             else:
                 # Unknown/unimplemented modifier
                 self.show_unknown_key_code(
