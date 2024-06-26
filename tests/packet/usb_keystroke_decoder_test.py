@@ -27,10 +27,12 @@ class USBKeystrokeDecoderTest(unittest.TestCase):
             except Exception as e:
                 print(f'*** cannot read pcap file: Error: {e}')
                 continue
-            print(f'---------- packets')
-            print(f'number of packets: {len(packets)}')
-            for p in packets[:5]:
-                self.print_packet(p)
+            show_packets = False
+            if show_packets:
+                print(f'---------- packets')
+                print(f'number of packets: {len(packets)}')
+                for p in packets[:5]:
+                    self.print_packet(p)
             print(f'---------- output of decode_packets(): Keyboard_Type_1')
             result_01 = decoder.decode_packets(
                 packets, keystroke_processor=None, keyboard_type=USBKeyboard.Keyboard_Type_1,
@@ -48,12 +50,15 @@ class USBKeystrokeDecoderTest(unittest.TestCase):
             print(f'---------- comparison')
             result_comparison = result_text_01 == result_text_02
             print(f'result_text_01 == result_text_02? {result_comparison}')
-            print(f'---------- output of decode_packets_old()')
-            result = decoder.decode_packets_old(packets)
-            print(f'==> final result:')
-            for line in result:
-                print(f'  {line}')
+            test_old = False
+            if test_old:
+                print(f'---------- output of decode_packets_old()')
+                result = decoder.decode_packets_old(packets)
+                print(f'==> final result:')
+                for line in result:
+                    print(f'  {line}')
             print(f'----------')
+            print()
         return
     
     def print_packet(self, packet):
