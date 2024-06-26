@@ -298,14 +298,29 @@ class USBKeystrokeDecoder:
 
             shift = caps_lock
             if modifier == 0:
-                shift = caps_lock
+                # Shift Key is not pressed
+                if key_code >= 4 and key_code <= 29:
+                    # caps lock only apply to key_code 'a' to 'z'
+                    shift = caps_lock
+                else:
+                    shift = False
             elif modifier == 2 or modifier == 0x20:
-                # TODO: check which of these cases is correct
+                # Shift Key is pressed
                 if keyboard_type == USBKeyboard.Keyboard_Type_1:
                     # Type 1: shift flip the caps_lock
-                    shift = not caps_lock
+                    # E.g. Windows keyboard
+                    # TODO: check whether does flipping apply to key_code 'a' to 'z' only?
+                    # TODO: and whether caps lock apply to number/symbol keys?
+                    if key_code >= 4 and key_code <= 29:
+                        shift = not caps_lock
+                    else:
+                        shift = True
                 elif keyboard_type == USBKeyboard.Keyboard_Type_2:
                     # Type 2: shift is alway shift, regardless of caps_lock
+                    # E.g. Apple keyboard
+                    shift = True
+                else:
+                    # Default
                     shift = True
             else:
                 # Unknown/unimplemented modifier
