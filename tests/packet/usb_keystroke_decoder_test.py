@@ -33,6 +33,14 @@ class USBKeystrokeDecoderTest(unittest.TestCase):
                 print(f'number of packets: {len(packets)}')
                 for p in packets[:5]:
                     self.print_packet(p)
+            print(f'---------- keystroke list')
+            keystroke_processor = USBKeystrokeDecoder.KeystrokeList()
+            result_list = decoder.decode_packets(
+                packets, keystroke_processor=keystroke_processor,
+                keyboard_type=USBKeyboard.Keyboard_Type_1,
+                verbose=False, debug=False
+            )
+            print(result_list.get_result())
             print(f'---------- output of decode_packets(): Keyboard_Type_1')
             result_01 = decoder.decode_packets(
                 packets, keystroke_processor=None, keyboard_type=USBKeyboard.Keyboard_Type_1,
