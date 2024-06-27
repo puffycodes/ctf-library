@@ -22,10 +22,10 @@ Type 1 Keyboard:
 ```
 Shift CapsLock
 ----- --------
- no     no      asdfghjkl 1234567890-= ;',./[]\
- yes    no      ASDFGHJKL !@#$%^&*()_+ :"<>?{}|
- no     yes     ASDFGHJKL 1234567890-= ;',./[]\
- yes    yes     asdfghjkl !@#$%^&*()_+ :"<>?{}|
+ no     no      asdfghjkl 1234567890-=` ;',./[]\
+ yes    no      ASDFGHJKL !@#$%^&*()_+~ :"<>?{}|
+ no     yes     ASDFGHJKL 1234567890-=` ;',./[]\
+ yes    yes     asdfghjkl !@#$%^&*()_+~ :"<>?{}|
 ```
 
 Type 2 Keyboard:
