@@ -108,11 +108,11 @@ class USBKeystrokeTable:
     def get_key_value(self, key_code, shift=False):
         key_value = USBKeystrokeTable.Key_Unknown
         if shift:
-            # Shift
+            # Shifted
             if key_code in self.shift_table:
                 key_value = self.shift_table[key_code]
         else:
-            # Unshift
+            # Unshifted
             if key_code in self.unshift_table:
                 key_value = self.unshift_table[key_code]
         return key_value
@@ -296,28 +296,28 @@ class USBKeystrokeDecoder:
                     )
                 continue
 
-            shift = False
+            is_shifted = False
             if modifier == 0:
                 # Shift Key is not pressed
                 if key_code >= 4 and key_code <= 29:
                     # caps lock only apply to key_code 'a' to 'z'
-                    shift = caps_lock
+                    is_shifted = caps_lock
                 else:
-                    shift = False
+                    is_shifted = False
             elif modifier == 2 or modifier == 0x20:
                 # Shift Key is pressed
                 if keyboard_type == USBKeyboard.Keyboard_Type_1:
                     # - Type 1: shift flip the caps_lock for key_code 'a' to 'z'
                     #   e.g. Windows keyboard
                     if key_code >= 4 and key_code <= 29:
-                        shift = not caps_lock
+                        is_shifted = not caps_lock
                     else:
-                        shift = True
+                        is_shifted = True
                 else:
                     # - Type 2: shift is alway shift, regardless of caps_lock
                     #   e.g. Apple keyboard
                     # - Default:
-                    shift = True
+                    is_shifted = True
             else:
                 # Unknown/unimplemented modifier
                 self.show_unknown_key_code(
@@ -325,7 +325,7 @@ class USBKeystrokeDecoder:
                 )
                 continue
 
-            key_value = self.keystroke_table.get_key_value(key_code, shift)
+            key_value = self.keystroke_table.get_key_value(key_code, is_shifted)
             if key_value == USBKeystrokeTable.Key_Unknown:
                 self.show_unknown_key_code(
                     packet_id, modifier, key_code, f'unknown key code'
