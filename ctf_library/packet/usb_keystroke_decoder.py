@@ -323,6 +323,7 @@ class USBKeystrokeDecoder:
                 self.show_unknown_key_code(
                     packet_id, modifier, key_code, f'unknown modifier'
                 )
+                # do not send key with unknown modifier to next stage
                 continue
 
             key_value = self.keystroke_table.get_key_value(key_code, is_shifted)
@@ -364,6 +365,7 @@ class USBKeystrokeDecoder:
         print(f'{packet_id}: {key_value} ({modifier}, {key_code}) {info}')
         return
     
+    # TODO: This function will be removed in the future
     def decode_packets_old(self, packets, verbose=False, debug=False):
         result = []
 
