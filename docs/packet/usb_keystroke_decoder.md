@@ -33,10 +33,10 @@ Type 2 Keyboard:
 ```
 Shift CapsLock
 ----- --------
- no     no      <TODO>
- yes    no      
- no     yes     
- yes    yes     
+ no     no      asdfghjkl 1234567890-=` ;',./[]\
+ yes    no      ASDFGHJKL !@#$%^&*()_+~ :"<>?{}|
+ no     yes     ASDFGHJKL 1234567890-=` ;',./[]\
+ yes    yes     ASDFGHJKL !@#$%^&*()_+~ :"<>?{}|
 ```
 
 ***
