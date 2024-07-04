@@ -474,10 +474,29 @@ class USBKeystrokeDecoder:
             
         return result
     
+import argparse
+from scapy.all import *
+
+class USBKeystrokeDecoderMain:
+
+    @staticmethod
+    def main():
+        parser = argparse.ArgumentParser(
+            prog='usb_keystroke_decoder',
+            description='Extract USB Keystroke from Pcap files'
+        )
+        parser.add_argument('pcapfiles', nargs='+')
+        args = parser.parse_args()
+        decoder = USBKeystrokeDecoder()
+        for pcapfile in args.pcapfiles:
+            packets = rdpcap(pcapfile)
+            result = decoder.decode_packets(packets)
+            print(f'result for {pcapfile}:')
+            print(f'{result.get_text()}')
+            print()
+        return
+    
 if __name__ == '__main__':
-    print('usage:')
-    print('>>> from usb_keystroke_decoder import USBKeystrokeDecoder')
-    print('>>> decoder = USBKeystrokeDecoder()')
-    print('>>> decoder.decode_packets(packets_from_pcap)')
+    USBKeystrokeDecoderMain.main()
 
 # --- end of file --- #
