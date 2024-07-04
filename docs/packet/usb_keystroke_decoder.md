@@ -7,6 +7,18 @@
 1. Decode Left, Right, Up and Down Arrow keys.
 1. Decode NumPad keys.
 
+## Usage
+
+```
+from scapy.all import *
+from ctf_library.packet.usb_keystroke_decoder import USBKeystrokeDecoder
+
+decoder = USBKeystrokeDecoder()
+packets = rdpcap('my_keystroke_file.pcap')
+result = decoder.decode_packets(packets)
+print(f'result is:\n{result.get_text()}')
+```
+
 ## References on USB Pcap Captures
 
 1. [Wireshark Sample Captures](https://wiki.wireshark.org/SampleCaptures)
