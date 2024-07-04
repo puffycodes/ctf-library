@@ -1,5 +1,9 @@
 # Documentation for CTF Library
 
+## Dependencies
+
+1. [Common Utility for Python](https://github.com/puffycodes/common-utility)
+
 ## Cipher
 
 Implemented in module ctf_library.cipher:
