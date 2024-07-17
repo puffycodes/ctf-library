@@ -15,18 +15,24 @@ Implemented in module ctf_library.cipher:
 1. Hill Cipher (ctf_library.cipher.hill_cipher.HillCipher)
 1. Quagmire Cipher (ctf_library.cipher.quagmire_cipher.QuagmireCipher)
 
-## Math
+## Math Library
 
 Implemented in module ctf_library.math:
 
 1. Matrix Modular Inverse (ctf_library.math.integer_matrix_math.IntegerMatrixMath)
 
-## Packet
+## Packet Tool
 
 Implemented in module ctf_library.packet:
 
 1. [USB Keystroke Decoder](packet/usb_keystroke_decoder.md) (ctf_library.packet.usb_keystroke_decoder.USBKeystrokeDecoder)
 
+## [Esoteric Programming Language](language/esolangs.md)
+
+Implemented in module ctf_library.language:
+
+1. [Brainfuck](language/esolangs.md#brainfuck) (ctf_library.langauge.bf)
+
 ***
 
-*Updated on 27 June 2024*
+*Updated on 17 July 2024*
