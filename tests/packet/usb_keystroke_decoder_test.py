@@ -21,11 +21,13 @@ class USBKeystrokeDecoderTest(unittest.TestCase):
             print(f'=== file: {file}')
             if not file.endswith('.pcap') and not file.endswith('.pcapng'):
                 print(f'*** {file} is not a pcap file.')
+                print()
                 continue
             try:
                 packets = rdpcap(file)
             except Exception as e:
                 print(f'*** cannot read pcap file: Error: {e}')
+                print()
                 continue
             show_packets = False
             if show_packets:
