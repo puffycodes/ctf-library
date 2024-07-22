@@ -376,10 +376,11 @@ class USBKeystrokeDecoderMain:
             prog='usb_keystroke_decoder',
             description='Extract USB Keystroke from Pcap files'
         )
-        parser.add_argument('pcapfiles', nargs='+')
+        parser.add_argument('pcapfile', nargs='+',
+                            help='pcap file to decode')
         args = parser.parse_args()
         decoder = USBKeystrokeDecoder()
-        for pcapfile in args.pcapfiles:
+        for pcapfile in args.pcapfile:
             packets = rdpcap(pcapfile)
             result = decoder.decode_packets(packets)
             print(f'result for {pcapfile}:')
