@@ -14,7 +14,7 @@ class USBKeystrokeDecoderTest(unittest.TestCase):
         file_list = DirectoryUtility.list_files(
             USBKeystrokeDecoderTest.data_file_dir, '*.pcap*', recursive=True
         )
-        if len(file_list) == 0:
+        if len(file_list) <= 0:
             print(f'no capture files in directory "{USBKeystrokeDecoderTest.data_file_dir}"')
             return
         for file in file_list:
