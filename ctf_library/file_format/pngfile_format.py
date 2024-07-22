@@ -13,7 +13,7 @@ class PNGFileFormat:
     PNGHeader = b'\x89\x50\x4e\x47\x0d\x0a\x1a\x0a'
 
     @staticmethod
-    def parse(data, offset=0, length=-1, pos=0, with_header=True):
+    def parse(data, offset=0, max_length=-1, pos=0, with_header=True):
         data_length = len(data) - pos - offset
         print(f'data length: {data_length}')
 
@@ -23,6 +23,9 @@ class PNGFileFormat:
             header_data = BytesUtility.extract_bytes(data, 0, 8, curr_pos)
             print(f'offset: {curr_pos}; header: {header_data}')
             curr_pos += 8
+
+            if header_data != PNGFileFormat.PNGHeader:
+                return curr_pos
 
         while curr_pos < len(data):
             chunk_length = BytesUtility.extract_integer(data, 0, 4, pos=curr_pos, endian='big')
