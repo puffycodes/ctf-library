@@ -8,6 +8,10 @@ class PNGFileFormatTest(unittest.TestCase):
 
     data_file_dir = 'data/pngfile'
 
+    def test_check_constants(self):
+        self.assertEqual(PNGFileFormat.PNGHeaderLength, 8)
+        return
+
     def test_list_and_parse_pngfile(self):
         file_list = DirectoryUtility.list_files(
             PNGFileFormatTest.data_file_dir, '*.png', recursive=True
