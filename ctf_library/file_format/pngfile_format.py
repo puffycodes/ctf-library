@@ -14,11 +14,11 @@ class PNGFileFormat:
 
     # TODO: Do we need both offset and pos?
     @staticmethod
-    def parse(data, offset=0, max_length=-1, pos=0, with_header=True):
-        data_length = len(data) - pos - offset
+    def parse(data, offset=0, max_length=-1, with_header=True):
+        data_length = len(data) - offset
         print(f'data length: {data_length}')
 
-        curr_pos = pos + offset
+        curr_pos = offset
 
         if with_header:
             header_data = BytesUtility.extract_bytes(data, 0, 8, curr_pos)
