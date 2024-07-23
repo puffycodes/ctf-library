@@ -12,7 +12,6 @@ class PNGFileFormat:
 
     PNGHeader = b'\x89\x50\x4e\x47\x0d\x0a\x1a\x0a'
 
-    # TODO: Do we need both offset and pos?
     @staticmethod
     def parse(data, offset=0, max_length=-1, with_header=True):
         data_length = len(data) - offset
