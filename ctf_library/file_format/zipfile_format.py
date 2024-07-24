@@ -13,6 +13,7 @@ class ZipFileFormat(FileFormat):
     LocalFileHeaderSignature = b'\x50\x4b\x03\x04'
     CentralDirectoryFileHeaderSignature = b'\x50\x4b\x01\x02'
     EndOfCentralDirectorySignature = b'\x50\x4b\x05\x06'
+    UnprocessedSignature0708 = b'\x50\x4b\x07\x08'
 
     @staticmethod
     def parse(data, offset=0, max_length=-1):
@@ -43,10 +44,18 @@ class ZipFileFormat(FileFormat):
                 curr_pos = ZipFileFormat.parse_end_of_central_directory_record(
                     data, pos=curr_pos, end_pos=end_of_data_pos
                 )
+            elif signature == ZipFileFormat.UnprocessedSignature0708:
+                curr_pos = ZipFileFormat.parse_pk0708(
+                    data, pos=curr_pos, end_pos=end_of_data_pos
+                )
+            elif signature.startswith(b'P'):
+                curr_pos = ZipFileFormat.parse_pk0708(
+                    data, pos=curr_pos, end_pos=end_of_data_pos
+                )
             else:
-                print(f'unknown signature {signature} at {curr_pos}')
-                print(f'data at {curr_pos}: {data[curr_pos:curr_pos+20]}')
-                curr_pos += 4
+                curr_pos = ZipFileFormat.parse_unknown_signature(
+                    data, pos=curr_pos, end_pos=end_of_data_pos
+                )
             print()
         
         return curr_pos
@@ -59,7 +68,7 @@ class ZipFileFormat(FileFormat):
 
         header_length_fixed = 30
 
-        print('local file header:')
+        print(f'local file header:')
         if end_pos >= curr_pos + header_length_fixed:
             signature = BytesUtility.extract_bytes(data, 0, 4, pos=curr_pos)
             version = BytesUtility.extract_integer(data, 4, 2, pos=curr_pos)
@@ -123,7 +132,7 @@ class ZipFileFormat(FileFormat):
 
         header_length_fixed = 46
 
-        print('central directory file header:')
+        print(f'central directory file header:')
         if end_pos >= curr_pos + header_length_fixed:
             signature = BytesUtility.extract_bytes(data, 0, 4, pos=curr_pos)
             #
@@ -204,6 +213,52 @@ class ZipFileFormat(FileFormat):
             return ZipFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
 
         curr_pos += comment_length
+
+        return curr_pos
+    
+    @staticmethod
+    def parse_pk0708(data, pos=0, end_pos=-1):
+        if end_pos < 0:
+            end_pos = len(data)
+        curr_pos = pos
+
+        skip_length_fixed = 4
+
+        print(f'unprocessed signautre:')
+        if end_pos >= curr_pos + skip_length_fixed:
+            signature = BytesUtility.extract_bytes(data, 0, 4, pos=curr_pos)
+            print(f'  unprocessed signature {signature} at {curr_pos}')
+
+        curr_pos += skip_length_fixed
+
+        return curr_pos
+    
+    @staticmethod
+    def parse_unknown_signature(data, pos=0, end_pos=-1):
+        if end_pos < 0:
+            end_pos = len(data)
+        curr_pos = pos
+
+        skip_length_fixed = 4
+
+        print(f'*** unknown signature:')
+        if end_pos >= curr_pos + skip_length_fixed:
+            signature = BytesUtility.extract_bytes(data, 0, 4, pos=curr_pos)
+            print(f'  unknown signature {signature} at {curr_pos}')
+
+        # resync to the next b'PK'
+        next_signature_pos = curr_pos
+        while end_pos >= next_signature_pos:
+            if BytesUtility.extract_bytes(data, 0, 2, pos=next_signature_pos) == b'PK':
+                break
+            next_signature_pos += 1
+
+        unknown_data_length = next_signature_pos - curr_pos
+        unknown_data = data[curr_pos:curr_pos+unknown_data_length]
+        print(f'  unknown data length: {unknown_data_length}')
+        print(f'  data at {curr_pos} - {next_signature_pos}: {unknown_data}')
+
+        curr_pos += unknown_data_length
 
         return curr_pos
     
