@@ -1,13 +1,14 @@
 # file: zipfile_format.py
 
 from common_util.bytes_util import BytesUtility
+from ctf_library.file_format.file_format import FileFormat
 
 # Reference:
 # - https://docs.fileformat.com/compression/zip/
 # Free Sample ZIP Files:
 # - https://file-examples.com/index.php/text-files-and-archives-download/
 
-class ZipFileFormat:
+class ZipFileFormat(FileFormat):
 
     LocalFileHeaderSignature = b'\x50\x4b\x03\x04'
     CentralDirectoryFileHeaderSignature = b'\x50\x4b\x01\x02'
@@ -200,12 +201,4 @@ class ZipFileFormat:
 
         return curr_pos
     
-    @staticmethod
-    def error_insufficient_data(data, length, pos=0):
-        remaining_data = data[pos:]
-        print(f'  *** insufficent data at {pos} ({pos:x}). need {length} ({length:x})')
-        print(f'  *** remaining data: {remaining_data}')
-        print(f'  *** remaining data length: {len(remaining_data)}')
-        return pos + length
-
 # --- end of file --- #

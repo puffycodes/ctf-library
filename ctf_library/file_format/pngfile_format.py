@@ -1,6 +1,7 @@
 # file: pngfile_format.py
 
 from common_util.bytes_util import BytesUtility
+from ctf_library.file_format.file_format import FileFormat
 
 # Reference:
 # - https://en.wikipedia.org/wiki/PNG
@@ -8,7 +9,7 @@ from common_util.bytes_util import BytesUtility
 # - https://file-examples.com/index.php/sample-images-download/sample-png-download/
 # - https://sample-videos.com/download-sample-png-image.php
 
-class PNGFileFormat:
+class PNGFileFormat(FileFormat):
 
     PNGHeader = b'\x89\x50\x4e\x47\x0d\x0a\x1a\x0a'
     PNGHeaderLength = len(PNGHeader)
