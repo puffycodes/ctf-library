@@ -12,6 +12,7 @@ File Samples:
 ## Zip File
 
 File Format Reference:
+1. [ZIP - Wikipedia](https://en.wikipedia.org/wiki/ZIP_(file_format))
 1. [ZIP File - Fileformat](https://docs.fileformat.com/compression/zip/)
 
 File Samples:
