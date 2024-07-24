@@ -45,6 +45,7 @@ class ZipFileFormat(FileFormat):
                 )
             else:
                 print(f'unknown signature {signature} at {curr_pos}')
+                print(f'data at {curr_pos}: {data[curr_pos:curr_pos+20]}')
                 curr_pos += 4
             print()
         
@@ -101,14 +102,16 @@ class ZipFileFormat(FileFormat):
             return ZipFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
 
         curr_pos += extra_field_length
-        if end_pos >= curr_pos + compressed_size:
-            compressed_data = BytesUtility.extract_bytes(data, 0, compressed_size, pos=curr_pos)
-            print(f'  data: {compressed_data[:50]}')
-            print(f'    - start: {curr_pos}; end: {curr_pos+compressed_size}')
+        # TODO: Check how the data_size is computed.
+        data_size = compressed_size if compressed_size != 0 else uncompressed_size
+        if end_pos >= curr_pos + data_size:
+            file_data = BytesUtility.extract_bytes(data, 0, data_size, pos=curr_pos)
+            print(f'  data: {file_data[:50]}')
+            print(f'    - start: {curr_pos}; end: {curr_pos+data_size}')
         else:
             return ZipFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
 
-        curr_pos += compressed_size
+        curr_pos += data_size
 
         return curr_pos
 
