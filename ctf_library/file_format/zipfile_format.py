@@ -16,9 +16,12 @@ class ZipFileFormat(FileFormat):
 
     @staticmethod
     def parse(data, offset=0, max_length=-1):
-        end_of_data_pos = len(data)
-        if max_length > 0:
-            end_of_data_pos = min(end_of_data_pos, offset + max_length)
+        # end_of_data_pos = len(data)
+        # if max_length > 0:
+        #     end_of_data_pos = min(end_of_data_pos, offset + max_length)
+        end_of_data_pos = ZipFileFormat.compute_end_position(
+            data, offset=offset, max_length=max_length
+        )
 
         data_length = end_of_data_pos - offset
         print(f'data lenght: {data_length}')

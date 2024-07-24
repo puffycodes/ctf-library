@@ -19,9 +19,12 @@ class PNGFileFormat(FileFormat):
         # data_length = len(data) - offset
         # print(f'data length: {data_length}')
 
-        end_of_data_pos = len(data)
-        if max_length > 0:
-            end_of_data_pos = min(end_of_data_pos, offset + max_length)
+        # end_of_data_pos = len(data)
+        # if max_length > 0:
+        #     end_of_data_pos = min(end_of_data_pos, offset + max_length)
+        end_of_data_pos = PNGFileFormat.compute_end_position(
+            data, offset=offset, max_length=max_length
+        )
 
         data_length = end_of_data_pos - offset
         print(f'data length: {data_length}')
@@ -53,9 +56,12 @@ class PNGFileFormat(FileFormat):
     
     @staticmethod
     def extract_png_data(data, offset=0, max_length=-1, with_header=True):
-        end_of_data_pos = len(data)
-        if max_length > 0:
-            end_of_data_pos = min(end_of_data_pos, offset + max_length)
+        # end_of_data_pos = len(data)
+        # if max_length > 0:
+        #     end_of_data_pos = min(end_of_data_pos, offset + max_length)
+        end_of_data_pos = PNGFileFormat.compute_end_position(
+            data, offset=offset, max_length=max_length
+        )
 
         extracted_data = b''
         curr_pos = offset
