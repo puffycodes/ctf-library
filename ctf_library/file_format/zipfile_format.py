@@ -114,8 +114,8 @@ class ZipFileFormat(FileFormat):
         # TODO: Check how the data_size is computed.
         data_size = compressed_size if compressed_size != 0 else uncompressed_size
         if end_pos >= curr_pos + data_size:
-            file_data = BytesUtility.extract_bytes(data, 0, data_size, pos=curr_pos)
-            print(f'  data: {file_data[:50]}')
+            compressed_data = BytesUtility.extract_bytes(data, 0, data_size, pos=curr_pos)
+            print(f'  data: {compressed_data[:50]}')
             print(f'    - start: {curr_pos}; end: {curr_pos+data_size}')
         else:
             return ZipFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
