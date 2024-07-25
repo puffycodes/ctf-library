@@ -13,7 +13,7 @@ class ZipFileFormat(FileFormat):
     LocalFileHeaderSignature = b'\x50\x4b\x03\x04'
     CentralDirectoryFileHeaderSignature = b'\x50\x4b\x01\x02'
     EndOfCentralDirectorySignature = b'\x50\x4b\x05\x06'
-    UnprocessedSignature0708 = b'\x50\x4b\x07\x08'
+    DataDescriptorSignature = b'\x50\x4b\x07\x08'
 
     @staticmethod
     def parse(data, offset=0, max_length=-1):
@@ -44,14 +44,14 @@ class ZipFileFormat(FileFormat):
                 curr_pos = ZipFileFormat.parse_end_of_central_directory_record(
                     data, pos=curr_pos, end_pos=end_of_data_pos
                 )
-            elif signature == ZipFileFormat.UnprocessedSignature0708:
-                curr_pos = ZipFileFormat.parse_pk0708(
+            elif signature == ZipFileFormat.DataDescriptorSignature:
+                curr_pos = ZipFileFormat.parse_data_descriptor(
                     data, pos=curr_pos, end_pos=end_of_data_pos
                 )
-            elif signature.startswith(b'P'):
-                curr_pos = ZipFileFormat.parse_pk0708(
-                    data, pos=curr_pos, end_pos=end_of_data_pos
-                )
+            # elif signature.startswith(b'P'):
+            #     curr_pos = ZipFileFormat.parse_data_descriptor(
+            #         data, pos=curr_pos, end_pos=end_of_data_pos
+            #     )
             else:
                 curr_pos = ZipFileFormat.parse_unknown_signature(
                     data, pos=curr_pos, end_pos=end_of_data_pos
@@ -217,7 +217,7 @@ class ZipFileFormat(FileFormat):
         return curr_pos
     
     @staticmethod
-    def parse_pk0708(data, pos=0, end_pos=-1):
+    def parse_data_descriptor(data, pos=0, end_pos=-1):
         if end_pos < 0:
             end_pos = len(data)
         curr_pos = pos
@@ -237,6 +237,14 @@ class ZipFileFormat(FileFormat):
             data, 0, unprocessed_data_length, pos=curr_pos
         )
         print(f'  data at {curr_pos}-{next_signature_pos}: {unprocessed_data}')
+        print(f'  - length: {unprocessed_data_length}')
+
+        crc32 = BytesUtility.extract_bytes(data, 4, 4, pos=curr_pos)
+        compressed_size = BytesUtility.extract_integer(data, 8, 4, pos=curr_pos)
+        uncompressed_size = BytesUtility.extract_integer(data, 12, 4, pos=curr_pos)
+        print(f'  crc32: {crc32}')
+        print(f'  compressed size: {compressed_size}')
+        print(f'  uncompressed size: {uncompressed_size}')
 
         #curr_pos += skip_length_fixed
         curr_pos += unprocessed_data_length
@@ -257,7 +265,7 @@ class ZipFileFormat(FileFormat):
             print(f'  unknown signature {signature} at {curr_pos}')
 
         next_signature_pos = ZipFileFormat.find_next_signature(
-            data, curr_pos, end_pos=end_pos
+            data, curr_pos+1, end_pos=end_pos
         )
 
         unknown_data_length = next_signature_pos - curr_pos
