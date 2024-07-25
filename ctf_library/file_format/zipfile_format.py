@@ -84,7 +84,7 @@ class ZipFileFormat(FileFormat):
 
             print(f'  signature: {signature}')
             print(f'  minimum version needed to extract: {version}')
-            print(f'  general purpose bit flag: {bit_flag:b}')
+            print(f'  general purpose bit flag: {bit_flag:016b}')
             print(f'  compression method: {compression_method}')
             print(f'  file last modified time: {last_modified_time}')
             print(f'  file last modified date: {last_modified_date}')
@@ -224,20 +224,20 @@ class ZipFileFormat(FileFormat):
 
         skip_length_fixed = 4
 
-        print(f'unprocessed signautre at offset {curr_pos}:')
+        print(f'data descriptor signautre at offset {curr_pos}:')
         if end_pos >= curr_pos + skip_length_fixed:
             signature = BytesUtility.extract_bytes(data, 0, 4, pos=curr_pos)
-            print(f'  unprocessed signature {signature} at {curr_pos}')
+            print(f'  data descriptor signature {signature} at {curr_pos}')
 
         next_signature_pos = ZipFileFormat.find_next_signature(
             data, curr_pos+1, end_pos=end_pos
         )
-        unprocessed_data_length = next_signature_pos - curr_pos
-        unprocessed_data = BytesUtility.extract_bytes(
-            data, 0, unprocessed_data_length, pos=curr_pos
+        descriptor_data_length = next_signature_pos - curr_pos
+        descriptor_data = BytesUtility.extract_bytes(
+            data, 0, descriptor_data_length, pos=curr_pos
         )
-        print(f'  data at {curr_pos}-{next_signature_pos}: {unprocessed_data}')
-        print(f'  - length: {unprocessed_data_length}')
+        print(f'  data at {curr_pos}-{next_signature_pos}: {descriptor_data}')
+        print(f'  - length: {descriptor_data_length}')
 
         crc32 = BytesUtility.extract_bytes(data, 4, 4, pos=curr_pos)
         compressed_size = BytesUtility.extract_integer(data, 8, 4, pos=curr_pos)
@@ -247,7 +247,7 @@ class ZipFileFormat(FileFormat):
         print(f'  uncompressed size: {uncompressed_size}')
 
         #curr_pos += skip_length_fixed
-        curr_pos += unprocessed_data_length
+        curr_pos += descriptor_data_length
 
         return curr_pos
     
