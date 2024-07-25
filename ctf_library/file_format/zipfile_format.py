@@ -111,14 +111,29 @@ class ZipFileFormat(FileFormat):
             return ZipFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
 
         curr_pos += extra_field_length
-        # TODO: Check how the data_size is computed.
-        data_size = compressed_size if compressed_size != 0 else uncompressed_size
-        if end_pos >= curr_pos + data_size:
-            compressed_data = BytesUtility.extract_bytes(data, 0, data_size, pos=curr_pos)
-            print(f'  data: {compressed_data[:50]}')
-            print(f'    - start: {curr_pos}; end: {curr_pos+data_size}')
+        # TODO: Check how the data_size is computed. (Done?)
+        if bit_flag & 0x08 != 0:
+            # Has data descriptor
+            has_data_descriptor = True
+            next_signature_pos = ZipFileFormat.find_next_signature(
+                data, curr_pos+1, end_pos=end_pos
+            )
+            data_size = next_signature_pos - curr_pos
+            compressed_data = BytesUtility.extract_bytes(
+                data, 0, data_size, pos=curr_pos
+            )
         else:
-            return ZipFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
+            has_data_descriptor = False
+            data_size = compressed_size if compressed_size != 0 else uncompressed_size
+            if end_pos >= curr_pos + data_size:
+                compressed_data = BytesUtility.extract_bytes(
+                    data, 0, data_size, pos=curr_pos
+                )
+            else:
+                return ZipFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
+        print(f'  data: {compressed_data[:50]}')
+        print(f'    - start: {curr_pos}; end: {curr_pos+data_size}')
+        print(f'    - has data descriptor: {has_data_descriptor}')
 
         curr_pos += data_size
 
@@ -237,7 +252,7 @@ class ZipFileFormat(FileFormat):
             data, 0, descriptor_data_length, pos=curr_pos
         )
         print(f'  data at {curr_pos}-{next_signature_pos}: {descriptor_data}')
-        print(f'  - length: {descriptor_data_length}')
+        print(f'    - length: {descriptor_data_length}')
 
         crc32 = BytesUtility.extract_bytes(data, 4, 4, pos=curr_pos)
         compressed_size = BytesUtility.extract_integer(data, 8, 4, pos=curr_pos)
