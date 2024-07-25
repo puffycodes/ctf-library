@@ -132,7 +132,7 @@ class ZipFileFormat(FileFormat):
             else:
                 return ZipFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
         print(f'  data: {compressed_data[:50]}')
-        print(f'    - start: {curr_pos}; end: {curr_pos+data_size}')
+        print(f'    - start: {curr_pos}; end: {curr_pos+data_size}; length {data_size}')
         print(f'    - has data descriptor: {has_data_descriptor}')
 
         curr_pos += data_size
