@@ -68,7 +68,7 @@ class ZipFileFormat(FileFormat):
 
         header_length_fixed = 30
 
-        print(f'local file header:')
+        print(f'local file header at offset {curr_pos}:')
         if end_pos >= curr_pos + header_length_fixed:
             signature = BytesUtility.extract_bytes(data, 0, 4, pos=curr_pos)
             version = BytesUtility.extract_integer(data, 4, 2, pos=curr_pos)
@@ -132,7 +132,7 @@ class ZipFileFormat(FileFormat):
 
         header_length_fixed = 46
 
-        print(f'central directory file header:')
+        print(f'central directory file header at offset {curr_pos}:')
         if end_pos >= curr_pos + header_length_fixed:
             signature = BytesUtility.extract_bytes(data, 0, 4, pos=curr_pos)
             #
@@ -192,7 +192,7 @@ class ZipFileFormat(FileFormat):
 
         header_length_fixed = 22
 
-        print('end of central directory record:')
+        print(f'end of central directory record at offset {curr_pos}:')
         if end_pos >= curr_pos + header_length_fixed:
             signature = BytesUtility.extract_bytes(data, 0, 4, pos=curr_pos)
             #
@@ -224,12 +224,22 @@ class ZipFileFormat(FileFormat):
 
         skip_length_fixed = 4
 
-        print(f'unprocessed signautre:')
+        print(f'unprocessed signautre at offset {curr_pos}:')
         if end_pos >= curr_pos + skip_length_fixed:
             signature = BytesUtility.extract_bytes(data, 0, 4, pos=curr_pos)
             print(f'  unprocessed signature {signature} at {curr_pos}')
 
-        curr_pos += skip_length_fixed
+        next_signature_pos = ZipFileFormat.find_next_signature(
+            data, curr_pos+1, end_pos=end_pos
+        )
+        unprocessed_data_length = next_signature_pos - curr_pos
+        unprocessed_data = BytesUtility.extract_bytes(
+            data, 0, unprocessed_data_length, pos=curr_pos
+        )
+        print(f'  data at {curr_pos}-{next_signature_pos}: {unprocessed_data}')
+
+        #curr_pos += skip_length_fixed
+        curr_pos += unprocessed_data_length
 
         return curr_pos
     
@@ -241,25 +251,37 @@ class ZipFileFormat(FileFormat):
 
         skip_length_fixed = 4
 
-        print(f'*** unknown signature:')
+        print(f'*** unknown signature at offset {curr_pos}:')
         if end_pos >= curr_pos + skip_length_fixed:
             signature = BytesUtility.extract_bytes(data, 0, 4, pos=curr_pos)
             print(f'  unknown signature {signature} at {curr_pos}')
 
-        # resync to the next b'PK'
-        next_signature_pos = curr_pos
-        while end_pos >= next_signature_pos:
-            if BytesUtility.extract_bytes(data, 0, 2, pos=next_signature_pos) == b'PK':
-                break
-            next_signature_pos += 1
+        next_signature_pos = ZipFileFormat.find_next_signature(
+            data, curr_pos, end_pos=end_pos
+        )
 
         unknown_data_length = next_signature_pos - curr_pos
-        unknown_data = data[curr_pos:curr_pos+unknown_data_length]
+        #unknown_data = data[curr_pos:curr_pos+unknown_data_length]
+        unknown_data = BytesUtility.extract_bytes(
+            data, 0, unknown_data_length, pos=curr_pos
+        )
         print(f'  unknown data length: {unknown_data_length}')
-        print(f'  data at {curr_pos} - {next_signature_pos}: {unknown_data}')
+        print(f'  data at {curr_pos}-{next_signature_pos}: {unknown_data}')
 
         curr_pos += unknown_data_length
 
         return curr_pos
+    
+    @staticmethod
+    def find_next_signature(data, start_pos, end_pos=-1):
+        if end_pos <= 0:
+            end_pos = len(data)
+        # resync to the next b'PK'
+        next_signature_pos = start_pos
+        while end_pos >= next_signature_pos:
+            if BytesUtility.extract_bytes(data, 0, 2, pos=next_signature_pos) == b'PK':
+                break
+            next_signature_pos += 1
+        return next_signature_pos
     
 # --- end of file --- #
