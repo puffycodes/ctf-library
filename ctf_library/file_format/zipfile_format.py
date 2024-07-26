@@ -15,6 +15,9 @@ class ZipFileFormat(FileFormat):
     EndOfCentralDirectorySignature = b'\x50\x4b\x05\x06'
     DataDescriptorSignature = b'\x50\x4b\x07\x08'
 
+    # TODO: Not implemented
+    Zip64EndOfCentralDirectorySignature = b'\x50\x4b\x06\x06'
+
     @staticmethod
     def parse(data, offset=0, max_length=-1):
         # end_of_data_pos = len(data)
