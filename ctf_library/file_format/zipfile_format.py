@@ -112,6 +112,10 @@ class ZipFileFormat(FileFormat):
 
         curr_pos += extra_field_length
         # TODO: Check how the data_size is computed. (Done?)
+        if compressed_size == 0xffffffff and uncompressed_size == 0xffffffff:
+            is_zip64 = True
+        else:
+            is_zip64 = False
         if bit_flag & 0x08 != 0:
             # Has data descriptor
             has_data_descriptor = True
@@ -134,6 +138,7 @@ class ZipFileFormat(FileFormat):
         print(f'  data: {compressed_data[:50]}')
         print(f'    - start: {curr_pos}; end: {curr_pos+data_size}; length {data_size}')
         print(f'    - has data descriptor: {has_data_descriptor}')
+        print(f'    - zip64: {is_zip64}')
 
         curr_pos += data_size
 
