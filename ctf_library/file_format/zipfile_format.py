@@ -100,20 +100,23 @@ class ZipFileFormat(FileFormat):
             return ZipFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
 
         curr_pos += header_length_fixed
+
         if end_pos >= curr_pos + file_name_length:
             filename = BytesUtility.extract_bytes(data, 0, file_name_length, pos=curr_pos)
             print(f'  file name: {filename}')
         else:
-            return ZipFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
+            return ZipFileFormat.error_insufficient_data(data, file_name_length, pos=curr_pos)
 
         curr_pos += file_name_length
+
         if end_pos >= curr_pos + extra_field_length:
             extra_field = BytesUtility.extract_bytes(data, 0, extra_field_length, pos=curr_pos)
             print(f'  extra field: {extra_field}')
         else:
-            return ZipFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
+            return ZipFileFormat.error_insufficient_data(data, extra_field_length, pos=curr_pos)
 
         curr_pos += extra_field_length
+        
         # TODO: Check how the data_size is computed. (Done?)
         if compressed_size == 0xffffffff and uncompressed_size == 0xffffffff:
             is_zip64 = True
@@ -137,7 +140,7 @@ class ZipFileFormat(FileFormat):
                     data, 0, data_size, pos=curr_pos
                 )
             else:
-                return ZipFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
+                return ZipFileFormat.error_insufficient_data(data, data_size, pos=curr_pos)
         print(f'  data: {compressed_data[:50]}')
         print(f'    - start: {curr_pos}; end: {curr_pos+data_size}; length {data_size}')
         print(f'    - has data descriptor: {has_data_descriptor}')
@@ -185,7 +188,7 @@ class ZipFileFormat(FileFormat):
             filename = BytesUtility.extract_bytes(data, 0, file_name_length, pos=curr_pos)
             print(f'  file name: {filename}')
         else:
-            return ZipFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
+            return ZipFileFormat.error_insufficient_data(data, file_name_length, pos=curr_pos)
 
         curr_pos += file_name_length
 
@@ -193,7 +196,7 @@ class ZipFileFormat(FileFormat):
             extra_field = BytesUtility.extract_bytes(data, 0, extra_field_length, pos=curr_pos)
             print(f'  extra field: {extra_field}')
         else:
-            return ZipFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
+            return ZipFileFormat.error_insufficient_data(data, extra_field_length, pos=curr_pos)
 
         curr_pos += extra_field_length
 
@@ -201,7 +204,7 @@ class ZipFileFormat(FileFormat):
             file_comment = BytesUtility.extract_bytes(data, 0, file_comment_length, pos=curr_pos)
             print(f'  file comment: {file_comment}')
         else:
-            return ZipFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
+            return ZipFileFormat.error_insufficient_data(data, file_comment_length, pos=curr_pos)
 
         curr_pos += file_comment_length
 
@@ -233,7 +236,7 @@ class ZipFileFormat(FileFormat):
             comment = BytesUtility.extract_bytes(data, 0, comment_length, pos=curr_pos)
             print(f'  comment: {comment}')
         else:
-            return ZipFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
+            return ZipFileFormat.error_insufficient_data(data, comment_length, pos=curr_pos)
 
         curr_pos += comment_length
 
@@ -251,6 +254,8 @@ class ZipFileFormat(FileFormat):
             if end_pos >= curr_pos + skip_length_fixed:
                 signature = BytesUtility.extract_bytes(data, 0, 4, pos=curr_pos)
                 print(f'  data descriptor signature {signature} at {curr_pos}')
+            else:
+                return ZipFileFormat.error_insufficient_data(data, skip_length_fixed, pos=curr_pos)
         else:
             skip_length_fixed = 0
             print(f'without data descriptor signature')

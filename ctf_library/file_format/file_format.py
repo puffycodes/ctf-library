@@ -15,9 +15,10 @@ class FileFormat:
     @staticmethod
     def error_insufficient_data(data, length, pos=0):
         remaining_data = data[pos:]
+        remaining_data_length = len(remaining_data)
         print(f'  *** insufficent data at {pos} ({pos:x}). need {length} ({length:x})')
         print(f'  *** remaining data: {remaining_data}')
-        print(f'  *** remaining data length: {len(remaining_data)}')
-        return pos + length
+        print(f'  *** remaining data length: {remaining_data_length} ({remaining_data_length:x})')
+        return pos + remaining_data_length
 
 # --- end of file --- #
