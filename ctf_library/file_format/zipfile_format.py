@@ -4,6 +4,7 @@ from common_util.bytes_util import BytesUtility
 from ctf_library.file_format.file_format import FileFormat
 
 # Reference:
+# - https://en.wikipedia.org/wiki/ZIP_(file_format)
 # - https://docs.fileformat.com/compression/zip/
 # Free Sample ZIP Files:
 # - https://file-examples.com/index.php/text-files-and-archives-download/
