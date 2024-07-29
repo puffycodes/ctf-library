@@ -17,6 +17,7 @@ class ZipFileFormat(FileFormat):
 
     # TODO: Not implemented
     Zip64EndOfCentralDirectorySignature = b'\x50\x4b\x06\x06'
+    Zip64SomeSignature = b'\x50\x4b\x06\x07'
 
     @staticmethod
     def parse(data, offset=0, max_length=-1):
@@ -25,7 +26,8 @@ class ZipFileFormat(FileFormat):
         )
 
         data_length = end_of_data_pos - offset
-        print(f'data lenght: {data_length}')
+        print(f'data lenght: {data_length} (0x{data_length:x})')
+        print()
 
         curr_pos = offset
 
@@ -112,19 +114,22 @@ class ZipFileFormat(FileFormat):
 
         is_zip64 = False
         has_data_descriptor = False
+        data_size_undermined = False
 
-        # TODO: Check how the data_size is computed. (Done?)
         if compressed_size == 0xffffffff and uncompressed_size == 0xffffffff:
             is_zip64 = True
-            has_data_descriptor = True
+            has_data_descriptor = True # TODO: True or False? Or irrelevant?
+            data_size_undermined = True
         else:
             is_zip64 = False
             if bit_flag & 0x08 != 0:
                 has_data_descriptor = True
+                data_size_undermined = True
             else:
                 has_data_descriptor = False
+                data_size_undermined = False
 
-        if has_data_descriptor:
+        if data_size_undermined:
             next_signature_pos = ZipFileFormat.find_next_signature(
                 data, curr_pos+1, end_pos=end_pos
             )
@@ -267,8 +272,8 @@ class ZipFileFormat(FileFormat):
         descriptor_data = BytesUtility.extract_bytes(
             data, 0, descriptor_data_length, pos=curr_pos
         )
-        print(f'  data at {curr_pos}-{next_signature_pos}: {descriptor_data}')
-        print(f'    - length: {descriptor_data_length}')
+        print(f'  data: {descriptor_data}')
+        print(f'    - start: {curr_pos}; end: {next_signature_pos}; length: {descriptor_data_length}')
 
         data_offset = header_length_fixed
         crc32 = BytesUtility.extract_bytes(data, data_offset, 4, pos=curr_pos)
@@ -279,8 +284,8 @@ class ZipFileFormat(FileFormat):
             compressed_size = BytesUtility.extract_integer(data, data_offset+4, 4, pos=curr_pos)
             uncompressed_size = BytesUtility.extract_integer(data, data_offset+8, 4, pos=curr_pos)
         print(f'  crc32: {crc32}')
-        print(f'  compressed size: {compressed_size}')
-        print(f'  uncompressed size: {uncompressed_size}')
+        print(f'  compressed size: {compressed_size} (0x{compressed_size:x})')
+        print(f'  uncompressed size: {uncompressed_size} (0x{uncompressed_size:x})')
 
         curr_pos += descriptor_data_length
 
@@ -307,8 +312,8 @@ class ZipFileFormat(FileFormat):
         unknown_data = BytesUtility.extract_bytes(
             data, 0, unknown_data_length, pos=curr_pos
         )
-        print(f'  unknown data length: {unknown_data_length}')
-        print(f'  data at {curr_pos}-{next_signature_pos}: {unknown_data}')
+        print(f'  data: {unknown_data}')
+        print(f'    - start: {curr_pos}; end: {next_signature_pos}; length: {unknown_data_length}')
 
         curr_pos += unknown_data_length
 
