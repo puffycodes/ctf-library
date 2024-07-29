@@ -92,8 +92,8 @@ class ZipFileFormat(FileFormat):
             print(f'  file last modified time: {last_modified_time}')
             print(f'  file last modified date: {last_modified_date}')
             print(f'  crc32: {crc32}')
-            print(f'  compressed size: {compressed_size}')
-            print(f'  uncompressed size: {uncompressed_size}')
+            print(f'  compressed size: {compressed_size} (0x{compressed_size:x})')
+            print(f'  uncompressed size: {uncompressed_size} (0x{uncompressed_size:x})')
             print(f'  file name length: {file_name_length}')
             print(f'  extra field length: {extra_field_length}')
         else:
@@ -117,14 +117,21 @@ class ZipFileFormat(FileFormat):
 
         curr_pos += extra_field_length
 
+        is_zip64 = False
+        has_data_descriptor = False
+
         # TODO: Check how the data_size is computed. (Done?)
         if compressed_size == 0xffffffff and uncompressed_size == 0xffffffff:
             is_zip64 = True
+            has_data_descriptor = True
         else:
             is_zip64 = False
-        if bit_flag & 0x08 != 0:
-            # Has data descriptor
-            has_data_descriptor = True
+            if bit_flag & 0x08 != 0:
+                has_data_descriptor = True
+            else:
+                has_data_descriptor = False
+
+        if has_data_descriptor:
             next_signature_pos = ZipFileFormat.find_next_signature(
                 data, curr_pos+1, end_pos=end_pos
             )
@@ -132,8 +139,7 @@ class ZipFileFormat(FileFormat):
             compressed_data = BytesUtility.extract_bytes(
                 data, 0, data_size, pos=curr_pos
             )
-        else:
-            has_data_descriptor = False
+        else:                
             data_size = compressed_size if compressed_size != 0 else uncompressed_size
             if end_pos >= curr_pos + data_size:
                 compressed_data = BytesUtility.extract_bytes(
@@ -141,10 +147,11 @@ class ZipFileFormat(FileFormat):
                 )
             else:
                 return ZipFileFormat.error_insufficient_data(data, data_size, pos=curr_pos)
+                
         print(f'  data: {compressed_data[:50]}')
         print(f'    - start: {curr_pos}; end: {curr_pos+data_size}; length {data_size}')
-        print(f'    - has data descriptor: {has_data_descriptor}')
         print(f'    - zip64: {is_zip64}')
+        print(f'    - has data descriptor: {has_data_descriptor}')
 
         curr_pos += data_size
 
