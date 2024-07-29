@@ -20,9 +20,6 @@ class ZipFileFormat(FileFormat):
 
     @staticmethod
     def parse(data, offset=0, max_length=-1):
-        # end_of_data_pos = len(data)
-        # if max_length > 0:
-        #     end_of_data_pos = min(end_of_data_pos, offset + max_length)
         end_of_data_pos = ZipFileFormat.compute_end_position(
             data, offset=offset, max_length=max_length
         )
@@ -289,7 +286,6 @@ class ZipFileFormat(FileFormat):
         print(f'  compressed size: {compressed_size}')
         print(f'  uncompressed size: {uncompressed_size}')
 
-        #curr_pos += skip_length_fixed
         curr_pos += descriptor_data_length
 
         return curr_pos
@@ -312,7 +308,6 @@ class ZipFileFormat(FileFormat):
         )
 
         unknown_data_length = next_signature_pos - curr_pos
-        #unknown_data = data[curr_pos:curr_pos+unknown_data_length]
         unknown_data = BytesUtility.extract_bytes(
             data, 0, unknown_data_length, pos=curr_pos
         )
