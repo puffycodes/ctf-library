@@ -48,10 +48,6 @@ class ZipFileFormat(FileFormat):
                 curr_pos = ZipFileFormat.parse_data_descriptor(
                     data, pos=curr_pos, end_pos=end_of_data_pos
                 )
-            # elif signature.startswith(b'P'):
-            #     curr_pos = ZipFileFormat.parse_data_descriptor(
-            #         data, pos=curr_pos, end_pos=end_of_data_pos
-            #     )
             else:
                 curr_pos = ZipFileFormat.parse_unknown_signature(
                     data, pos=curr_pos, end_pos=end_of_data_pos
