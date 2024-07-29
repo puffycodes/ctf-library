@@ -116,7 +116,7 @@ class ZipFileFormat(FileFormat):
             return ZipFileFormat.error_insufficient_data(data, extra_field_length, pos=curr_pos)
 
         curr_pos += extra_field_length
-        
+
         # TODO: Check how the data_size is computed. (Done?)
         if compressed_size == 0xffffffff and uncompressed_size == 0xffffffff:
             is_zip64 = True
@@ -249,15 +249,15 @@ class ZipFileFormat(FileFormat):
         curr_pos = pos
 
         if with_signature:
-            skip_length_fixed = 4
+            header_length_fixed = 4
             print(f'data descriptor signautre at offset {curr_pos}:')
-            if end_pos >= curr_pos + skip_length_fixed:
+            if end_pos >= curr_pos + header_length_fixed:
                 signature = BytesUtility.extract_bytes(data, 0, 4, pos=curr_pos)
                 print(f'  data descriptor signature {signature} at {curr_pos}')
             else:
-                return ZipFileFormat.error_insufficient_data(data, skip_length_fixed, pos=curr_pos)
+                return ZipFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
         else:
-            skip_length_fixed = 0
+            header_length_fixed = 0
             print(f'without data descriptor signature')
 
         next_signature_pos = ZipFileFormat.find_next_signature(
@@ -270,7 +270,7 @@ class ZipFileFormat(FileFormat):
         print(f'  data at {curr_pos}-{next_signature_pos}: {descriptor_data}')
         print(f'    - length: {descriptor_data_length}')
 
-        data_offset = skip_length_fixed
+        data_offset = header_length_fixed
         crc32 = BytesUtility.extract_bytes(data, data_offset, 4, pos=curr_pos)
         if is_zip64:
             compressed_size = BytesUtility.extract_integer(data, data_offset+4, 8, pos=curr_pos)
