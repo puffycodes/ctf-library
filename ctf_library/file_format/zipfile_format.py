@@ -240,17 +240,20 @@ class ZipFileFormat(FileFormat):
         return curr_pos
     
     @staticmethod
-    def parse_data_descriptor(data, pos=0, end_pos=-1):
+    def parse_data_descriptor(data, pos=0, end_pos=-1, with_signature=True, is_zip64=False):
         if end_pos < 0:
             end_pos = len(data)
         curr_pos = pos
 
-        skip_length_fixed = 4
-
-        print(f'data descriptor signautre at offset {curr_pos}:')
-        if end_pos >= curr_pos + skip_length_fixed:
-            signature = BytesUtility.extract_bytes(data, 0, 4, pos=curr_pos)
-            print(f'  data descriptor signature {signature} at {curr_pos}')
+        if with_signature:
+            skip_length_fixed = 4
+            print(f'data descriptor signautre at offset {curr_pos}:')
+            if end_pos >= curr_pos + skip_length_fixed:
+                signature = BytesUtility.extract_bytes(data, 0, 4, pos=curr_pos)
+                print(f'  data descriptor signature {signature} at {curr_pos}')
+        else:
+            skip_length_fixed = 0
+            print(f'without data descriptor signature')
 
         next_signature_pos = ZipFileFormat.find_next_signature(
             data, curr_pos+1, end_pos=end_pos
@@ -262,9 +265,14 @@ class ZipFileFormat(FileFormat):
         print(f'  data at {curr_pos}-{next_signature_pos}: {descriptor_data}')
         print(f'    - length: {descriptor_data_length}')
 
-        crc32 = BytesUtility.extract_bytes(data, 4, 4, pos=curr_pos)
-        compressed_size = BytesUtility.extract_integer(data, 8, 4, pos=curr_pos)
-        uncompressed_size = BytesUtility.extract_integer(data, 12, 4, pos=curr_pos)
+        data_offset = skip_length_fixed
+        crc32 = BytesUtility.extract_bytes(data, data_offset, 4, pos=curr_pos)
+        if is_zip64:
+            compressed_size = BytesUtility.extract_integer(data, data_offset+4, 8, pos=curr_pos)
+            uncompressed_size = BytesUtility.extract_integer(data, data_offset+12, 8, pos=curr_pos)
+        else:
+            compressed_size = BytesUtility.extract_integer(data, data_offset+4, 4, pos=curr_pos)
+            uncompressed_size = BytesUtility.extract_integer(data, data_offset+8, 4, pos=curr_pos)
         print(f'  crc32: {crc32}')
         print(f'  compressed size: {compressed_size}')
         print(f'  uncompressed size: {uncompressed_size}')
