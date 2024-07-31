@@ -3,7 +3,16 @@
 # Base class for FileFormat class.
 # Contains some common functions.
 
+import argparse
+
 class FileFormat:
+
+    # Dummy, default parse function
+    @staticmethod
+    def parse(data, offset=0, max_length=-1):
+        print(f'=== default parse function:')
+        print(f'      please call the parse function of subclass.')
+        return
 
     @staticmethod
     def compute_end_position(data, offset=0, max_length=-1):
@@ -20,5 +29,33 @@ class FileFormat:
         print(f'  *** remaining data: {remaining_data}')
         print(f'  *** remaining data length: {remaining_data_length} (0x{remaining_data_length:x})')
         return pos + remaining_data_length
+    
+    @staticmethod
+    def main(params):
+        prog = params.get('prog', 'parse_file')
+        description = params.get('description',
+                                 'Parse and list content of files.')
+        file_arg_name = params.get('file_arg_name', 'file')
+        file_arg_name_help = params.get(
+            'file_arg_name_help', 'file to parse'
+        )
+        file_parse_function = params.get('file_parse_function', FileFormat.parse)
+
+        parser = argparse.ArgumentParser(
+            prog=prog, description=description
+        )
+        parser.add_argument(file_arg_name, nargs='+',
+                            help=file_arg_name_help)
+        args = parser.parse_args()
+
+        args_dict = vars(args)
+        files = args_dict[file_arg_name]
+        for file in files:
+            print(f'=== parsing file "{file}":')
+            with open(file, 'rb') as fd:
+                data = fd.read()
+                file_parse_function(data)
+
+        return
 
 # --- end of file --- #

@@ -124,4 +124,19 @@ class GzipFileFormat(FileFormat):
 
         return curr_pos
 
+    @staticmethod
+    def main():
+        params = {
+            'prog': 'parse_gzipfile',
+            'description': 'Parse and list content of gzipfiles.',
+            'file_arg_name': 'gzipfile',
+            'file_arg_name_help': 'gzipfile to parse',
+            'file_parse_function': GzipFileFormat.parse,
+        }
+        FileFormat.main(params)
+        return
+    
+if __name__ == '__main__':
+    GzipFileFormat.main()
+    
 # --- end of file --- #

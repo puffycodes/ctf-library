@@ -81,4 +81,19 @@ class PNGFileFormat(FileFormat):
 
         return extracted_data
 
+    @staticmethod
+    def main():
+        params = {
+            'prog': 'parse_pngfile',
+            'description': 'Parse and list content of pngfiles.',
+            'file_arg_name': 'pngfile',
+            'file_arg_name_help': 'pngfile to parse',
+            'file_parse_function': PNGFileFormat.parse,
+        }
+        FileFormat.main(params)
+        return
+    
+if __name__ == '__main__':
+    PNGFileFormat.main()
+    
 # --- end of file --- #

@@ -332,4 +332,19 @@ class ZipFileFormat(FileFormat):
             next_signature_pos += 1
         return next_signature_pos
     
+    @staticmethod
+    def main():
+        params = {
+            'prog': 'parse_zipfile',
+            'description': 'Parse and list content of zipfiles.',
+            'file_arg_name': 'zipfile',
+            'file_arg_name_help': 'zipfile to parse',
+            'file_parse_function': ZipFileFormat.parse,
+        }
+        FileFormat.main(params)
+        return
+    
+if __name__ == '__main__':
+    ZipFileFormat.main()
+    
 # --- end of file --- #
