@@ -7,6 +7,8 @@ import argparse
 
 class FileFormat:
 
+    # --- Common functions
+
     @staticmethod
     def compute_end_position(data, offset=0, max_length=-1):
         end_of_data_pos = len(data)
@@ -22,6 +24,8 @@ class FileFormat:
         print(f'  *** remaining data: {remaining_data}')
         print(f'  *** remaining data length: {remaining_data_length} (0x{remaining_data_length:x})')
         return pos + remaining_data_length
+    
+    # --- Functions related to main()
     
     # Dummy, default parse function
     @staticmethod
