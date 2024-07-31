@@ -19,6 +19,7 @@ File Format Reference:
 1. [ZIP - Wikipedia](https://en.wikipedia.org/wiki/ZIP_(file_format))
 1. [ZIP File - Fileformat](https://docs.fileformat.com/compression/zip/)
 1. [The Structure of a PKZIP File](https://users.cs.jmu.edu/buchhofp/forensics/formats/pkzip.html)
+1. [.ZIP File Format Specification](https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT)
 
 File Samples:
 1. [Free Sample Zip Files](https://file-examples.com/index.php/text-files-and-archives-download/)
