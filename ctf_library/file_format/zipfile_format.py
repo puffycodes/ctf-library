@@ -57,6 +57,10 @@ class ZipFileFormat(FileFormat):
                 curr_pos = ZipFileFormat.parse_zip64_end_of_central_directory_record(
                     data, pos=curr_pos, end_pos=end_of_data_pos
                 )
+            elif signature == ZipFileFormat.Zip64EndOfCentralDirLocatorSignature:
+                curr_pos = ZipFileFormat.parse_zip64_end_of_central_dir_locator(
+                    data, pos=curr_pos, end_pos=end_of_data_pos
+                )
             else:
                 curr_pos = ZipFileFormat.parse_unknown_signature(
                     data, pos=curr_pos, end_pos=end_of_data_pos
@@ -193,7 +197,7 @@ class ZipFileFormat(FileFormat):
             print(f'  signature: {signature}')
             print(f'  made with version: {version_made}')
             print(f'  version needed to extract: {version_needed}')
-            print(f'  general purpose bit flag: {bit_flag:b}')
+            print(f'  general purpose bit flag: {bit_flag:016b}')
             print(f'  compression method: {compression_method}')
             print(f'  file last modification time: {last_modification_time}')
             print(f'  file last modification date: {last_modification_date}')
@@ -372,6 +376,32 @@ class ZipFileFormat(FileFormat):
 
         return curr_pos
     
+    @staticmethod
+    def parse_zip64_end_of_central_dir_locator(data, pos=0, end_pos=-1):
+        if end_pos < 0:
+            end_pos = len(data)
+        curr_pos = pos
+
+        header_length_fixed = 20
+
+        print(f'zip64 end of central dir locator at offset {curr_pos}:')
+        if end_pos >= curr_pos + header_length_fixed:
+            signature = BytesUtility.extract_bytes(data, 0, 4, pos=curr_pos)
+            disk_count = BytesUtility.extract_integer(data, 4, 4, pos=curr_pos)
+            central_directory_offset = BytesUtility.extract_integer(data, 8, 8, pos=curr_pos)
+            disk_count_total = BytesUtility.extract_integer(data, 16, 4, pos=curr_pos)
+
+            print(f'  signature: {signature}')
+            print(f'  number of disk: {disk_count}')
+            print(f'  offset to central directory record: {central_directory_offset}')
+            print(f'  total number of disk: {disk_count_total}')
+        else:
+            return ZipFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
+
+        curr_pos += header_length_fixed
+
+        return curr_pos
+
     @staticmethod
     def parse_unknown_signature(data, pos=0, end_pos=-1):
         if end_pos < 0:
