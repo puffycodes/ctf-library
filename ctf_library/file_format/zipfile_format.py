@@ -3,7 +3,8 @@
 from common_util.bytes_util import BytesUtility
 from ctf_library.file_format.file_format import FileFormat
 
-# Reference:
+# References:
+# - https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT
 # - https://en.wikipedia.org/wiki/ZIP_(file_format)
 # - https://docs.fileformat.com/compression/zip/
 # Free Sample ZIP Files:
