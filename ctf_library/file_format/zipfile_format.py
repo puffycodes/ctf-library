@@ -16,8 +16,6 @@ class ZipFileFormat(FileFormat):
     EndOfCentralDirectorySignature = b'\x50\x4b\x05\x06'
     DataDescriptorSignature = b'\x50\x4b\x07\x08'
     Zip64EndOfCentralDirectorySignature = b'\x50\x4b\x06\x06'
-
-    # TODO: Not implemented
     Zip64EndOfCentralDirLocatorSignature = b'\x50\x4b\x06\x07'
     ArchiveExtraDataSignature = b'\x50\x4b\x06\x08'
     DigitalSignatureHeaderSignature = b'\x50\x4b\x05\x05'
@@ -59,6 +57,14 @@ class ZipFileFormat(FileFormat):
                 )
             elif signature == ZipFileFormat.Zip64EndOfCentralDirLocatorSignature:
                 curr_pos = ZipFileFormat.parse_zip64_end_of_central_dir_locator(
+                    data, pos=curr_pos, end_pos=end_of_data_pos
+                )
+            elif signature == ZipFileFormat.ArchiveExtraDataSignature:
+                curr_pos = ZipFileFormat.parse_archive_extra_data(
+                    data, pos=curr_pos, end_pos=end_of_data_pos
+                )
+            elif signature == ZipFileFormat.DigitalSignatureHeaderSignature:
+                curr_pos = ZipFileFormat.parse_digital_signature(
                     data, pos=curr_pos, end_pos=end_of_data_pos
                 )
             else:
@@ -402,6 +408,66 @@ class ZipFileFormat(FileFormat):
 
         return curr_pos
 
+    @staticmethod
+    def parse_archive_extra_data(data, pos=0, end_pos=-1):
+        if end_pos < 0:
+            end_pos = len(data)
+        curr_pos = pos
+
+        header_length_fixed = 8
+
+        print(f'archive extra data at offset {curr_pos}:')
+        if end_pos >= curr_pos + header_length_fixed:
+            signature = BytesUtility.extract_bytes(data, 0, 4, pos=curr_pos)
+            extra_field_length = BytesUtility.extract_integer(data, 4, 4, pos=curr_pos)
+
+            print(f'  signature: {signature}')
+            print(f'  extra field length: {extra_field_length}')
+        else:
+            return ZipFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
+
+        curr_pos += header_length_fixed
+
+        if end_pos >= curr_pos + extra_field_length:
+            extra_field_data = BytesUtility.extract_bytes(data, 0, extra_field_length, pos=curr_pos)
+            print(f'  extra field data: {extra_field_data}')
+        else:
+            return ZipFileFormat.error_insufficient_data(data, extra_field_length, pos=curr_pos)
+
+        curr_pos += extra_field_length
+
+        return curr_pos
+    
+    @staticmethod
+    def parse_digital_signature(data, pos=0, end_pos=-1):
+        if end_pos < 0:
+            end_pos = len(data)
+        curr_pos = pos
+
+        header_length_fixed = 6
+
+        print(f'archive extra data at offset {curr_pos}:')
+        if end_pos >= curr_pos + header_length_fixed:
+            signature = BytesUtility.extract_bytes(data, 0, 4, pos=curr_pos)
+            data_size = BytesUtility.extract_integer(data, 4, 2, pos=curr_pos)
+
+            print(f'  signature: {signature}')
+            print(f'  size of data: {data_size}')
+        else:
+            return ZipFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
+
+        curr_pos += header_length_fixed
+
+        if end_pos >= curr_pos + data_size:
+            signature_data = BytesUtility.extract_bytes(data, 0, data_size, pos=curr_pos)
+            print(f'  signature data: {signature_data}')
+        else:
+            return ZipFileFormat.error_insufficient_data(data, data_size, pos=curr_pos)
+
+        curr_pos += data_size
+
+        return curr_pos
+    
     @staticmethod
     def parse_unknown_signature(data, pos=0, end_pos=-1):
         if end_pos < 0:
