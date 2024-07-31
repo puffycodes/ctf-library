@@ -51,6 +51,10 @@ class ZipFileFormat(FileFormat):
                 curr_pos = ZipFileFormat.parse_data_descriptor(
                     data, pos=curr_pos, end_pos=end_of_data_pos
                 )
+            elif signature == ZipFileFormat.Zip64EndOfCentralDirectorySignature:
+                curr_pos = ZipFileFormat.parse_zip64_end_of_central_directory_record(
+                    data, pos=curr_pos, end_pos=end_of_data_pos
+                )
             else:
                 curr_pos = ZipFileFormat.parse_unknown_signature(
                     data, pos=curr_pos, end_pos=end_of_data_pos
@@ -227,11 +231,21 @@ class ZipFileFormat(FileFormat):
         print(f'end of central directory record at offset {curr_pos}:')
         if end_pos >= curr_pos + header_length_fixed:
             signature = BytesUtility.extract_bytes(data, 0, 4, pos=curr_pos)
-            #
+            disk_number = BytesUtility.extract_integer(data, 4, 2, pos=curr_pos)
+            disk_of_central_directory = BytesUtility.extract_integer(data, 6, 2, pos=curr_pos)
+            directory_count_this_disk = BytesUtility.extract_integer(data, 8, 2, pos=curr_pos)
+            directory_count_total = BytesUtility.extract_integer(data, 10, 2, pos=curr_pos)
+            directory_size = BytesUtility.extract_integer(data, 12, 4, pos=curr_pos)
+            directory_start = BytesUtility.extract_integer(data, 16, 4, pos=curr_pos)
             comment_length = BytesUtility.extract_integer(data, 20, 2, pos=curr_pos)
 
             print(f'  signature: {signature}')
-            #
+            print(f'  this disk number: {disk_number}')
+            print(f'  disk where central directory starts: {disk_of_central_directory}')
+            print(f'  number of central directory on this disk: {directory_count_this_disk}')
+            print(f'  total number of central directory: {directory_count_total}')
+            print(f'  central directory size: {directory_size}')
+            print(f'  start of central directory: {directory_start}')            #
             print(f'  comment length: {comment_length}')
         else:
             return ZipFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
@@ -289,6 +303,54 @@ class ZipFileFormat(FileFormat):
         print(f'  uncompressed size: {uncompressed_size} (0x{uncompressed_size:x})')
 
         curr_pos += descriptor_data_length
+
+        return curr_pos
+
+    @staticmethod
+    def parse_zip64_end_of_central_directory_record(data, pos=0, end_pos=-1):
+        if end_pos < 0:
+            end_pos = len(data)
+        curr_pos = pos
+
+        header_length_fixed = 56
+
+        print(f'zip64 end of central directory record at offset {curr_pos}:')
+        if end_pos >= curr_pos + header_length_fixed:
+            signature = BytesUtility.extract_bytes(data, 0, 4, pos=curr_pos)
+            eocd64_size = BytesUtility.extract_integer(data, 4, 8, pos=curr_pos)
+            version_made_by = BytesUtility.extract_integer(data, 12, 2, pos=curr_pos)
+            version_needed = BytesUtility.extract_integer(data, 14, 2, pos=curr_pos)
+            disk_number = BytesUtility.extract_integer(data, 16, 4, pos=curr_pos)
+            disk_of_central_directory = BytesUtility.extract_integer(data, 20, 4, pos=curr_pos)
+            directory_count_this_disk = BytesUtility.extract_integer(data, 24, 8, pos=curr_pos)
+            directory_count_total = BytesUtility.extract_integer(data, 32, 8, pos=curr_pos)
+            directory_size = BytesUtility.extract_integer(data, 40, 8, pos=curr_pos)
+            directory_start = BytesUtility.extract_integer(data, 48, 8, pos=curr_pos)
+            comment_length = eocd64_size - 56 + 12
+
+            print(f'  signature: {signature}')
+            print(f'  record size: {eocd64_size}')
+            print(f'  made with version: {version_made_by}')
+            print(f'  version needed to extract: {version_needed}')
+            print(f'  this disk number: {disk_number}')
+            print(f'  disk where central directory starts: {disk_of_central_directory}')
+            print(f'  number of directory records on this disk: {directory_count_this_disk}')
+            print(f'  total number of directory records: {directory_count_total}')
+            print(f'  size of central directory: {directory_size}')
+            print(f'  start of central directory: {directory_start}')
+            print(f'  comment length: {comment_length}')
+        else:
+            return ZipFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
+
+        curr_pos += header_length_fixed
+
+        if end_pos >= curr_pos + comment_length:
+            comment = BytesUtility.extract_bytes(data, 0, comment_length, pos=curr_pos)
+            print(f'  comment: {comment}')
+        else:
+            return ZipFileFormat.error_insufficient_data(data, comment_length, pos=curr_pos)
+
+        curr_pos += comment_length
 
         return curr_pos
     
