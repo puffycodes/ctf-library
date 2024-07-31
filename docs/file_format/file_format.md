@@ -24,6 +24,12 @@ File Format Reference:
 File Samples:
 1. [Free Sample Zip Files](https://file-examples.com/index.php/text-files-and-archives-download/)
 
+Encrypt a Zip File:
+
+```
+zip -er zipfile.zip files
+```
+
 ## Gzip File
 
 File Format References:
