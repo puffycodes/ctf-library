@@ -15,10 +15,12 @@ class ZipFileFormat(FileFormat):
     CentralDirectoryFileHeaderSignature = b'\x50\x4b\x01\x02'
     EndOfCentralDirectorySignature = b'\x50\x4b\x05\x06'
     DataDescriptorSignature = b'\x50\x4b\x07\x08'
+    Zip64EndOfCentralDirectorySignature = b'\x50\x4b\x06\x06'
 
     # TODO: Not implemented
-    Zip64EndOfCentralDirectorySignature = b'\x50\x4b\x06\x06'
-    Zip64SomeSignature = b'\x50\x4b\x06\x07'
+    Zip64EndOfCentralDirLocatorSignature = b'\x50\x4b\x06\x07'
+    ArchiveExtraDataSignature = b'\x50\x4b\x06\x08'
+    DigitalSignatureHeaderSignature = b'\x50\x4b\x05\x05'
 
     @staticmethod
     def parse(data, offset=0, max_length=-1):
