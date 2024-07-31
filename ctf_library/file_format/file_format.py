@@ -7,13 +7,6 @@ import argparse
 
 class FileFormat:
 
-    # Dummy, default parse function
-    @staticmethod
-    def parse(data, offset=0, max_length=-1):
-        print(f'=== default parse function:')
-        print(f'      please call the parse function of subclass.')
-        return
-
     @staticmethod
     def compute_end_position(data, offset=0, max_length=-1):
         end_of_data_pos = len(data)
@@ -30,6 +23,13 @@ class FileFormat:
         print(f'  *** remaining data length: {remaining_data_length} (0x{remaining_data_length:x})')
         return pos + remaining_data_length
     
+    # Dummy, default parse function
+    @staticmethod
+    def parse(data, offset=0, max_length=-1):
+        print(f'=== default parse function:')
+        print(f'      please call the parse function of subclass.')
+        return
+
     @staticmethod
     def main(params):
         prog = params.get('prog', 'parse_file')
@@ -49,12 +49,13 @@ class FileFormat:
         args = parser.parse_args()
 
         args_dict = vars(args)
-        files = args_dict[file_arg_name]
+        files = args_dict.get(file_arg_name, [])
         for file in files:
             print(f'=== parsing file "{file}":')
             with open(file, 'rb') as fd:
                 data = fd.read()
                 file_parse_function(data)
+            print()
 
         return
 
