@@ -27,14 +27,14 @@ class ZipFileFormat(FileFormat):
         )
 
         data_length = end_of_data_pos - offset
-        print(f'data lenght: {data_length} (0x{data_length:x})')
+        print(f'data length: {data_length} (0x{data_length:x})')
         print()
 
         curr_pos = offset
 
         while curr_pos < end_of_data_pos:
             signature = BytesUtility.extract_bytes(data, 0, 4, pos=curr_pos)
-            print(f'=== found signature {signature} at {curr_pos}')
+            print(f'=== found signature {signature} at {curr_pos} (0x{curr_pos:x})')
             if signature == ZipFileFormat.LocalFileHeaderSignature:
                 curr_pos = ZipFileFormat.parse_local_file_header(
                     data, pos=curr_pos, end_pos=end_of_data_pos
@@ -119,22 +119,22 @@ class ZipFileFormat(FileFormat):
 
         is_zip64 = False
         has_data_descriptor = False
-        data_size_undermined = False
+        data_size_undetermined = False
 
         if compressed_size == 0xffffffff and uncompressed_size == 0xffffffff:
             is_zip64 = True
             has_data_descriptor = True # TODO: True or False? Or irrelevant?
-            data_size_undermined = True
+            data_size_undetermined = True
         else:
             is_zip64 = False
             if bit_flag & 0x08 != 0:
                 has_data_descriptor = True
-                data_size_undermined = True
+                data_size_undetermined = True
             else:
                 has_data_descriptor = False
-                data_size_undermined = False
+                data_size_undetermined = False
 
-        if data_size_undermined:
+        if data_size_undetermined:
             next_signature_pos = ZipFileFormat.find_next_signature(
                 data, curr_pos+1, end_pos=end_pos
             )
@@ -171,23 +171,39 @@ class ZipFileFormat(FileFormat):
         print(f'central directory file header at offset {curr_pos}:')
         if end_pos >= curr_pos + header_length_fixed:
             signature = BytesUtility.extract_bytes(data, 0, 4, pos=curr_pos)
-            #
+            version_made = BytesUtility.extract_integer(data, 4, 2, pos=curr_pos)
+            version_needed = BytesUtility.extract_integer(data, 6, 2, pos=curr_pos)
+            bit_flag = BytesUtility.extract_integer(data, 8, 2,pos=curr_pos)
+            compression_method = BytesUtility.extract_integer(data, 10, 2, pos=curr_pos)
+            last_modification_time = BytesUtility.extract_integer(data, 12, 2, pos=curr_pos)
+            last_modification_date = BytesUtility.extract_integer(data, 14, 2, pos=curr_pos)
             crc32 = BytesUtility.extract_bytes(data, 16, 4, pos=curr_pos)
-            #
+            compressed_size = BytesUtility.extract_integer(data, 20, 4, pos=curr_pos)
+            uncompressed_size = BytesUtility.extract_bytes(data, 24, 4, pos=curr_pos)
             file_name_length = BytesUtility.extract_integer(data, 28, 2, pos=curr_pos)
             extra_field_length = BytesUtility.extract_integer(data, 30, 2, pos=curr_pos)
             file_comment_length = BytesUtility.extract_integer(data, 32, 2, pos=curr_pos)
-            #
+            disk_number_file_start = BytesUtility.extract_integer(data, 34, 2, pos=curr_pos)
+            file_attribute_internal = BytesUtility.extract_integer(data, 36, 2, pos=curr_pos)
+            file_attribute_external = BytesUtility.extract_integer(data, 38, 4, pos=curr_pos)
             local_file_header_offset = BytesUtility.extract_integer(data, 42, 4, pos=curr_pos)
 
             print(f'  signature: {signature}')
-            #
+            print(f'  made with version: {version_made}')
+            print(f'  version needed to extract: {version_needed}')
+            print(f'  general purpose bit flag: {bit_flag:b}')
+            print(f'  compression method: {compression_method}')
+            print(f'  file last modification time: {last_modification_time}')
+            print(f'  file last modification date: {last_modification_date}')
             print(f'  crc32: {crc32}')
-            #
+            print(f'  compressed size: {compressed_size}')
+            print(f'  uncompressed size: {uncompressed_size}')
             print(f'  file name length: {file_name_length}')
             print(f'  extra field length: {extra_field_length}')
             print(f'  file comment length: {file_comment_length}')
-            #
+            print(f'  file starts at disk: {disk_number_file_start}')
+            print(f'  internal file attributes: {file_attribute_internal}')
+            print(f'  external file attribute: {file_attribute_external}')
             print(f'  relative offset of local file header: {local_file_header_offset}')
         else:
             return ZipFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
