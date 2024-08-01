@@ -51,7 +51,8 @@ class ZipFileFormatTest(unittest.TestCase):
             print(f'total length: {len(zip_data)}')
             records = ZipFileFormat.get_zipfile_records(zip_data)
             for type, signature, start, end in records:
-                print(f'{type} {signature}: {start} - {end}')
+                length = end - start + 1
+                print(f'{type} {signature}: {start} - {end} ({length})')
             print()
         return
     
