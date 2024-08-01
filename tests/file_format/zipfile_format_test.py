@@ -9,13 +9,6 @@ class ZipFileFormatTest(unittest.TestCase):
     data_file_dir = 'data/zipfile'
 
     def test_list_and_parse_zipfile(self):
-        # file_list = DirectoryUtility.list_files(
-        #     ZipFileFormatTest.data_file_dir, '*.zip', recursive=True
-        # )
-        # if len(file_list) <= 0:
-        #     print(f'no Zip files in directory "{ZipFileFormatTest.data_file_dir}"')
-        #     return
-        # for file in file_list:
         for file in self.iterate_zipfiles(ZipFileFormatTest.data_file_dir):
             print(f'=== file: {file}')
             try:
@@ -34,13 +27,6 @@ class ZipFileFormatTest(unittest.TestCase):
         return
     
     def test_get_zipfile_records(self):
-        # file_list = DirectoryUtility.list_files(
-        #     ZipFileFormatTest.data_file_dir, '*.zip', recursive=True
-        # )
-        # if len(file_list) <= 0:
-        #     print(f'no Zip files in directory "{ZipFileFormatTest.data_file_dir}"')
-        #     return
-        # for file in file_list:
         for file in self.iterate_zipfiles(ZipFileFormatTest.data_file_dir):
             print(f'=== file: {file}')
             try:
