@@ -9,13 +9,14 @@ class ZipFileFormatTest(unittest.TestCase):
     data_file_dir = 'data/zipfile'
 
     def test_list_and_parse_zipfile(self):
-        file_list = DirectoryUtility.list_files(
-            ZipFileFormatTest.data_file_dir, '*.zip', recursive=True
-        )
-        if len(file_list) <= 0:
-            print(f'no Zip files in directory "{ZipFileFormatTest.data_file_dir}"')
-            return
-        for file in file_list:
+        # file_list = DirectoryUtility.list_files(
+        #     ZipFileFormatTest.data_file_dir, '*.zip', recursive=True
+        # )
+        # if len(file_list) <= 0:
+        #     print(f'no Zip files in directory "{ZipFileFormatTest.data_file_dir}"')
+        #     return
+        # for file in file_list:
+        for file in self.iterate_zipfiles(ZipFileFormatTest.data_file_dir):
             print(f'=== file: {file}')
             try:
                 with open(file, 'rb') as fd:
@@ -33,13 +34,14 @@ class ZipFileFormatTest(unittest.TestCase):
         return
     
     def test_get_zipfile_records(self):
-        file_list = DirectoryUtility.list_files(
-            ZipFileFormatTest.data_file_dir, '*.zip', recursive=True
-        )
-        if len(file_list) <= 0:
-            print(f'no Zip files in directory "{ZipFileFormatTest.data_file_dir}"')
-            return
-        for file in file_list:
+        # file_list = DirectoryUtility.list_files(
+        #     ZipFileFormatTest.data_file_dir, '*.zip', recursive=True
+        # )
+        # if len(file_list) <= 0:
+        #     print(f'no Zip files in directory "{ZipFileFormatTest.data_file_dir}"')
+        #     return
+        # for file in file_list:
+        for file in self.iterate_zipfiles(ZipFileFormatTest.data_file_dir):
             print(f'=== file: {file}')
             try:
                 with open(file, 'rb') as fd:
@@ -54,6 +56,15 @@ class ZipFileFormatTest(unittest.TestCase):
                 length = end - start + 1
                 print(f'{type} {signature}: {start} - {end} ({length})')
             print()
+        return
+    
+    def iterate_zipfiles(self, dirname):
+        file_list = DirectoryUtility.list_files(dirname, '*.zip', recursive=True)
+        if len(file_list) <= 0:
+            print(f'no Zip files in directory "{dirname}"')
+            return
+        for file in file_list:
+            yield file
         return
     
 if __name__ == '__main__':
