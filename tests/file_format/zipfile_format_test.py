@@ -32,6 +32,29 @@ class ZipFileFormatTest(unittest.TestCase):
             print()
         return
     
+    def test_get_zipfile_records(self):
+        file_list = DirectoryUtility.list_files(
+            ZipFileFormatTest.data_file_dir, '*.zip', recursive=True
+        )
+        if len(file_list) <= 0:
+            print(f'no Zip files in directory "{ZipFileFormatTest.data_file_dir}"')
+            return
+        for file in file_list:
+            print(f'=== file: {file}')
+            try:
+                with open(file, 'rb') as fd:
+                    zip_data = fd.read()
+            except Exception as e:
+                print(f'*** cannot read Zip file {file}: Error: {e}')
+                print()
+                continue
+            print(f'total length: {len(zip_data)}')
+            records = ZipFileFormat.get_zipfile_records(zip_data)
+            for type, signature, start, end in records:
+                print(f'{type} {signature}: {start} - {end}')
+            print()
+        return
+    
 if __name__ == '__main__':
     unittest.main()
 

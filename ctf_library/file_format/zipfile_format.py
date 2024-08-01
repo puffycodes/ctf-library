@@ -24,6 +24,31 @@ class ZipFileFormat(FileFormat):
     DigitalSignatureHeaderSignature = b'\x50\x4b\x05\x05'
 
     @staticmethod
+    def get_zipfile_records(data, offset=0, max_length=-1):
+        end_of_data_pos = ZipFileFormat.compute_end_position(
+            data, offset=offset, max_length=max_length
+        )
+        records = []
+
+        curr_pos = offset
+        while curr_pos < end_of_data_pos:
+            if BytesUtility.extract_bytes(data, 0, 2, pos=curr_pos) == ZipFileFormat.SignatureMarker:
+                next_record_pos = ZipFileFormat.find_next_signature(
+                    data, curr_pos+1, end_pos=end_of_data_pos
+                )
+                signature = BytesUtility.extract_bytes(data, 0, 4, pos=curr_pos)
+                records.append(('valid', signature, curr_pos, next_record_pos-1))
+                curr_pos = next_record_pos
+            else:
+                next_record_pos = ZipFileFormat.find_next_signature(
+                    data, curr_pos, end_pos=end_of_data_pos
+                )
+                records.append(('invalid', b'----', curr_pos, next_record_pos-1))
+                curr_pos = next_record_pos
+
+        return records
+
+    @staticmethod
     def parse(data, offset=0, max_length=-1):
         end_of_data_pos = ZipFileFormat.compute_end_position(
             data, offset=offset, max_length=max_length
@@ -503,9 +528,9 @@ class ZipFileFormat(FileFormat):
     def find_next_signature(data, start_pos, end_pos=-1):
         if end_pos <= 0:
             end_pos = len(data)
-        # resync to the next b'PK'
+        # resync to the next b'PK' (i.e. b'\x50\x4b')
         next_signature_pos = start_pos
-        while end_pos >= next_signature_pos:
+        while end_pos > next_signature_pos:
             if BytesUtility.extract_bytes(data, 0, 2, pos=next_signature_pos) == ZipFileFormat.SignatureMarker:
                 break
             next_signature_pos += 1
