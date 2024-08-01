@@ -12,6 +12,8 @@ from ctf_library.file_format.file_format import FileFormat
 
 class ZipFileFormat(FileFormat):
 
+    SignatureMarker = b'\x50\x4b'
+
     LocalFileHeaderSignature = b'\x50\x4b\x03\x04'
     CentralDirectoryFileHeaderSignature = b'\x50\x4b\x01\x02'
     EndOfCentralDirectorySignature = b'\x50\x4b\x05\x06'
@@ -504,7 +506,7 @@ class ZipFileFormat(FileFormat):
         # resync to the next b'PK'
         next_signature_pos = start_pos
         while end_pos >= next_signature_pos:
-            if BytesUtility.extract_bytes(data, 0, 2, pos=next_signature_pos) == b'PK':
+            if BytesUtility.extract_bytes(data, 0, 2, pos=next_signature_pos) == ZipFileFormat.SignatureMarker:
                 break
             next_signature_pos += 1
         return next_signature_pos
