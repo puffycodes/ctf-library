@@ -2,6 +2,7 @@
 
 import unittest
 from ctf_library.file_format.zipfile_format import ZipFileFormat
+from ctf_library.io.fileio import FileIO
 from common_util.dir_util import DirectoryUtility
 
 class ZipFileFormatTest(unittest.TestCase):
@@ -12,8 +13,9 @@ class ZipFileFormatTest(unittest.TestCase):
         for file in self.iterate_zipfiles(ZipFileFormatTest.data_file_dir):
             print(f'=== file: {file}')
             try:
-                with open(file, 'rb') as fd:
-                    zip_data = fd.read()
+                # with open(file, 'rb') as fd:
+                #     zip_data = fd.read()
+                zip_data = FileIO.read_binary_data(file)
             except Exception as e:
                 print(f'*** cannot read Zip file {file}: Error: {e}')
                 print()
@@ -30,8 +32,9 @@ class ZipFileFormatTest(unittest.TestCase):
         for file in self.iterate_zipfiles(ZipFileFormatTest.data_file_dir):
             print(f'=== file: {file}')
             try:
-                with open(file, 'rb') as fd:
-                    zip_data = fd.read()
+                # with open(file, 'rb') as fd:
+                #     zip_data = fd.read()
+                zip_data = FileIO.read_binary_data(file)
             except Exception as e:
                 print(f'*** cannot read Zip file {file}: Error: {e}')
                 print()

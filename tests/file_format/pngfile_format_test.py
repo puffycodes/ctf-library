@@ -2,6 +2,7 @@
 
 import unittest
 from ctf_library.file_format.pngfile_format import PNGFileFormat
+from ctf_library.io.fileio import FileIO
 from common_util.dir_util import DirectoryUtility
 
 class PNGFileFormatTest(unittest.TestCase):
@@ -26,8 +27,9 @@ class PNGFileFormatTest(unittest.TestCase):
                 print()
                 continue
             try:
-                with open(file, 'rb') as fd:
-                    png_data = fd.read()
+                # with open(file, 'rb') as fd:
+                #     png_data = fd.read()
+                png_data = FileIO.read_binary_data(file)
             except Exception as e:
                 print(f'*** cannot read PNG file {file}: Error: {e}')
                 print()

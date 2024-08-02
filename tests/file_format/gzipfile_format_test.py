@@ -4,6 +4,7 @@ import unittest
 import gzip
 import binascii
 from ctf_library.file_format.gzipfile_format import GzipFileFormat
+from ctf_library.io.fileio import FileIO
 from common_util.dir_util import DirectoryUtility
 from common_util.bytes_util import BytesUtility
 
@@ -21,8 +22,9 @@ class GzipFileFormatTest(unittest.TestCase):
         for file in file_list:
             print(f'=== file: {file}')
             try:
-                with open(file, 'rb') as fd:
-                    gzip_data = fd.read()
+                # with open(file, 'rb') as fd:
+                #     gzip_data = fd.read()
+                gzip_data = FileIO.read_binary_data(file)
             except Exception as e:
                 print(f'*** cannot read gzip file {file}: Error: {e}')
                 print()
