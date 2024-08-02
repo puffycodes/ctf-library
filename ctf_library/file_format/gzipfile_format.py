@@ -19,12 +19,6 @@ class GzipFileFormat(FileFormat):
 
     @staticmethod
     def parse(data, offset=0, max_length=-1):
-        # data_length = len(data)
-        # curr_pos = pos
-
-        # end_of_data_pos = len(data)
-        # if max_length > 0:
-        #     end_of_data_pos = min(end_of_data_pos, offset + max_length)
         end_of_data_pos = GzipFileFormat.compute_end_position(
             data, offset=offset, max_length=max_length
         )
@@ -64,7 +58,7 @@ class GzipFileFormat(FileFormat):
             print(f'  extra field data: {extra_field_data}')
             curr_pos += 2 + extra_field_length
         else:
-            print('  no extra field')
+            print(f'  no extra field')
 
         #print(f'  remaining data: {data[curr_pos:curr_pos+40]}')
 
@@ -76,7 +70,7 @@ class GzipFileFormat(FileFormat):
             print(f'  filename: {filename} ({filename_char_count} characters)')
             curr_pos += filename_char_count + 1
         else:
-            print('  no filename')
+            print(f'  no filename')
 
         #print(f'  remaining data: {data[curr_pos:curr_pos+40]}')
 
@@ -88,7 +82,7 @@ class GzipFileFormat(FileFormat):
             print(f'  comment: {comment} ({comment_char_count} characters)')
             curr_pos += comment_char_count + 1
         else:
-            print('  no comment')
+            print(f'  no comment')
 
         #print(f'  remaining data: {data[curr_pos:curr_pos+40]}')
 
@@ -97,7 +91,7 @@ class GzipFileFormat(FileFormat):
             print(f'  crc16 (header): {crc16}')
             curr_pos += 2
         else:
-            print('  no crc')
+            print(f'  no crc')
 
         remaining_data_length = end_of_data_pos - curr_pos
         trailer_length_fixed = 8
@@ -121,7 +115,7 @@ class GzipFileFormat(FileFormat):
             print(f'  isize location: {isize_pos}')
             print(f'  crc32 (uncompressed data): {crc32}')
             print(f'  isize (input size): {isize}')
-            print(f'  compressed block data: {compressed_block}')
+            print(f'  compressed block data: {compressed_block[:50]}')
             print(f'    -- length: {compressed_block_length}')
             # TODO: need to update curr_pos here
             curr_pos = end_of_data_pos # TODO: Temporary do this. Need to check.
