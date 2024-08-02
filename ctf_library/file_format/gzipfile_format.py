@@ -68,7 +68,8 @@ class GzipFileFormat(FileFormat):
             filename_char_count = 0
             while data[curr_pos+filename_char_count] != 0x00:
                filename_char_count += 1
-            filename = data[curr_pos:curr_pos+filename_char_count]
+            # filename = data[curr_pos:curr_pos+filename_char_count]
+            filename = BytesUtility.extract_bytes(data, 0, filename_char_count, pos=curr_pos)
             print(f'  filename: {filename} ({filename_char_count} characters)')
             curr_pos += filename_char_count + 1
         else:
@@ -80,7 +81,8 @@ class GzipFileFormat(FileFormat):
             comment_char_count = 0
             while data[curr_pos+comment_char_count] != 0x00:
                comment_char_count += 1
-            comment = data[curr_pos:curr_pos+comment_char_count]
+            # comment = data[curr_pos:curr_pos+comment_char_count]
+            comment = BytesUtility.extract_bytes(data, 0, comment_char_count, pos=curr_pos)
             print(f'  comment: {comment} ({comment_char_count} characters)')
             curr_pos += comment_char_count + 1
         else:
@@ -96,7 +98,7 @@ class GzipFileFormat(FileFormat):
             print(f'  no crc')
 
         print(f'compressed data:')
-        
+
         remaining_data_length = end_of_data_pos - curr_pos
         trailer_length_fixed = 8
 
@@ -119,8 +121,9 @@ class GzipFileFormat(FileFormat):
             print(f'  isize location: {isize_pos}')
             print(f'  crc32 (uncompressed data): {crc32}')
             print(f'  isize (input size): {isize}')
-            print(f'  compressed block data: {compressed_block[:50]}')
-            print(f'    -- length: {compressed_block_length}')
+            print(f'  compressed block data: {compressed_block[:40]}')
+            print(f'                         {compressed_block[-20:]}')
+            print(f'    - length: {compressed_block_length}')
             # TODO: need to update curr_pos here
             curr_pos = end_of_data_pos # TODO: Temporary do this. Need to check.
         else:
