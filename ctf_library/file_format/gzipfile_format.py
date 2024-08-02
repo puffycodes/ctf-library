@@ -51,6 +51,8 @@ class GzipFileFormat(FileFormat):
 
         print(f'  remaining data: {data[curr_pos:curr_pos+40]}')
 
+        print(f'optional fields:')
+
         if header_flags & GzipFileFormat.flag_fextra != 0:
             extra_field_length = BytesUtility.extract_integer(data, 0, 2, pos=curr_pos)
             extra_field_data = BytesUtility.extract_bytes(data, 2, extra_field_length, pos=curr_pos)
@@ -93,6 +95,8 @@ class GzipFileFormat(FileFormat):
         else:
             print(f'  no crc')
 
+        print(f'compressed data:')
+        
         remaining_data_length = end_of_data_pos - curr_pos
         trailer_length_fixed = 8
 
