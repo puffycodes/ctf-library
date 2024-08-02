@@ -46,7 +46,7 @@ class GzipFileFormat(FileFormat):
 
             print(f'  magic number: {magic_number}')
             print(f'  compression method: {compression_method}')
-            print(f'  header flags: {header_flags:b}')
+            print(f'  header flags: {header_flags:08b}')
             print(f'  timestamp:  {timestamp}')
             print(f'  compression flags: {compression_flags}')
             print(f'  operating system id: {operating_system_id}')
@@ -113,10 +113,16 @@ class GzipFileFormat(FileFormat):
             isize_pos = end_of_data_pos - 4
             crc32 = BytesUtility.extract_bytes(data, 0, 4, pos=crc32_pos)
             isize = BytesUtility.extract_integer(data, 0, 4, pos=isize_pos)
+            compressed_block_length = crc32_pos - curr_pos
+            compressed_block = BytesUtility.extract_bytes(
+                data, curr_pos, compressed_block_length
+            )
             print(f'  crc32 location: {crc32_pos}')
             print(f'  isize location: {isize_pos}')
-            print(f'  crc32 (compressed block): {crc32}')
-            print(f'  isize: {isize}')
+            print(f'  crc32 (uncompressed data): {crc32}')
+            print(f'  isize (input size): {isize}')
+            print(f'  compressed block data: {compressed_block}')
+            print(f'    -- length: {compressed_block_length}')
             # TODO: need to update curr_pos here
             curr_pos = end_of_data_pos # TODO: Temporary do this. Need to check.
         else:
