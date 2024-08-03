@@ -15,6 +15,28 @@ Implemented in module ctf_library.cipher:
 1. Hill Cipher (ctf_library.cipher.hill_cipher.HillCipher)
 1. Quagmire Cipher (ctf_library.cipher.quagmire_cipher.QuagmireCipher)
 
+[Other Cipher Solvers (External)](cipher/cipher.md)
+
+## [File Format](file_format/file_format.md)
+
+Implemented in module ctf_library.file_format:
+
+1. Gzip File Format (ctf_library.file_format.gzipfile_format.GzipFileFormat)
+1. PNG File Format (ctf_library.file_format.pngfile_format.PNGFileFormat)
+1. Zip File Format (ctf_library.file_format.zipfile_format.ZipFileFormat)
+
+## Input and Output
+
+Implemented in module ctf_library.io:
+
+1. File Input and Output (ctf_library.io.fileio.FileIO)
+
+## [Esoteric Programming Language](language/esolangs.md)
+
+Implemented in module ctf_library.language:
+
+1. [Brainfuck](language/esolangs.md#brainfuck) (ctf_library.langauge.bf)
+
 ## Math Library
 
 Implemented in module ctf_library.math:
@@ -27,12 +49,6 @@ Implemented in module ctf_library.packet:
 
 1. [USB Keystroke Decoder](packet/usb_keystroke_decoder.md) (ctf_library.packet.usb_keystroke_decoder.USBKeystrokeDecoder)
 
-## [Esoteric Programming Language](language/esolangs.md)
-
-Implemented in module ctf_library.language:
-
-1. [Brainfuck](language/esolangs.md#brainfuck) (ctf_library.langauge.bf)
-
 ***
 
-*Updated on 17 July 2024*
+*Updated on 3 August 2024*
