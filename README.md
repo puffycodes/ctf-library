@@ -6,6 +6,10 @@
 
 1. [Known Issues in CTF Library](docs/known_issues.md)
 
+## Some Random Notes
+
+1. [Some Random Notes](docs/notes/index.md)
+
 ***
 
-*Updated on 13 June 2024*
+*Updated on 6 August 2024*
