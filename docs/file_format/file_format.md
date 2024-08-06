@@ -1,8 +1,35 @@
 # File Format
 
+## Contents
+
+1. [File Signatures](#file-signatures)
+1. [Gzip File](#gzip-file)
+1. [JPEG File Interchange Format](#jpeg-file-interchange-format-jfif)
+1. [PNG File](#png-file)
+1. [Zip File](#zip-file)
+
 ## File Signatures
 
 1. [List of File Signatures](https://en.wikipedia.org/wiki/List_of_file_signatures)
+
+## Gzip File
+
+File Format References:
+1. [Gzip - Wikipedia](https://en.wikipedia.org/wiki/Gzip)
+1. [Gzip - RFC](https://datatracker.ietf.org/doc/html/rfc1952.html)
+
+Free Sample Files:
+1. [Free Sample Gzip Files](https://getsamplefiles.com/sample-archive-files/gzip)
+
+## JPEG File Interchange Format (JFIF)
+
+File Format References:
+1. [JPEG File Interchange Format - Wikipedia](https://en.wikipedia.org/wiki/JPEG_File_Interchange_Format)
+1. [JPEG File Interchange Format File Format Summary](https://www.fileformat.info/format/jpeg/egff.htm)
+1. [JPEG](https://docs.fileformat.com/image/jpeg/)
+
+File Sample:
+1. [Free Sample JPEG Files](https://filesamples.com/formats/jpeg)
 
 ## PNG File
 
@@ -29,15 +56,6 @@ Encrypt a Zip File:
 ```
 zip -er zipfile.zip files
 ```
-
-## Gzip File
-
-File Format References:
-1. [Gzip - Wikipedia](https://en.wikipedia.org/wiki/Gzip)
-1. [Gzip - RFC](https://datatracker.ietf.org/doc/html/rfc1952.html)
-
-Free Sample Files:
-1. [Free Sample Gzip Files](https://getsamplefiles.com/sample-archive-files/gzip)
 
 ***
 
