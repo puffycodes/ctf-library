@@ -57,8 +57,6 @@ class JFIFFileFormat(FileFormat):
                 curr_pos = JFIFFileFormat.parse_unknown_segment(
                     data, pos=curr_pos, end_pos=end_of_data_pos
                 )
-                # print(f'parsing ended at location {curr_pos}')
-                # break
             print()
 
         return curr_pos
@@ -239,7 +237,7 @@ class JFIFFileFormat(FileFormat):
             return JFIFFileFormat.error_insufficient_data(data, data_length, pos=curr_pos)
 
         curr_pos += data_length
-        
+
         return curr_pos
     
     @staticmethod
