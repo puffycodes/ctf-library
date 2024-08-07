@@ -281,7 +281,7 @@ class JFIFFileFormat(FileFormat):
 
         next_marker_pos = start_pos
 
-        # resync to the next b'\xff\xvv' where vv != 00
+        # resync to the next b'\xff\xvv' which is in the list of valid markers
         while end_pos > next_marker_pos:
             if data[next_marker_pos:next_marker_pos+1] == b'\xff':
                 if end_pos > next_marker_pos + 1:
