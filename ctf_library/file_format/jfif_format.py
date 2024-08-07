@@ -19,6 +19,9 @@ class JFIFFileFormat(FileFormat):
         MarkerSOI, MarkerEOI, MarkerSOS, Marker0xDB,
         Marker0xC0, Marker0xC4, MarkerAPP0,
     ]
+    MarkersWithTwoBytesLength = [
+        Marker0xDB, Marker0xC0, Marker0xC4
+    ]
 
     @staticmethod
     def parse(data, offset=0, max_length=-1):
@@ -44,6 +47,10 @@ class JFIFFileFormat(FileFormat):
                 )
             elif marker == JFIFFileFormat.MarkerAPP0:
                 curr_pos = JFIFFileFormat.parse_app0_segment(
+                    data, pos=curr_pos, end_pos=end_of_data_pos
+                )
+            elif marker in JFIFFileFormat.MarkersWithTwoBytesLength:
+                curr_pos = JFIFFileFormat.parse_segment_with_two_bytes_length(
                     data, pos=curr_pos, end_pos=end_of_data_pos
                 )
             else:
@@ -195,6 +202,44 @@ class JFIFFileFormat(FileFormat):
             print(f'  - unknown identifier: {identifier}')
             curr_pos += header_length_fixed
 
+        return curr_pos
+    
+    @staticmethod
+    def parse_segment_with_two_bytes_length(data, pos=0, end_pos=-1):
+        if end_pos < 0:
+            end_pos = len(data)
+        curr_pos = pos
+
+        header_length_fixed = 4
+
+        if end_pos >= curr_pos + header_length_fixed:
+            marker = BytesUtility.extract_bytes(data, 0, 2, pos=curr_pos)
+            length = BytesUtility.extract_integer(
+                data, 2, 2, endian='big', pos=curr_pos
+            )
+            length_bytes = BytesUtility.extract_bytes(data, 2, 2, pos=curr_pos)
+            data_length = length - header_length_fixed + 2
+            print(f'Segment with length (2 bytes):')
+            print(f'  - marker: {marker}')
+            print(f'  - length: {length}; {length_bytes}')
+        else:
+            return JFIFFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
+
+        curr_pos += header_length_fixed
+
+        if end_pos >= curr_pos + data_length:
+            if data_length > 0:
+                data = BytesUtility.extract_bytes(data, 0, data_length, pos=curr_pos)
+                print(f'  - data: {data[:50]}')
+                print(f'          {data[-20:]}')
+                print(f'      - start: {curr_pos}; end: {curr_pos+data_length}; length: {data_length}')
+            else:
+                print(f'  - data: none')
+        else:
+            return JFIFFileFormat.error_insufficient_data(data, data_length, pos=curr_pos)
+
+        curr_pos += data_length
+        
         return curr_pos
     
     @staticmethod
