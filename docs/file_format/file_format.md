@@ -24,6 +24,10 @@ Free Sample Files:
 ## JPEG File Interchange Format (JFIF)
 
 File Format References:
+1. [JFIF Version 1.02](https://www.w3.org/Graphics/JPEG/jfif3.pdf)
+1. [JPEG File Interchange Format (JFIF)](https://www.ecma-international.org/wp-content/uploads/ECMA_TR-98_1st_edition_june_2009.pdf)
+1. [The Structure of JPEG Pictures](https://metacpan.org/dist/Image-MetaData-JPEG/view/lib/Image/MetaData/JPEG/Structures.pod)
+1. [JFIF, JPEG File Interchange Format, Version 1.02](https://www.loc.gov/preservation/digital/formats/fdd/fdd000018.shtml)
 1. [JPEG File Interchange Format - Wikipedia](https://en.wikipedia.org/wiki/JPEG_File_Interchange_Format)
 1. [JPEG File Interchange Format File Format Summary](https://www.fileformat.info/format/jpeg/egff.htm)
 1. [JPEG](https://docs.fileformat.com/image/jpeg/)
