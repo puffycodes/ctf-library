@@ -241,8 +241,10 @@ class JFIFFileFormat(FileFormat):
         # resync to the next b'\xff\xvv' where vv != 00
         while end_pos > next_marker_pos:
             if data[next_marker_pos:next_marker_pos+1] == b'\xff':
-                if end_pos > next_marker_pos + 1 and data[next_marker_pos+1:next_marker_pos+2] != b'\x00':
-                    break
+                if end_pos > next_marker_pos + 1:
+                    next_marker = data[next_marker_pos:next_marker_pos+2]
+                    if  next_marker in JFIFFileFormat.ValidMarkers:
+                        break
             next_marker_pos += 1
 
         return next_marker_pos
