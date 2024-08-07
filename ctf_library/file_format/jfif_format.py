@@ -15,6 +15,11 @@ class JFIFFileFormat(FileFormat):
 
     MarkerAPP0 = b'\xff\xe0'
 
+    ValidMarkers = [
+        MarkerSOI, MarkerEOI, MarkerSOS, Marker0xDB,
+        Marker0xC0, Marker0xC4, MarkerAPP0,
+    ]
+
     @staticmethod
     def parse(data, offset=0, max_length=-1):
         end_of_data_pos = JFIFFileFormat.compute_end_position(
@@ -209,13 +214,9 @@ class JFIFFileFormat(FileFormat):
 
         curr_pos += header_length_fixed
 
-        next_marker_pos = curr_pos
-        # Sync to the next b'\xff\xvv' where vv != 00
-        while end_pos > next_marker_pos:
-            if data[next_marker_pos:next_marker_pos+1] == b'\xff':
-                if end_pos > next_marker_pos + 1 and data[next_marker_pos+1:next_marker_pos+2] != b'\x00':
-                    break
-            next_marker_pos += 1
+        next_marker_pos = JFIFFileFormat.find_next_marker(
+            data, curr_pos, end_pos = end_pos
+        )
 
         unknown_data_length = next_marker_pos - curr_pos
         unknown_data = BytesUtility.extract_bytes(
@@ -229,6 +230,22 @@ class JFIFFileFormat(FileFormat):
         curr_pos = next_marker_pos
 
         return curr_pos
+    
+    @staticmethod
+    def find_next_marker(data, start_pos, end_pos=-1):
+        if end_pos <= 0:
+            end_pos = len(data)
+
+        next_marker_pos = start_pos
+
+        # resync to the next b'\xff\xvv' where vv != 00
+        while end_pos > next_marker_pos:
+            if data[next_marker_pos:next_marker_pos+1] == b'\xff':
+                if end_pos > next_marker_pos + 1 and data[next_marker_pos+1:next_marker_pos+2] != b'\x00':
+                    break
+            next_marker_pos += 1
+
+        return next_marker_pos
     
     @staticmethod
     def main():
