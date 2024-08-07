@@ -71,8 +71,9 @@ class JFIFFileFormat(FileFormat):
 
         if end_pos >= curr_pos + header_length_fixed:
             marker = BytesUtility.extract_bytes(data, 0, 2, pos=curr_pos)
+            marker_pos = curr_pos
             print(f'SOI Marker Segment:')
-            print(f'  - marker: {marker}')
+            print(f'  - marker: {marker} at {marker_pos}')
         else:
             return JFIFFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
 
@@ -90,8 +91,9 @@ class JFIFFileFormat(FileFormat):
 
         if end_pos >= curr_pos + header_length_fixed:
             marker = BytesUtility.extract_bytes(data, 0, 2, pos=curr_pos)
+            marker_pos = curr_pos
             print(f'EOI Marker Segment:')
-            print(f'  - marker: {marker}')
+            print(f'  - marker: {marker} at {marker_pos}')
         else:
             return JFIFFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
 
@@ -109,8 +111,9 @@ class JFIFFileFormat(FileFormat):
 
         if end_pos >= curr_pos + common_header_length_fixed:
             marker = BytesUtility.extract_bytes(data, 0, 2, pos=curr_pos)
+            marker_pos = curr_pos
             print(f'APP0 Marker Segment:')
-            print(f'  - marker: {marker}')
+            print(f'  - marker: {marker} at {marker_pos}')
 
             length = BytesUtility.extract_integer(
                 data, 2, 2, pos=curr_pos, endian='big'
@@ -212,14 +215,15 @@ class JFIFFileFormat(FileFormat):
 
         if end_pos >= curr_pos + header_length_fixed:
             marker = BytesUtility.extract_bytes(data, 0, 2, pos=curr_pos)
+            marker_pos = curr_pos
             length = BytesUtility.extract_integer(
                 data, 2, 2, endian='big', pos=curr_pos
             )
             length_bytes = BytesUtility.extract_bytes(data, 2, 2, pos=curr_pos)
             data_length = length - header_length_fixed + 2
             print(f'Segment with length (2 bytes):')
-            print(f'  - marker: {marker}')
-            print(f'  - length: {length}; {length_bytes}')
+            print(f'  - marker: {marker} at {marker_pos}')
+            print(f'  - length: {length} (0x{length:04x}); {length_bytes}')
         else:
             return JFIFFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
 
@@ -250,8 +254,9 @@ class JFIFFileFormat(FileFormat):
 
         if end_pos >= curr_pos + header_length_fixed:
             marker = BytesUtility.extract_bytes(data, 0, 2, pos=curr_pos)
+            marker_pos = curr_pos
             print(f'Unknown Marker Segment:')
-            print(f'  - marker: {marker}')
+            print(f'  - marker: {marker} at {marker_pos}')
         else:
             return JFIFFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
 
