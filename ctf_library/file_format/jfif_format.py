@@ -35,19 +35,19 @@ class JFIFFileFormat(FileFormat):
         while curr_pos < end_of_data_pos:
             marker = BytesUtility.extract_bytes(data, 0, 2, pos=curr_pos)
             if marker == JFIFFileFormat.MarkerSOI:
-                curr_pos = JFIFFileFormat.parse_soi_marker_segment(
+                curr_pos = JFIFFileFormat.parse_soi_segment(
                     data, pos=curr_pos, end_pos=end_of_data_pos
                 )
             elif marker == JFIFFileFormat.MarkerEOI:
-                curr_pos = JFIFFileFormat.parse_eoi_marker_segment(
+                curr_pos = JFIFFileFormat.parse_eoi_segment(
                     data, pos=curr_pos, end_pos=end_of_data_pos
                 )
             elif marker == JFIFFileFormat.MarkerAPP0:
-                curr_pos = JFIFFileFormat.parse_app0_marker_segment(
+                curr_pos = JFIFFileFormat.parse_app0_segment(
                     data, pos=curr_pos, end_pos=end_of_data_pos
                 )
             else:
-                curr_pos = JFIFFileFormat.parse_unknown_marker_segment(
+                curr_pos = JFIFFileFormat.parse_unknown_segment(
                     data, pos=curr_pos, end_pos=end_of_data_pos
                 )
                 # print(f'parsing ended at location {curr_pos}')
@@ -57,7 +57,7 @@ class JFIFFileFormat(FileFormat):
         return curr_pos
 
     @staticmethod
-    def parse_soi_marker_segment(data, pos=0, end_pos=-1):
+    def parse_soi_segment(data, pos=0, end_pos=-1):
         if end_pos < 0:
             end_pos = len(data)
         curr_pos = pos
@@ -76,7 +76,7 @@ class JFIFFileFormat(FileFormat):
         return curr_pos
     
     @staticmethod
-    def parse_eoi_marker_segment(data, pos=0, end_pos=-1):
+    def parse_eoi_segment(data, pos=0, end_pos=-1):
         if end_pos < 0:
             end_pos = len(data)
         curr_pos = pos
@@ -95,7 +95,7 @@ class JFIFFileFormat(FileFormat):
         return curr_pos
     
     @staticmethod
-    def parse_app0_marker_segment(data, pos=0, end_pos=-1):
+    def parse_app0_segment(data, pos=0, end_pos=-1):
         if end_pos < 0:
             end_pos = len(data)
         curr_pos = pos
@@ -198,7 +198,7 @@ class JFIFFileFormat(FileFormat):
         return curr_pos
     
     @staticmethod
-    def parse_unknown_marker_segment(data, pos=0, end_pos=-1):
+    def parse_unknown_segment(data, pos=0, end_pos=-1):
         if end_pos < 0:
             end_pos = len(data)
         curr_pos = pos
