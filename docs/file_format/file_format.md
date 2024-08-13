@@ -35,6 +35,7 @@ File Format References:
 File Sample:
 1. [Free Sample JPEG Files](https://filesamples.com/formats/jpeg)
 1. [Wikimedia](https://commons.wikimedia.org/wiki/File:JPEG_example_flower.jpg)
+1. [Wikipedia](https://en.wikipedia.org/wiki/File:Example.jpg)
 
 ## PNG File
 
