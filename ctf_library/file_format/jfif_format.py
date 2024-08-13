@@ -353,7 +353,7 @@ class JFIFFileFormat(FileFormat):
     def main():
         params = {
             'prog': 'parse_jfiffile',
-            'description': 'Parse and list content of jfiffiles.',
+            'description': 'Parse and list content of jfif files.',
             'file_arg_name': 'jfiffile',
             'file_arg_name_help': 'jfiffile to parse',
             'file_parse_function': JFIFFileFormat.parse,

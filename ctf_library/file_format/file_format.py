@@ -58,7 +58,8 @@ class FileFormat:
             print(f'=== parsing file "{file}":')
             with open(file, 'rb') as fd:
                 data = fd.read()
-                file_parse_function(data)
+            end_pos = file_parse_function(data)
+            print(f'data length: {len(data)}; parsing ends at {end_pos}')
             print()
 
         return
