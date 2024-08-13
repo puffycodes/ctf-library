@@ -49,6 +49,10 @@ class JFIFFileFormat(FileFormat):
                 curr_pos = JFIFFileFormat.parse_app0_segment(
                     data, pos=curr_pos, end_pos=end_of_data_pos
                 )
+            elif marker == JFIFFileFormat.MarkerSOS:
+                curr_pos = JFIFFileFormat.parse_sos_segment(
+                    data, pos=curr_pos, end_pos=end_of_data_pos
+                )
             elif marker in JFIFFileFormat.MarkersWithTwoBytesLength:
                 curr_pos = JFIFFileFormat.parse_segment_with_two_bytes_length(
                     data, pos=curr_pos, end_pos=end_of_data_pos
@@ -72,7 +76,7 @@ class JFIFFileFormat(FileFormat):
         if end_pos >= curr_pos + header_length_fixed:
             marker = BytesUtility.extract_bytes(data, 0, 2, pos=curr_pos)
             marker_pos = curr_pos
-            print(f'SOI Marker Segment:')
+            print(f'Start of Image (SOI) Segment:')
             print(f'  - marker: {marker} at {marker_pos}')
         else:
             return JFIFFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
@@ -92,7 +96,7 @@ class JFIFFileFormat(FileFormat):
         if end_pos >= curr_pos + header_length_fixed:
             marker = BytesUtility.extract_bytes(data, 0, 2, pos=curr_pos)
             marker_pos = curr_pos
-            print(f'EOI Marker Segment:')
+            print(f'End of Image (EOI) Segment:')
             print(f'  - marker: {marker} at {marker_pos}')
         else:
             return JFIFFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
@@ -112,7 +116,7 @@ class JFIFFileFormat(FileFormat):
         if end_pos >= curr_pos + common_header_length_fixed:
             marker = BytesUtility.extract_bytes(data, 0, 2, pos=curr_pos)
             marker_pos = curr_pos
-            print(f'APP0 Marker Segment:')
+            print(f'APP0 Segment:')
             print(f'  - marker: {marker} at {marker_pos}')
 
             length = BytesUtility.extract_integer(
@@ -128,6 +132,8 @@ class JFIFFileFormat(FileFormat):
 
         # JFIF-APP0 Segment
         if identifier == b'JFIF\x00':
+            print(f'  - JFIF-APP0 Segment')
+
             header_length_fixed = common_header_length_fixed + 9
             if end_pos < curr_pos + header_length_fixed:
                 return JFIFFileFormat.error_insufficient_data(
@@ -178,6 +184,8 @@ class JFIFFileFormat(FileFormat):
 
         # JFXX-APP0 Segment
         elif identifier == b'JFXX\x00':
+            print(f'  - JFXX-APP0 Segment')
+
             header_length_fixed = common_header_length_fixed + 1
             if end_pos < curr_pos + header_length_fixed:
                 return JFIFFileFormat.error_insufficient_data(
@@ -199,9 +207,50 @@ class JFIFFileFormat(FileFormat):
 
         # Bombed
         else:
+            print(f'  - Unknown APP0 Segment')
             header_length_fixed = common_header_length_fixed
             print(f'  - unknown identifier: {identifier}')
             curr_pos += header_length_fixed
+
+        return curr_pos
+    
+    @staticmethod
+    def parse_sos_segment(data, pos=0, end_pos=-1):
+        if end_pos < 0:
+            end_pos = len(data)
+        curr_pos = pos
+
+        header_length_fixed = 2
+
+        if end_pos >= curr_pos + header_length_fixed:
+            marker = BytesUtility.extract_bytes(data, 0, 2, pos=curr_pos)
+            marker_pos = curr_pos
+            print(f'Start of Scan (SOS) Segment:')
+            print(f'  - marker: {marker} at {marker_pos}')
+        else:
+            return JFIFFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
+
+        curr_pos += header_length_fixed
+
+        next_marker_pos = JFIFFileFormat.find_next_marker(
+            data, curr_pos, end_pos = end_pos
+        )
+        next_marker = BytesUtility.extract_bytes(data, 0, 2, pos=next_marker_pos)
+        if next_marker == JFIFFileFormat.MarkerEOI:
+            print(f'  - next marker is EOI {next_marker} at {next_marker_pos}')
+        else:
+            print(f'  - next marker is not EOI: found {next_marker} at {next_marker_pos}')
+
+        compressed_image_data_length = next_marker_pos - curr_pos
+        compressed_image_data = BytesUtility.extract_bytes(
+            data, 0, compressed_image_data_length, pos=curr_pos
+        )
+
+        print(f'  - data: {compressed_image_data[:50]}')
+        print(f'          {compressed_image_data[-20:]}')
+        print(f'      - start: {curr_pos}; end: {next_marker_pos}; length: {compressed_image_data_length}')
+
+        curr_pos = next_marker_pos
 
         return curr_pos
     
