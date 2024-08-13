@@ -11,16 +11,19 @@ class JFIFFileFormat(FileFormat):
     Marker0xDB = b'\xff\xdb'
 
     Marker0xC0 = b'\xff\xc0'
+    Marker0xC2 = b'\xff\xc2'
     Marker0xC4 = b'\xff\xc4'
 
     MarkerAPP0 = b'\xff\xe0'
+
+    Marker0xFE = b'\xff\xfe'
 
     ValidMarkers = [
         MarkerSOI, MarkerEOI, MarkerSOS, Marker0xDB,
         Marker0xC0, Marker0xC4, MarkerAPP0,
     ]
     MarkersWithTwoBytesLength = [
-        Marker0xDB, Marker0xC0, Marker0xC4
+        Marker0xDB, Marker0xC0, Marker0xC2, Marker0xC4, Marker0xFE,
     ]
 
     @staticmethod
@@ -304,7 +307,7 @@ class JFIFFileFormat(FileFormat):
         if end_pos >= curr_pos + header_length_fixed:
             marker = BytesUtility.extract_bytes(data, 0, 2, pos=curr_pos)
             marker_pos = curr_pos
-            print(f'Unknown Marker Segment:')
+            print(f'*** Unknown Marker Segment:')
             print(f'  - marker: {marker} at {marker_pos}')
         else:
             return JFIFFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
