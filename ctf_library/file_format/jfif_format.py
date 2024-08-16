@@ -349,6 +349,8 @@ class JFIFFileFormat(FileFormat):
 
         return curr_pos
     
+    # --- Internal Common Functions --- #
+    
     @staticmethod
     def find_next_marker(data, start_pos, end_pos=-1):
         if end_pos <= 0:
