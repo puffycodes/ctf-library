@@ -1,6 +1,7 @@
 # file: jfif_format.py
 
 from common_util.bytes_util import BytesUtility
+from common_util.hexdump import HexDump
 from ctf_library.file_format.file_format import FileFormat
 
 class JFIFFileFormat(FileFormat):
@@ -251,7 +252,14 @@ class JFIFFileFormat(FileFormat):
 
         print(f'  - data: {compressed_image_data[:50]}')
         print(f'          {compressed_image_data[-20:]}')
-        print(f'      - start: {curr_pos}; end: {next_marker_pos}; length: {compressed_image_data_length}')
+        print(f'      - start: {curr_pos} (0x{curr_pos:x}); end: {next_marker_pos}; length: {compressed_image_data_length}')
+
+        compressed_image_data_hexdump = HexDump.hexdump_start_and_end(
+            compressed_image_data, pos_label=curr_pos
+        )
+        HexDump.print_hexdump(
+            compressed_image_data_hexdump, prefix='          '
+        )
 
         curr_pos = next_marker_pos
 
