@@ -177,8 +177,12 @@ class JFIFFileFormat(FileFormat):
                     thumbnail_data = BytesUtility.extract_bytes(
                         data, 0, thumbnail_data_length, pos=curr_pos
                     )
-                    print(f'  - thumbnail data: {thumbnail_data[:50]}')
-                    print(f'                    {thumbnail_data[-20:]}')
+                    # print(f'  - thumbnail data: {thumbnail_data[:50]}')
+                    # print(f'                    {thumbnail_data[-20:]}')
+                    JFIFFileFormat.show_data(
+                        thumbnail_data, curr_pos, curr_pos + thumbnail_data_length, thumbnail_data_length,
+                        tag='thumbnail data'
+                    )
                 else:
                     thumbnail_data = b''
                     print(f'  - thumbnail data: none')
@@ -206,7 +210,22 @@ class JFIFFileFormat(FileFormat):
 
             curr_pos += header_length_fixed
 
-            # TODO: thumbnail data
+            if end_pos >= curr_pos + thumbnail_data_length:
+                if thumbnail_data_length > 0:
+                    thumbnail_data = BytesUtility.extract_bytes(
+                        data, 0, thumbnail_data_length, pos=curr_pos
+                    )
+                    # print(f'  - thumbnail data: {thumbnail_data[:50]}')
+                    # print(f'                    {thumbnail_data[-20:]}')
+                    JFIFFileFormat.show_data(
+                        thumbnail_data, curr_pos, curr_pos + thumbnail_data_length, thumbnail_data_length,
+                        tag='thumbnail data'
+                    )
+                else:
+                    thumbnail_data = b''
+                    print(f'  - thumbnail data: none')
+            else:
+                return JFIFFileFormat.error_insufficient_data(data, thumbnail_data_length, pos=curr_pos)
 
             curr_pos += thumbnail_data_length
 
@@ -291,7 +310,7 @@ class JFIFFileFormat(FileFormat):
                 # print(f'          {data[-20:]}')
                 # print(f'      - start: {curr_pos}; end: {curr_pos+data_length}; length: {data_length}')
                 JFIFFileFormat.show_data(
-                    data, curr_pos, curr_pos + data_length, data_length, tag='data'
+                    data, curr_pos, curr_pos + data_length, data_length, tag='segment data'
                 )
             else:
                 print(f'  - data: none')
