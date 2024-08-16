@@ -306,7 +306,7 @@ class JFIFFileFormat(FileFormat):
                     data, curr_pos, curr_pos + data_length, data_length, tag='segment data'
                 )
             else:
-                print(f'  - data: none')
+                print(f'  - segment data: none')
         else:
             return JFIFFileFormat.error_insufficient_data(data, data_length, pos=curr_pos)
 
