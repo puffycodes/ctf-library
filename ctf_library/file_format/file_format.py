@@ -3,6 +3,7 @@
 # Base class for FileFormat class.
 # Contains some common functions.
 
+import sys
 import argparse
 
 class FileFormat:
@@ -17,12 +18,15 @@ class FileFormat:
         return end_of_data_pos
 
     @staticmethod
-    def error_insufficient_data(data, length, pos=0):
+    def error_insufficient_data(data, length, pos=0, fout=sys.stdout):
         remaining_data = data[pos:]
         remaining_data_length = len(remaining_data)
-        print(f'  *** insufficent data at {pos} (0x{pos:x}). need {length} (0x{length:x})')
-        print(f'  *** remaining data: {remaining_data}')
-        print(f'  *** remaining data length: {remaining_data_length} (0x{remaining_data_length:x})')
+        print(f'  *** insufficent data at {pos} (0x{pos:x}). need {length} (0x{length:x})', file=fout)
+        print(f'  *** remaining data: {remaining_data}', file=fout)
+        print(
+            f'  *** remaining data length: {remaining_data_length} (0x{remaining_data_length:x})',
+            file=fout
+        )
         return pos + remaining_data_length
     
     # --- Functions related to main()
