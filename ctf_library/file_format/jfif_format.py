@@ -1,5 +1,6 @@
 # file: jfif_format.py
 
+import sys
 from common_util.bytes_util import BytesUtility
 from common_util.hexdump import HexDump
 from ctf_library.file_format.file_format import FileFormat
@@ -250,15 +251,9 @@ class JFIFFileFormat(FileFormat):
             data, 0, compressed_image_data_length, pos=curr_pos
         )
 
-        print(f'  - data: {compressed_image_data[:50]}')
-        print(f'          {compressed_image_data[-20:]}')
-        print(f'      - start: {curr_pos} (0x{curr_pos:x}); end: {next_marker_pos}; length: {compressed_image_data_length}')
-
-        compressed_image_data_hexdump = HexDump.hexdump_start_and_end(
-            compressed_image_data, pos_label=curr_pos
-        )
-        HexDump.print_hexdump(
-            compressed_image_data_hexdump, prefix='          '
+        JFIFFileFormat.show_data(
+            compressed_image_data,
+            curr_pos, next_marker_pos, compressed_image_data_length, tag='compressed image data'
         )
 
         curr_pos = next_marker_pos
@@ -292,9 +287,12 @@ class JFIFFileFormat(FileFormat):
         if end_pos >= curr_pos + data_length:
             if data_length > 0:
                 data = BytesUtility.extract_bytes(data, 0, data_length, pos=curr_pos)
-                print(f'  - data: {data[:50]}')
-                print(f'          {data[-20:]}')
-                print(f'      - start: {curr_pos}; end: {curr_pos+data_length}; length: {data_length}')
+                # print(f'  - data: {data[:50]}')
+                # print(f'          {data[-20:]}')
+                # print(f'      - start: {curr_pos}; end: {curr_pos+data_length}; length: {data_length}')
+                JFIFFileFormat.show_data(
+                    data, curr_pos, curr_pos + data_length, data_length, tag='data'
+                )
             else:
                 print(f'  - data: none')
         else:
@@ -331,9 +329,12 @@ class JFIFFileFormat(FileFormat):
             data, 0, unknown_data_length, pos=curr_pos
         )
 
-        print(f'  - data: {unknown_data[:50]}')
-        print(f'          {unknown_data[-20:]}')
-        print(f'      - start: {curr_pos}; end: {next_marker_pos}; length: {unknown_data_length}')
+        # print(f'  - data: {unknown_data[:50]}')
+        # print(f'          {unknown_data[-20:]}')
+        # print(f'      - start: {curr_pos}; end: {next_marker_pos}; length: {unknown_data_length}')
+        JFIFFileFormat.show_data(
+            unknown_data, curr_pos, next_marker_pos, unknown_data_length, tag='unknown data'
+        )
 
         curr_pos = next_marker_pos
 
@@ -356,6 +357,25 @@ class JFIFFileFormat(FileFormat):
             next_marker_pos += 1
 
         return next_marker_pos
+    
+    # --- Display Data --- #
+    
+    @staticmethod
+    def show_data(data, start_label, end_label, length, tag='data', fout=sys.stdout):
+        print(f'  - {tag}:', file=fout)
+        print(f'        {data[:50]}', file=fout)
+        print(f'        {data[-20:]}', file=fout)
+        print(
+            f'      - start: {start_label} (0x{start_label:x});'
+            f' end: {end_label} (0x{end_label:x}); length: {length}',
+            file=fout
+        )
+        print(f'      - hexdump:', file=fout)
+        data_hexdump = HexDump.hexdump_start_and_end(data, pos_label=start_label)
+        HexDump.print_hexdump(data_hexdump, prefix='          ', fout=fout)
+        return
+    
+    # --- Main Function --- #
     
     @staticmethod
     def main():
