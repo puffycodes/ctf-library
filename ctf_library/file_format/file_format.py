@@ -8,6 +8,43 @@ import argparse
 
 class FileFormat:
 
+    class BlockInfo:
+
+        def __init__(self, start=0, end=0):
+            self.start = start
+            self.end = end
+            self.compute_length()
+            return
+        
+        def set_start(self, start):
+            self.start = start
+            self.compute_length()
+            return
+        
+        def set_end(self, end):
+            self.end = end
+            self.compute_length()
+            return
+        
+        def compute_length(self):
+            self.length = self.end - self.start
+            return
+
+        def show_block_info(self, tag='data', indent=0, fout=sys.stdout):
+            indentation = ' ' * indent
+            block_info_str = self.format_block_info()
+            print(
+                f'{indentation}- {tag}: {block_info_str}',
+                file=fout
+            )
+            return
+        
+        def format_block_info(self):
+            result = f'start: {self.start} (0x{self.start:x});' \
+                f' end: {self.end} (0x{self.end:x});' \
+                f' length: {self.length} (0x{self.length:x})'
+            return result
+    
     # --- Common functions
 
     @staticmethod
@@ -28,24 +65,6 @@ class FileFormat:
             file=fout
         )
         return pos + remaining_data_length
-    
-    # --- Common functions for displaying information
-
-    @staticmethod
-    def show_block_info(start, end, length, tag='data', indent=0, fout=sys.stdout):
-        indentation = ' ' * indent
-        block_info_str = FileFormat.format_block_info(start, end, length)
-        print(
-            f'{indentation}- {tag}: {block_info_str}',
-            file=fout
-        )
-        return
-    
-    @staticmethod
-    def format_block_info(start, end, length):
-        result = f'start: {start} (0x{start:x}); end: {end} (0x{end:x});' \
-            f' length: {length} (0x{length:x})'
-        return result
     
     # --- Functions related to main()
     
