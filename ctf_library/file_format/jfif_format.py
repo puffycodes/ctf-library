@@ -383,13 +383,14 @@ class JFIFFileFormat(FileFormat):
         return
     
     @staticmethod
-    def show_data(data, start_label, end_label, length, tag='data', fout=sys.stdout):
+    def show_data(data, start_label, end_label, data_length,
+                  tag='data', fout=sys.stdout):
         print(f'  - {tag}:', file=fout)
         # print(f'        {data[:50]}', file=fout)
         # print(f'        {data[-20:]}', file=fout)
         print(
             f'      - start: {start_label} (0x{start_label:x});'
-            f' end: {end_label} (0x{end_label:x}); length: {length}',
+            f' end: {end_label} (0x{end_label:x}); length: {data_length}',
             file=fout
         )
         print(f'      - hexdump:', file=fout)
