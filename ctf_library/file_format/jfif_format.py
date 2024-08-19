@@ -177,7 +177,7 @@ class JFIFFileFormat(FileFormat):
                     thumbnail_data = BytesUtility.extract_bytes(
                         data, 0, thumbnail_data_length, pos=curr_pos
                     )
-                    JFIFFileFormat.show_data(
+                    JFIFFileFormat.show_data_with_info(
                         thumbnail_data, curr_pos, curr_pos + thumbnail_data_length, thumbnail_data_length,
                         tag='thumbnail data'
                     )
@@ -213,7 +213,7 @@ class JFIFFileFormat(FileFormat):
                     thumbnail_data = BytesUtility.extract_bytes(
                         data, 0, thumbnail_data_length, pos=curr_pos
                     )
-                    JFIFFileFormat.show_data(
+                    JFIFFileFormat.show_data_with_info(
                         thumbnail_data, curr_pos, curr_pos + thumbnail_data_length, thumbnail_data_length,
                         tag='thumbnail data'
                     )
@@ -268,7 +268,7 @@ class JFIFFileFormat(FileFormat):
             data, 0, compressed_image_data_length, pos=curr_pos
         )
 
-        JFIFFileFormat.show_data(
+        JFIFFileFormat.show_data_with_info(
             compressed_image_data,
             curr_pos, next_marker_pos, compressed_image_data_length, tag='compressed image data'
         )
@@ -304,7 +304,7 @@ class JFIFFileFormat(FileFormat):
         if end_pos >= curr_pos + data_length:
             if data_length > 0:
                 data = BytesUtility.extract_bytes(data, 0, data_length, pos=curr_pos)
-                JFIFFileFormat.show_data(
+                JFIFFileFormat.show_data_with_info(
                     data, curr_pos, curr_pos + data_length, data_length, tag='segment data'
                 )
             else:
@@ -343,7 +343,7 @@ class JFIFFileFormat(FileFormat):
             data, 0, unknown_data_length, pos=curr_pos
         )
 
-        JFIFFileFormat.show_data(
+        JFIFFileFormat.show_data_with_info(
             unknown_data, curr_pos, next_marker_pos, unknown_data_length, tag='unknown data'
         )
 
@@ -383,8 +383,8 @@ class JFIFFileFormat(FileFormat):
         return
     
     @staticmethod
-    def show_data(data, start_label, end_label, data_length,
-                  tag='data', fout=sys.stdout):
+    def show_data_with_info(data, start_label, end_label, data_length,
+                            tag='data', fout=sys.stdout):
         print(f'  - {tag}:', file=fout)
         # print(f'        {data[:50]}', file=fout)
         # print(f'        {data[-20:]}', file=fout)
