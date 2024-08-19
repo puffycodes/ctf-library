@@ -76,6 +76,8 @@ class JFIFFileFormat(FileFormat):
             end_pos = len(data)
         curr_pos = pos
 
+        segment_start = curr_pos
+
         header_length_fixed = 2
 
         if end_pos >= curr_pos + header_length_fixed:
@@ -88,6 +90,12 @@ class JFIFFileFormat(FileFormat):
 
         curr_pos += header_length_fixed
 
+        segment_end = curr_pos
+        segment_length = segment_end - segment_start
+        JFIFFileFormat.show_block_info(
+            segment_start, segment_end, segment_length, tag='segment', indent=2
+        )
+
         return curr_pos
     
     @staticmethod
@@ -95,6 +103,8 @@ class JFIFFileFormat(FileFormat):
         if end_pos < 0:
             end_pos = len(data)
         curr_pos = pos
+
+        segment_start = curr_pos
 
         header_length_fixed = 2
 
@@ -108,6 +118,12 @@ class JFIFFileFormat(FileFormat):
 
         curr_pos += header_length_fixed
 
+        segment_end = curr_pos
+        segment_length = segment_end - segment_start
+        JFIFFileFormat.show_block_info(
+            segment_start, segment_end, segment_length, tag='segment', indent=2
+        )
+
         return curr_pos
     
     @staticmethod
@@ -115,6 +131,8 @@ class JFIFFileFormat(FileFormat):
         if end_pos < 0:
             end_pos = len(data)
         curr_pos = pos
+
+        segment_start = curr_pos
 
         common_header_length_fixed = 9
 
@@ -232,6 +250,12 @@ class JFIFFileFormat(FileFormat):
             print(f'  - unknown identifier: {identifier}')
             curr_pos += header_length_fixed
 
+        segment_end = curr_pos
+        segment_length = segment_end - segment_start
+        JFIFFileFormat.show_block_info(
+            segment_start, segment_end, segment_length, tag='segment', indent=2
+        )
+
         return curr_pos
     
     @staticmethod
@@ -239,6 +263,8 @@ class JFIFFileFormat(FileFormat):
         if end_pos < 0:
             end_pos = len(data)
         curr_pos = pos
+
+        segment_start = curr_pos
 
         header_length_fixed = 2
 
@@ -275,6 +301,12 @@ class JFIFFileFormat(FileFormat):
 
         curr_pos = next_marker_pos
 
+        segment_end = curr_pos
+        segment_length = segment_end - segment_start
+        JFIFFileFormat.show_block_info(
+            segment_start, segment_end, segment_length, tag='segment', indent=2
+        )
+
         return curr_pos
     
     @staticmethod
@@ -282,6 +314,8 @@ class JFIFFileFormat(FileFormat):
         if end_pos < 0:
             end_pos = len(data)
         curr_pos = pos
+
+        segment_start = curr_pos
 
         header_length_fixed = 4
 
@@ -314,6 +348,12 @@ class JFIFFileFormat(FileFormat):
 
         curr_pos += data_length
 
+        segment_end = curr_pos
+        segment_length = segment_end - segment_start
+        JFIFFileFormat.show_block_info(
+            segment_start, segment_end, segment_length, tag='segment', indent=2
+        )
+
         return curr_pos
     
     @staticmethod
@@ -321,6 +361,8 @@ class JFIFFileFormat(FileFormat):
         if end_pos < 0:
             end_pos = len(data)
         curr_pos = pos
+
+        segment_start = curr_pos
 
         header_length_fixed = 2
 
@@ -348,6 +390,12 @@ class JFIFFileFormat(FileFormat):
         )
 
         curr_pos = next_marker_pos
+
+        segment_end = curr_pos
+        segment_length = segment_end - segment_start
+        JFIFFileFormat.show_block_info(
+            segment_start, segment_end, segment_length, tag='segment', indent=2
+        )
 
         return curr_pos
     

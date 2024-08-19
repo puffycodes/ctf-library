@@ -29,6 +29,24 @@ class FileFormat:
         )
         return pos + remaining_data_length
     
+    # --- Common functions for displaying information
+
+    @staticmethod
+    def show_block_info(start, end, length, tag='data', indent=0, fout=sys.stdout):
+        indentation = ' ' * indent
+        block_info_str = FileFormat.format_block_info(start, end, length)
+        print(
+            f'{indentation}- {tag}: {block_info_str}',
+            file=fout
+        )
+        return
+    
+    @staticmethod
+    def format_block_info(start, end, length):
+        result = f'start: {start} (0x{start:x}); end: {end} (0x{end:x});' \
+            f' length: {length} (0x{length:x})'
+        return result
+    
     # --- Functions related to main()
     
     # Dummy, default parse function
