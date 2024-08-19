@@ -82,7 +82,8 @@ class JFIFFileFormat(FileFormat):
             marker = BytesUtility.extract_bytes(data, 0, 2, pos=curr_pos)
             marker_pos = curr_pos
             print(f'Start of Image (SOI) Segment:')
-            print(f'  - marker: {marker} at {marker_pos}')
+            #print(f'  - marker: {marker} at {marker_pos}')
+            JFIFFileFormat.show_marker(marker, marker_pos)
         else:
             return JFIFFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
 
@@ -102,7 +103,8 @@ class JFIFFileFormat(FileFormat):
             marker = BytesUtility.extract_bytes(data, 0, 2, pos=curr_pos)
             marker_pos = curr_pos
             print(f'End of Image (EOI) Segment:')
-            print(f'  - marker: {marker} at {marker_pos}')
+            #print(f'  - marker: {marker} at {marker_pos}')
+            JFIFFileFormat.show_marker(marker, marker_pos)
         else:
             return JFIFFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
 
@@ -122,7 +124,8 @@ class JFIFFileFormat(FileFormat):
             marker = BytesUtility.extract_bytes(data, 0, 2, pos=curr_pos)
             marker_pos = curr_pos
             print(f'APP0 Segment:')
-            print(f'  - marker: {marker} at {marker_pos}')
+            #print(f'  - marker: {marker} at {marker_pos}')
+            JFIFFileFormat.show_marker(marker, marker_pos)
 
             length = BytesUtility.extract_integer(
                 data, 2, 2, pos=curr_pos, endian='big'
@@ -246,7 +249,8 @@ class JFIFFileFormat(FileFormat):
             marker = BytesUtility.extract_bytes(data, 0, 2, pos=curr_pos)
             marker_pos = curr_pos
             print(f'Start of Scan (SOS) Segment:')
-            print(f'  - marker: {marker} at {marker_pos}')
+            #print(f'  - marker: {marker} at {marker_pos}')
+            JFIFFileFormat.show_marker(marker, marker_pos)
         else:
             return JFIFFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
 
@@ -257,9 +261,13 @@ class JFIFFileFormat(FileFormat):
         )
         next_marker = BytesUtility.extract_bytes(data, 0, 2, pos=next_marker_pos)
         if next_marker == JFIFFileFormat.MarkerEOI:
-            print(f'  - next marker is EOI {next_marker} at {next_marker_pos}')
+            #print(f'  - next marker is EOI {next_marker} at {next_marker_pos}')
+            JFIFFileFormat.show_marker(next_marker, next_marker_pos,
+                                       tag='next marker is EOI')
         else:
-            print(f'  - next marker is not EOI: found {next_marker} at {next_marker_pos}')
+            #print(f'  - next marker is not EOI: found {next_marker} at {next_marker_pos}')
+            JFIFFileFormat.show_marker(next_marker, next_marker_pos,
+                                       tag='next marker is not EOI')
 
         compressed_image_data_length = next_marker_pos - curr_pos
         compressed_image_data = BytesUtility.extract_bytes(
@@ -292,7 +300,8 @@ class JFIFFileFormat(FileFormat):
             length_bytes = BytesUtility.extract_bytes(data, 2, 2, pos=curr_pos)
             data_length = length - header_length_fixed + 2
             print(f'Segment with length (2 bytes):')
-            print(f'  - marker: {marker} at {marker_pos}')
+            #print(f'  - marker: {marker} at {marker_pos}')
+            JFIFFileFormat.show_marker(marker, marker_pos)
             print(f'  - length: {length} (0x{length:04x}); {length_bytes}')
         else:
             return JFIFFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
@@ -326,7 +335,8 @@ class JFIFFileFormat(FileFormat):
             marker = BytesUtility.extract_bytes(data, 0, 2, pos=curr_pos)
             marker_pos = curr_pos
             print(f'*** Unknown Marker Segment:')
-            print(f'  - marker: {marker} at {marker_pos}')
+            #print(f'  - marker: {marker} at {marker_pos}')
+            JFIFFileFormat.show_marker(marker, marker_pos)
         else:
             return JFIFFileFormat.error_insufficient_data(data, header_length_fixed, pos=curr_pos)
 
@@ -370,6 +380,15 @@ class JFIFFileFormat(FileFormat):
         return next_marker_pos
     
     # --- Display Data --- #
+
+    @staticmethod
+    def show_marker(marker, marker_pos, tag='marker', fout=sys.stdout):
+        marker_str = HexDump.to_hex(marker, sep='')
+        print(
+            f'  - {tag}: \'{marker_str}\' at {marker_pos} (0x{marker_pos:x})',
+            file=fout
+        )
+        return
     
     @staticmethod
     def show_data(data, start_label, end_label, length, tag='data', fout=sys.stdout):
