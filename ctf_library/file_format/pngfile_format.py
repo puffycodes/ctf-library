@@ -87,8 +87,11 @@ class PNGFileFormat(FileFormat):
             'prog': 'parse_pngfile',
             'description': 'Parse and list content of pngfiles.',
             'file_arg_name': 'pngfile',
-            'file_arg_name_help': 'pngfile to parse',
-            'file_parse_function': PNGFileFormat.parse,
+            'file_arg_name_help': 'png file to parse',
+            'file_actions': {
+                'parse': PNGFileFormat.parse,
+                #'scan': PNGFileFormat.extract_png_data,
+            }
         }
         FileFormat.main(params)
         return

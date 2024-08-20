@@ -72,35 +72,47 @@ class FileFormat:
     @staticmethod
     def parse(data, offset=0, max_length=-1):
         print(f'=== default parse function:')
-        print(f'      please call the parse function of subclass.')
-        return
+        print(f'      please provide the parse function of subclass.')
+        return offset
 
     @staticmethod
-    def main(params):
+    def main(params, debug=False):
         prog = params.get('prog', 'parse_file')
-        description = params.get('description',
-                                 'Parse and list content of files.')
+        description = params.get(
+            'description', 'Parse and list content of files.'
+        )
         file_arg_name = params.get('file_arg_name', 'file')
         file_arg_name_help = params.get(
             'file_arg_name_help', 'file to parse'
         )
-        file_parse_function = params.get('file_parse_function', FileFormat.parse)
+        file_actions = params.get('file_actions', {})
+        if len(file_actions) <= 0:
+            file_actions['parse'] = FileFormat.parse
+        if debug:
+            for curr_action in file_actions.keys():
+                print(f'{curr_action}: {file_actions[curr_action]}')
 
         parser = argparse.ArgumentParser(
             prog=prog, description=description
         )
+        parser.add_argument('action', choices=file_actions.keys(),
+                            help='action to perform on file')
         parser.add_argument(file_arg_name, nargs='+',
                             help=file_arg_name_help)
         args = parser.parse_args()
 
         args_dict = vars(args)
         files = args_dict.get(file_arg_name, [])
+        curr_action = args.action
         for file in files:
-            print(f'=== parsing file "{file}":')
+            print(f'=== parsing file "{file}" with action "{curr_action}":')
             with open(file, 'rb') as fd:
                 data = fd.read()
-            end_pos = file_parse_function(data)
-            print(f'data length: {len(data)}; parsing ends at {end_pos}')
+            if curr_action in file_actions:
+                end_pos = file_actions[curr_action](data)
+                print(f'data length: {len(data)}; parsing ends at {end_pos}')
+            else:
+                print(f'unknown action {curr_action}')
             print()
 
         return

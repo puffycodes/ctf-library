@@ -137,8 +137,10 @@ class GzipFileFormat(FileFormat):
             'prog': 'parse_gzipfile',
             'description': 'Parse and list content of gzipfiles.',
             'file_arg_name': 'gzipfile',
-            'file_arg_name_help': 'gzipfile to parse',
-            'file_parse_function': GzipFileFormat.parse,
+            'file_arg_name_help': 'gzip file to parse',
+            'file_actions': {
+                'parse': GzipFileFormat.parse,
+            }
         }
         FileFormat.main(params)
         return

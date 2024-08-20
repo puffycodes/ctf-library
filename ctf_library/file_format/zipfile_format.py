@@ -542,8 +542,10 @@ class ZipFileFormat(FileFormat):
             'prog': 'parse_zipfile',
             'description': 'Parse and list content of zipfiles.',
             'file_arg_name': 'zipfile',
-            'file_arg_name_help': 'zipfile to parse',
-            'file_parse_function': ZipFileFormat.parse,
+            'file_arg_name_help': 'zip file to parse',
+            'file_actions': {
+                'parse': ZipFileFormat.parse,
+            }
         }
         FileFormat.main(params)
         return

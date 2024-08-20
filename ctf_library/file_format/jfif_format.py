@@ -436,8 +436,12 @@ class JFIFFileFormat(FileFormat):
             'prog': 'parse_jfiffile',
             'description': 'Parse and list content of jfif files.',
             'file_arg_name': 'jfiffile',
-            'file_arg_name_help': 'jfiffile to parse',
-            'file_parse_function': JFIFFileFormat.parse,
+            'file_arg_name_help': 'jfif file to parse',
+            'file_actions': {
+                'parse': JFIFFileFormat.parse,
+                'scan': JFIFFileFormat.parse,
+                'test': JFIFFileFormat.parse,
+            }
         }
         FileFormat.main(params)
         return
