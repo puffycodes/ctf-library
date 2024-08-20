@@ -1,6 +1,7 @@
 # file: pngfile_format.py
 
 from common_util.bytes_util import BytesUtility
+from common_util.hexdump import HexDump
 from ctf_library.file_format.file_format import FileFormat
 
 # Reference:
@@ -29,7 +30,9 @@ class PNGFileFormat(FileFormat):
             header_data = BytesUtility.extract_bytes(
                 data, 0, PNGFileFormat.PNGHeaderLength, curr_pos
             )
-            print(f'offset: {curr_pos}; header: {header_data}')
+            header_data_hexdump = HexDump.to_hex(header_data, sep=' ')
+            header_data_text = HexDump.to_text(header_data)
+            print(f'offset: {curr_pos}; header: {header_data_hexdump} "{header_data_text}"')
             curr_pos += PNGFileFormat.PNGHeaderLength
 
             if header_data != PNGFileFormat.PNGHeader:
@@ -40,7 +43,8 @@ class PNGFileFormat(FileFormat):
             chunk_type = BytesUtility.extract_bytes(data, 4, 4, pos=curr_pos)
             chunk_data = BytesUtility.extract_bytes(data, 8, chunk_length, pos=curr_pos)
             chunk_crc = BytesUtility.extract_bytes(data, 8 + chunk_length, 4, pos=curr_pos)
-            print(f'offset: {curr_pos}; type: {chunk_type}; length: {chunk_length}; crc: {chunk_crc}')
+            chunk_crc_hexdump = HexDump.to_hex(chunk_crc, sep='')
+            print(f'offset: {curr_pos}; type: {chunk_type}; length: {chunk_length}; crc: {chunk_crc_hexdump}')
             curr_pos += 12 + chunk_length
 
             if chunk_type == b'IEND':
