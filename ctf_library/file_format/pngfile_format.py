@@ -85,7 +85,7 @@ class PNGFileFormat(FileFormat):
             'file_arg_name_help': 'png file to parse',
             'file_actions': {
                 'parse': PNGFileFormat.parse,
-                #'scan': PNGFileFormat.extract_png_data,
+                'extract': PNGFileFormat.extract_png_data,
             }
         }
         FileFormat.main(params)

@@ -6,6 +6,8 @@
 import sys
 import argparse
 
+from common_util.hexdump import HexDump
+
 class FileFormat:
 
     class BlockInfo:
@@ -109,8 +111,17 @@ class FileFormat:
             with open(file, 'rb') as fd:
                 data = fd.read()
             if curr_action in file_actions:
-                end_pos = file_actions[curr_action](data)
-                print(f'data length: {len(data)}; parsing ends at {end_pos}')
+                result = file_actions[curr_action](data)
+                if type(result) == int:
+                    end_pos = result
+                    print(f'data length: {len(data)}; parsing ends at {end_pos}')
+                elif type(result) == bytes:
+                    result_length = len(result)
+                    result_hexdump = HexDump.hexdump_start_and_end(result)
+                    print(f'result length: {result_length}')
+                    HexDump.print_hexdump(result_hexdump)
+                else:
+                    print(f'result: {result}')
             else:
                 print(f'unknown action {curr_action}')
             print()
