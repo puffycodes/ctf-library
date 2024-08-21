@@ -112,15 +112,17 @@ class FileFormat:
                 data = fd.read()
             if curr_action in file_actions:
                 result = file_actions[curr_action](data)
+                data_length = len(data)
                 if type(result) == int:
                     end_pos = result
-                    print(f'data length: {len(data)}; parsing ends at {end_pos}')
+                    print(f'data length: {data_length}; parsing ends at {end_pos}')
                 elif type(result) == bytes:
                     result_length = len(result)
                     result_hexdump = HexDump.hexdump_start_and_end(result)
-                    print(f'result length: {result_length}')
+                    print(f'original data length: {data_length}; result length: {result_length}')
                     HexDump.print_hexdump(result_hexdump)
                 else:
+                    print(f'original data length: {data_length}')
                     print(f'result: {result}')
             else:
                 print(f'unknown action {curr_action}')
