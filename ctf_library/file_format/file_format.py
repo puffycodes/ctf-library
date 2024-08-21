@@ -108,9 +108,9 @@ class FileFormat:
         curr_action = args.action
         for file in files:
             print(f'=== parsing file "{file}" with action "{curr_action}":')
-            with open(file, 'rb') as fd:
-                data = fd.read()
             if curr_action in file_actions:
+                with open(file, 'rb') as fd:
+                    data = fd.read()
                 result = file_actions[curr_action](data)
                 data_length = len(data)
                 if type(result) == int:
