@@ -1,5 +1,6 @@
 # file: pngfile_format.py
 
+import binascii
 from common_util.bytes_util import BytesUtility
 from common_util.hexdump import HexDump
 from ctf_library.file_format.file_format import FileFormat
@@ -44,7 +45,15 @@ class PNGFileFormat(FileFormat):
             chunk_data = BytesUtility.extract_bytes(data, 8, chunk_length, pos=curr_pos)
             chunk_crc = BytesUtility.extract_bytes(data, 8 + chunk_length, 4, pos=curr_pos)
             chunk_crc_hexdump = HexDump.to_hex(chunk_crc, sep='')
-            print(f'offset: {curr_pos}; type: {chunk_type}; length: {chunk_length}; crc: {chunk_crc_hexdump}')
+            chunk_crc_computed = binascii.crc32(chunk_type + chunk_data)
+            chunk_crc_computed_hex = HexDump.to_hex(
+                BytesUtility.integer_to_bytes(chunk_crc_computed, endian='big'),
+                sep=''
+            )
+            print(
+                f'offset: {curr_pos}; type: {chunk_type}; length: {chunk_length};'
+                f' crc: {chunk_crc_hexdump} ({chunk_crc_computed_hex})'
+            )
             curr_pos += 12 + chunk_length
 
             if chunk_type == b'IEND':
