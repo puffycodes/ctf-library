@@ -8,7 +8,7 @@ class FactorizationTest(unittest.TestCase):
     verbose = False
 
     def test_factorization(self):
-        for number in range(2, 50):
+        for number in range(2, 50000):
             self.do_check_factorization(number)
         for number in range(-1, -50, -1):
             self.do_check_factorization(number)
