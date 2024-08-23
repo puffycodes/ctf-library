@@ -3,6 +3,7 @@
 class Factorization:
 
     # ----- Factorisation ----- #
+    
     @staticmethod
     def prime_factors(number):
         factors = []
@@ -27,6 +28,7 @@ class Factorization:
         factors.sort()
         return factors[-1]
 
+    # Euler's totient function
     # Ref: https://en.wikipedia.org/wiki/Euler%27s_totient_function
     @staticmethod
     def totient_function(number):
