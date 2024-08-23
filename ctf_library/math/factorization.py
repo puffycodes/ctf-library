@@ -31,14 +31,16 @@ class Factorization:
     # ----- Get All Factors ----- #
     
     # Ref: https://courses.lumenlearning.com/mathforliberalartscorequisite/chapter/finding-all-the-factors-of-a-number/
+    #
+    # - return a list [ f0, f1, ..., fn ] where number % fn == 0
     @staticmethod
     def all_factors(number):
         result = []
 
         # special case for zero
         if number == 0:
-            result.append(0)
-            result.sort()
+            # result.append(0)
+            # result.sort()
             return result
 
         # handle negative numbers
