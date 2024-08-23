@@ -63,6 +63,8 @@ class FactorizationTest(unittest.TestCase):
         all_factors = Factorization.all_factors(number)
         if verbose:
             print(f'{number}: {all_factors}')
+        for factor in all_factors:
+            self.assertEqual(number % factor, 0)
         return
     
     def list_multiplication(self, number_list):
