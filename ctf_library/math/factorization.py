@@ -2,10 +2,10 @@
 
 class Factorization:
 
-    # ----- Factorisation ----- #
-    
+    # ----- Factorization ----- #
+
     @staticmethod
-    def prime_factors(number):
+    def prime_factorization(number):
         factors = []
         
         if number < 0:
@@ -24,7 +24,7 @@ class Factorization:
     
     @staticmethod
     def max_prime_factor(number):
-        factors = Factorization.prime_factors(number)
+        factors = Factorization.prime_factorization(number)
         factors.sort()
         return factors[-1]
 
@@ -32,7 +32,7 @@ class Factorization:
     # Ref: https://en.wikipedia.org/wiki/Euler%27s_totient_function
     @staticmethod
     def totient_function(number):
-        factors = Factorization.prime_factors(number)
+        factors = Factorization.prime_factorization(number)
         phi_n = 1
         for p in set(factors):
             phi_n *= p ** (factors.count(p) - 1) * (p - 1)
