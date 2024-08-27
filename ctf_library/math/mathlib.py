@@ -15,7 +15,9 @@
 class MathLib:
 
     # --- GCD Related
-    #     - can use math.gcd() for Python 3.5 and above
+    #     - Can use math.gcd() for Python 3.5 and above.
+    #     - The Euclidean Algorithm may return a negative gcd, which is
+    #       different from math.gcd().
 
     @staticmethod
     def gcd(a, b):
@@ -36,8 +38,9 @@ class MathLib:
             return MathLib.gcd_euclidean_recursive(b, a % b)
         
     # --- Extended Euclidean Algorithm (XGCD)
-    #     - for two numbers a and b, return g, x and y,
-    #       where g = gcd(a, b) and g = ax + by
+    #     - For two numbers a and b, return g, x and y,
+    #       where g = gcd(a, b) and g = ax + by.
+    #     - The value g may be negative.
     @staticmethod
     def xgcd(a, b):
         prevx, x = 1, 0
@@ -50,7 +53,8 @@ class MathLib:
         return a, prevx, prevy
         
     # --- LCM Related
-    #     - can use math.lcm() after Python 3.9.0
+    #     - Can use math.lcm() for Python 3.9.0 and above.
+    #     - Return value of lcm() is always positive.
     @staticmethod
     def lcm(a, b):
         if a == 0 and b == 0:
