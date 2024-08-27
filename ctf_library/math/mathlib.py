@@ -16,13 +16,14 @@ class MathLib:
 
     # --- GCD Related
     #     - Can use math.gcd() for Python 3.5 and above.
-    #     - The Euclidean Algorithm may return a negative gcd value, which
+    #     - The Euclidean Algorithms may return a negative gcd value, which
     #       is different from math.gcd(). The return value is negative when
     #       the second value is negative.
+    #     - The function gcd() returns the positive gcd value.
 
     @staticmethod
     def gcd(a, b):
-        return MathLib.gcd_euclidean(a, b)
+        return abs(MathLib.gcd_euclidean(a, b))
     
     @staticmethod
     def gcd_euclidean(a, b):

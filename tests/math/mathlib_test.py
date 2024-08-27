@@ -11,7 +11,9 @@ class MathLibTest(unittest.TestCase):
         [ -5, 7, 1, 35 ], [ 5, -7, -1, 35 ], [ -5, -7, -1, 35 ],
         [ -1, 1, 1, 1 ], [ 1, -1, -1, 1 ], [ -1, -1, -1, 1 ],
         [ 0, 7, 7, 0 ], [ 7, 0, 7, 0 ], [ 0, 0, 0, 0 ],
-        [ 210, 30, 30, 210 ], [ 210, 150, 30, 1050 ], [ 1000, 50, 50, 1000 ],
+        [ 210, 30, 30, 210 ], [ 210, 150, 30, 1050 ],
+        [ -210, 30, 30, 210], [ 210, -30, -30, 210 ], [ -210, -30, -30, 210 ],
+        [ 1000, 50, 50, 1000 ],
     ]
 
     def test_gcd(self):
@@ -22,7 +24,7 @@ class MathLibTest(unittest.TestCase):
             ge_2 = MathLib.gcd_euclidean_recursive(a, b)
             if verbose:
                 print(f'gcd({a}, {b}) = {g}')
-            self.assertEqual(g, gcd_expected)
+            self.assertEqual(g, abs(gcd_expected))
             self.assertEqual(ge_1, gcd_expected)
             self.assertEqual(ge_2, gcd_expected)
         return
