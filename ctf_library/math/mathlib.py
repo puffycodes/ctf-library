@@ -26,12 +26,12 @@ class MathLib:
         while b != 0:
             r = a % b
             a, b = b, r
-        return abs(a)
+        return a
     
     @staticmethod
     def gcd_euclidean_recursive(a, b):
         if b == 0:
-            return abs(a)
+            return a
         else:
             return MathLib.gcd_euclidean_recursive(b, a % b)
         
@@ -54,7 +54,8 @@ class MathLib:
     @staticmethod
     def lcm(a, b):
         if a == 0 and b == 0:
+            # special case
             return 0
-        return abs(a * b) // MathLib.gcd(a, b)
+        return abs(a * b) // abs(MathLib.gcd(a, b))
 
 # --- end of file --- #
