@@ -42,11 +42,11 @@ class MathLibTest(unittest.TestCase):
     
     def test_lcm(self):
         verbose = False
-        for a, b, _, lcd_expected in MathLibTest.test_cases:
+        for a, b, _, lcm_expected in MathLibTest.test_cases:
             l = MathLib.lcm(a, b)
             if verbose:
                 print(f'lcm({a}, {b}) = {l}')
-            self.assertEqual(l, lcd_expected)
+            self.assertEqual(l, lcm_expected)
         return
     
 if __name__ == '__main__':
