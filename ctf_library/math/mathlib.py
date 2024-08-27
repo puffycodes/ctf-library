@@ -1,0 +1,60 @@
+# file: mathlib.py
+
+# A random collection of math functions.
+
+# GCD (or HCF)
+# - Ref: https://simple.wikipedia.org/wiki/Greatest_common_divisor
+
+# Extended GCD
+# - Ref: http://anh.cs.luc.edu/331/notes/xgcd.pdf
+
+# LCM
+# - Ref: https://en.wikipedia.org/wiki/Least_common_multiple
+# - Ref: https://www.cuemath.com/numbers/lcm-least-common-multiple/
+
+class MathLib:
+
+    # --- GCD Related
+    #     - can use math.gcd() for Python 3.5 and above
+
+    @staticmethod
+    def gcd(a, b):
+        return MathLib.gcd_euclidean(a, b)
+    
+    @staticmethod
+    def gcd_euclidean(a, b):
+        while b != 0:
+            r = a % b
+            a, b = b, r
+        return abs(a)
+    
+    @staticmethod
+    def gcd_euclidean_recursive(a, b):
+        if b == 0:
+            return abs(a)
+        else:
+            return MathLib.gcd_euclidean_recursive(b, a % b)
+        
+    # --- Extended Euclidean Algorithm (XGCD)
+    #     - for two numbers a and b, return g, x and y,
+    #       where g = gcd(a, b) and g = ax + by
+    @staticmethod
+    def xgcd(a, b):
+        prevx, x = 1, 0
+        prevy, y = 0, 1
+        while b != 0:
+            q = a // b
+            x, prevx = prevx - q * x, x
+            y, prevy = prevy - q * y, y
+            a, b = b, a % b
+        return a, prevx, prevy
+        
+    # --- LCM Related
+    #     - can use math.lcm() after Python 3.9.0
+    @staticmethod
+    def lcm(a, b):
+        if a == 0 and b == 0:
+            return 0
+        return abs(a * b) // MathLib.gcd(a, b)
+
+# --- end of file --- #
