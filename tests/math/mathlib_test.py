@@ -20,13 +20,13 @@ class MathLibTest(unittest.TestCase):
         verbose = False
         for a, b, gcd_expected, _ in MathLibTest.test_cases:
             g = MathLib.gcd(a, b)
-            ge_1 = MathLib.gcd_euclidean(a, b)
-            ge_2 = MathLib.gcd_euclidean_recursive(a, b)
+            g_e1 = MathLib.gcd_euclidean(a, b)
+            g_e2 = MathLib.gcd_euclidean_recursive(a, b)
             if verbose:
                 print(f'gcd({a}, {b}) = {g}')
             self.assertEqual(g, abs(gcd_expected))
-            self.assertEqual(ge_1, gcd_expected)
-            self.assertEqual(ge_2, gcd_expected)
+            self.assertEqual(g_e1, gcd_expected)
+            self.assertEqual(g_e2, gcd_expected)
         return
     
     def test_xgcd(self):
