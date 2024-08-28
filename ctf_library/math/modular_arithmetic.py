@@ -9,6 +9,9 @@
 # - Ref: https://stackoverflow.com/questions/4798654/modular-multiplicative-inverse-function-in-python
 # - Ref: https://docs.python.org/3/library/functions.html#pow
 #
+# Modular Exponentiation (TODO)
+# - Ref: https://simple.wikipedia.org/wiki/Exponentiation_by_squaring
+#
 # Modular Square Root
 # - Tonelli–Shanks algorithm
 #   Ref: https://en.wikipedia.org/wiki/Tonelli%E2%80%93Shanks_algorithm
