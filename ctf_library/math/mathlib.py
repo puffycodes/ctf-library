@@ -13,8 +13,8 @@
 # - Ref: https://www.cuemath.com/numbers/lcm-least-common-multiple/
 
 # Euclidean Algorithms
-# gcd() Ref: https://en.wikipedia.org/wiki/Euclidean_algorithm
-# xgcd() Ref: https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
+# - gcd() Ref: https://en.wikipedia.org/wiki/Euclidean_algorithm
+# - xgcd() Ref: https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
 
 class MathLib:
 
