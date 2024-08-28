@@ -24,6 +24,14 @@ class ModularArithmeticTest(unittest.TestCase):
         self.do_check_multiplicative_inverse_random(end_m=999, verbose=verbose)
         return
     
+    def test_mod_sqrt(self):
+        verbose = True
+        modulo_list = [ 17, 32, 37, 55, 59, 199, 293, 991, 997 ]
+        for modulo in modulo_list:
+            for number in range(modulo):
+                self.do_check_mod_sqrt_tonelli_shanks(number, modulo, verbose=verbose)
+        return
+    
     def do_check_multiplicative_inverse_random(self, rounds=100,
                                                start_n=2, end_n=9999999999,
                                                start_m=2, end_m=999999,
@@ -44,6 +52,19 @@ class ModularArithmeticTest(unittest.TestCase):
         except ValueError as e:
             if verbose:
                 print(f'mod_inv({number}, {modulo}) does not exist.')
+        return
+    
+    def do_check_mod_sqrt_tonelli_shanks(self, number, modulo, verbose=False):
+        try:
+            sqrt_list = ModularArithmetic.mod_sqrt_tonelli_shanks(number, modulo)
+            if verbose:
+                print(f'mod_sqrt({number}, {modulo}) = {sqrt_list}')
+            for sqrt in sqrt_list:
+                result = (sqrt * sqrt) % modulo
+                self.assertEqual(number, result)
+        except ValueError as e:
+            if verbose:
+                print(f'no modular square root for {number}, modulo {modulo}')
         return
     
 if __name__ == '__main__':
