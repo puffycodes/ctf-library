@@ -16,6 +16,9 @@
 # - gcd() Ref: https://en.wikipedia.org/wiki/Euclidean_algorithm
 # - xgcd() Ref: https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
 
+# Exponentiation
+# - Ref: https://simple.wikipedia.org/wiki/Exponentiation_by_squaring
+
 class MathLib:
 
     # --- GCD Related
@@ -68,4 +71,20 @@ class MathLib:
             return 0
         return abs(a * b) // abs(MathLib.gcd(a, b))
 
+    # --- Exponentiation Related
+    #     - A recursive algorithm that compute x ^ n
+    #       for a positive integer n where n > 0.
+    #     - Can use math.pow().
+    #     - Limitation: Do not compute modulo of exponentiation.
+    @staticmethod
+    def pow(x, n):
+        if n == 1:
+            return x
+        elif n % 2 == 0:
+            # n is even
+            return MathLib.pow(x*x, n//2)
+        else:
+            # n is odd and n > 2
+            return x * MathLib.pow(x*x, (n-1)//2)
+    
 # --- end of file --- #
