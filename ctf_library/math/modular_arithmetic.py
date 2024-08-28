@@ -9,7 +9,7 @@
 # - Ref: https://stackoverflow.com/questions/4798654/modular-multiplicative-inverse-function-in-python
 # - Ref: https://docs.python.org/3/library/functions.html#pow
 #
-# Modular Exponentiation (TODO)
+# Modular Exponentiation
 # - Ref: https://simple.wikipedia.org/wiki/Exponentiation_by_squaring
 #
 # Modular Square Root
@@ -23,10 +23,15 @@ class ModularArithmetic:
     @staticmethod
     def mod_inv(number, modulo):
         return ModularArithmetic.multiplicative_inverse(number, modulo)
+    
+    @staticmethod
+    def mod_pow(base, exponent, modulo):
+        raise Exception('not implemented')
+        return 0
 
     @staticmethod
-    def mod_sqrt(n, p):
-        return MathLib.mod_sqrt_tonelli_shanks(n, p)
+    def mod_sqrt(number, modulo):
+        return MathLib.mod_sqrt_tonelli_shanks(number, modulo)
     
     # ----- Modulo Inverse related ----- #
 
@@ -42,6 +47,10 @@ class ModularArithmetic:
             raise ValueError('modular multiplicative inverse does not exist.')
         else:
             return (x % modulo + modulo) % modulo
+        
+    # ----- Modular Exponentation related ----- #
+
+    # TODO: To implement
 
     # ----- Modulo Square Root related ----- #
     
