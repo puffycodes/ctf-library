@@ -39,7 +39,6 @@ class FactorizationTest(unittest.TestCase):
         for _ in range(rounds):
             number = random.randint(start, end)
             self.do_check_factorization_only(number, verbose=verbose)
-            pass
         return
     
     def do_check_factorization(self, number, verbose=False):
