@@ -76,6 +76,7 @@ class MathLib:
     #       for a positive integer n where n > 0.
     #     - Can use math.pow().
     #     - Limitation: Do not compute modulo of exponentiation.
+    #         - Use ModularArithmetic.mod_pow() or Python buildin pow().
     @staticmethod
     def pow(x, n):
         if n == 1:
