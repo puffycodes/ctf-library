@@ -51,6 +51,9 @@ class ModularArithmetic:
         
     # ----- Modular Exponentation related ----- #
 
+    # Modular Exponentiation
+    # - Can use pow(base, exponent, modulo) for Python 3.8(?) and above.
+    @staticmethod
     def mod_pow_exponentiation_by_squaring(base, exponent, modulo):
         result = 1
         if exponent < 0:
