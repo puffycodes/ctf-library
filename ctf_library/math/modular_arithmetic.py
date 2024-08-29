@@ -54,7 +54,9 @@ class ModularArithmetic:
     def mod_pow_exponentiation_by_squaring(base, exponent, modulo):
         result = 1
         if exponent < 0:
-            raise ValueError('exponent cannot be negative: exponent = {exponent}')
+            # may raise error if multiplicative inverse does not exist
+            base = ModularArithmetic.multiplicative_inverse(base, modulo)
+            exponent = - exponent
         while exponent > 0:
             if exponent % 2 == 1:
                 result = (result * base) % modulo

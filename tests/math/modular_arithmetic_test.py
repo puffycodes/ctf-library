@@ -51,6 +51,29 @@ class ModularArithmeticTest(unittest.TestCase):
                                            verbose=verbose)
         return
     
+    def test_mod_pow_negative(self):
+        verbose = False
+        # [ <base>, <exponent>, <modulo>, <expected result> ]
+        #   - expected result == -1 implied not computable
+        test_cases = [
+            [ 2, -5, 7, 2 ], [ 3, -5, 7, 3 ], [ 4, -5, 7, 4 ],
+            [ 4, -3, 7, 1 ],
+            [ 2, -5, 4, -1 ],
+        ]
+        for base, exponent, modulo, expected_result in test_cases:
+            try:
+                result = ModularArithmetic.mod_pow_exponentiation_by_squaring(
+                    base, exponent, modulo
+                )
+                if verbose:
+                    print(f'mod_pow({base}, {exponent}, {modulo}) = {result}')
+                self.assertEqual(expected_result, result)
+            except ValueError as e:
+                if verbose:
+                    print(f'mod_pow({base}, {exponent}, {modulo}) = (error: {e})')
+                self.assertEqual(expected_result, -1)
+        return
+    
     def test_mod_sqrt(self):
         verbose = False
         modulo_list = ModularArithmeticTest.modulo_list_01
