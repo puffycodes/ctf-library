@@ -26,12 +26,13 @@ class ModularArithmetic:
     
     @staticmethod
     def mod_pow(base, exponent, modulo):
-        raise Exception('not implemented')
-        return 0
+        return ModularArithmetic.mod_pow_exponentiation_by_squaring(
+            base, exponent, modulo
+        )
 
     @staticmethod
     def mod_sqrt(number, modulo):
-        return MathLib.mod_sqrt_tonelli_shanks(number, modulo)
+        return ModularArithmetic.mod_sqrt_tonelli_shanks(number, modulo)
     
     # ----- Modulo Inverse related ----- #
 
@@ -50,7 +51,14 @@ class ModularArithmetic:
         
     # ----- Modular Exponentation related ----- #
 
-    # TODO: To implement
+    def mod_pow_exponentiation_by_squaring(base, exponent, modulo):
+        result = 1
+        while exponent > 0:
+            if exponent % 2 == 1:
+                result = (result * base) % modulo
+            base = (base * base) % modulo
+            exponent = exponent // 2
+        return result
 
     # ----- Modulo Square Root related ----- #
     
