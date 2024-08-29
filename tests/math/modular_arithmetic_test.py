@@ -51,7 +51,7 @@ class ModularArithmeticTest(unittest.TestCase):
                                            verbose=verbose)
         return
     
-    def test_mod_pow_negative(self):
+    def test_mod_pow_negative_exponent(self):
         verbose = False
         # [ <base>, <exponent>, <modulo>, <expected result> ]
         #   - expected result == -1 implied not computable
