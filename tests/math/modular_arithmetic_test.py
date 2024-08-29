@@ -94,7 +94,12 @@ class ModularArithmeticTest(unittest.TestCase):
         verbose = False
         modulo_list = ModularArithmeticTest.modulo_list_02
         for modulo in modulo_list:
-            for number in range(modulo):
+            number_list = []
+            number_list.extend(range(modulo * 2))
+            number_list.extend(range(-2, -40, -1))
+            if verbose:
+                print(f'number list: {number_list}')
+            for number in number_list:
                 self.do_compare_mod_sqrt(number, modulo, verbose=verbose)
         return
     

@@ -72,6 +72,9 @@ class ModularArithmetic:
     
     @staticmethod
     def mod_sqrt_slow(v, p):
+        # compute v mod p for comparison
+        v = v % p
+        # check through range(p) to find (i ** 2) mod p == v mod p
         result = []
         for i in range(p):
             if pow(i, 2, p) == v:
