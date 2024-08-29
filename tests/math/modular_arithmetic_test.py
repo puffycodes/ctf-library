@@ -12,6 +12,7 @@ class ModularArithmeticTest(unittest.TestCase):
     # --- Test Cases
 
     def test_calling_exported_functions(self):
+        # to test that the exported functions can be called without issues
         result = ModularArithmetic.mod_inv(99, 293)
         result = ModularArithmetic.mod_pow(3, 17, 991)
         result = ModularArithmetic.mod_sqrt(40, 997)
@@ -37,25 +38,32 @@ class ModularArithmeticTest(unittest.TestCase):
     
     def test_mod_pow(self):
         verbose = False
-        for modulo in ModularArithmeticTest.modulo_list_01:
-            self.do_check_mod_pow_function(modulo, verbose=verbose)
+        modulo_list = []
+        modulo_list.extend(ModularArithmeticTest.modulo_list_01)
         random_modulo = [random.randint(0, 9999999999) for i in range(100)]
-        for modulo in random_modulo:
+        modulo_list.extend(random_modulo)
+        if verbose:
+            print(f'modulo list: {modulo_list}')
+        for modulo in modulo_list:
             self.do_check_mod_pow_function(modulo, verbose=verbose)
+            self.do_check_mod_pow_function(modulo,
+                                           start_base=-99999999, end_base=0,
+                                           verbose=verbose)
         return
     
     def test_mod_sqrt(self):
         verbose = False
         modulo_list = ModularArithmeticTest.modulo_list_01
+        if verbose:
+            print(f'modulo list: {modulo_list}')
         for modulo in modulo_list:
-            for number in range(modulo):
+            number_list = []
+            number_list.extend(range(modulo * 2))
+            number_list.extend(range(-2, -40, -1))
+            if verbose:
+                print(f'number list: {number_list}')
+            for number in number_list:
                 self.do_check_mod_sqrt_tonelli_shanks(number, modulo, verbose=verbose)
-            for number in range(-2, -40, -1):
-                self.do_check_mod_sqrt_tonelli_shanks(number, modulo, verbose=verbose)
-        for modulo in modulo_list:
-            for number in range(modulo):
-                self.do_check_mod_sqrt_slow(number, modulo, verbose=verbose)
-            for number in range(-2, -40, -1):
                 self.do_check_mod_sqrt_slow(number, modulo, verbose=verbose)
         return
     
