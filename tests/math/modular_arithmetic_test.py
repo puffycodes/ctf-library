@@ -8,6 +8,7 @@ class ModularArithmeticTest(unittest.TestCase):
 
     modulo_list_01 = [ 17, 32, 37, 55, 59, 199, 293, 991, 997 ]
     modulo_list_02 = [ 17, 32, 55, 997 ]
+    modulo_list_03 = [ 65535, 65537, 65539, 65541 ]
 
     # --- Test Cases
 
@@ -90,6 +91,15 @@ class ModularArithmeticTest(unittest.TestCase):
                 self.do_check_mod_sqrt_slow(number, modulo, verbose=verbose)
         return
     
+    def test_mod_sqrt_random(self):
+        verbose = False
+        modulo_list = ModularArithmeticTest.modulo_list_03
+        if verbose:
+            print(f'modulo list: {modulo_list}')
+        for modulo in modulo_list:
+            self.do_check_mod_sqrt_random(modulo, verbose=verbose)
+        return
+    
     def test_mod_sqrt_compare(self):
         verbose = False
         modulo_list = ModularArithmeticTest.modulo_list_02
@@ -146,6 +156,15 @@ class ModularArithmeticTest(unittest.TestCase):
         return
     
     # --- Internal functions for testing mod_sqrt()
+
+    def do_check_mod_sqrt_random(self, modulo, rounds=100,
+                                 start_number=0, end_number=9999999999,
+                                 verbose=False):
+        for _ in range(rounds):
+            number = random.randint(start_number, end_number)
+            self.do_check_mod_sqrt_tonelli_shanks(number, modulo, verbose=verbose)
+            self.do_check_mod_sqrt_slow(number, modulo, verbose=verbose)
+        return
     
     def do_check_mod_sqrt_tonelli_shanks(self, number, modulo, verbose=False):
         self.do_check_mod_sqrt_function(
