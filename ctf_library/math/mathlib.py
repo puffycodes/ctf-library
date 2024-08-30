@@ -50,6 +50,7 @@ class MathLib:
     #     - For two numbers a and b, return g, x and y,
     #       where g = gcd(a, b) and g = ax + by.
     #     - The value g may be negative.
+
     @staticmethod
     def xgcd(a, b):
         prevx, x = 1, 0
@@ -64,6 +65,7 @@ class MathLib:
     # --- LCM Related
     #     - Can use math.lcm() for Python 3.9.0 and above.
     #     - Return value of lcm() is always positive.
+
     @staticmethod
     def lcm(a, b):
         if a == 0 and b == 0:
@@ -73,16 +75,19 @@ class MathLib:
 
     # --- Exponentiation Related
     #     - Can use Python built-in function pow().
+
     @staticmethod
     def pow(x, n):
         return MathLib.pow_exponentiation_by_squaring(x, n)
     
     # --- Exponentation by Squaring
     #     - An algorithm that compute x ^ n for a positive integer n where n > 0.
+    #     - Two versions, one non-recursive, one recursive.
     #     - Limitation:
     #         - Do not compute modulo of exponentiation.
     #           - Use ModularArithmetic.mod_pow() or Python built-in function pow().
-    #         - Do not work for x that is not integer.
+    #         - Do not work for x that is not integer. (TODO: check why)
+
     @staticmethod
     def pow_exponentiation_by_squaring(x, n):
         result = 1
