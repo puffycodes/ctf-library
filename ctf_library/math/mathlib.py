@@ -72,20 +72,46 @@ class MathLib:
         return abs(a * b) // abs(MathLib.gcd(a, b))
 
     # --- Exponentiation Related
-    #     - A recursive algorithm that compute x ^ n
-    #       for a positive integer n where n > 0.
-    #     - Can use math.pow().
-    #     - Limitation: Do not compute modulo of exponentiation.
-    #         - Use ModularArithmetic.mod_pow() or Python buildin pow().
+    #     - Can use Python built-in function pow().
     @staticmethod
     def pow(x, n):
-        if n == 1:
+        return MathLib.pow_exponentiation_by_squaring(x, n)
+    
+    # --- Exponentation by Squaring
+    #     - An algorithm that compute x ^ n for a positive integer n where n > 0.
+    #     - Limitation:
+    #         - Do not compute modulo of exponentiation.
+    #           - Use ModularArithmetic.mod_pow() or Python built-in function pow().
+    #         - Do not work for x that is not integer.
+    @staticmethod
+    def pow_exponentiation_by_squaring(x, n):
+        result = 1
+        if n < 0:
+            # special case when n < 0
+            raise ValueError('exponent cannot be negative: {n}')
+        # the case when n == 0 is taken care of in the loop
+        while n > 0:
+            if n % 2 == 1:
+                result = result * x
+            x = x * x
+            n = n // 2
+        return result
+    
+    @staticmethod
+    def pow_exponentiation_by_squaring_recursive(x, n):
+        if n < 0:
+            # special case when n < 0
+            raise ValueError('exponent cannot be negative: {n}')
+        elif n == 0:
+            # special case when n = 0
+            return 1
+        elif n == 1:
             return x
         elif n % 2 == 0:
             # n is even
-            return MathLib.pow(x*x, n//2)
+            return MathLib.pow_exponentiation_by_squaring_recursive(x*x, n//2)
         else:
             # n is odd and n > 2
-            return x * MathLib.pow(x*x, (n-1)//2)
-    
+            return x * MathLib.pow_exponentiation_by_squaring_recursive(x*x, (n-1)//2)
+        
 # --- end of file --- #
