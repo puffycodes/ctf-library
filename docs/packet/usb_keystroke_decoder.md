@@ -1,6 +1,8 @@
 # Documentation for USB Keystroke Decoder
 
-## Features of the Decoder
+## Class USBKeystrokeDecoder
+
+### Features of the Decoder
 
 1. Extract and decode relevant packets directly from an unfiltered list of packets.
 1. Decode keys with combinations of Shift and CapsLock keys.
@@ -9,15 +11,28 @@
 
 ## Usage
 
-```
-from scapy.all import *
-from ctf_library.packet.usb_keystroke_decoder import USBKeystrokeDecoder
+1. Command line:
 
-decoder = USBKeystrokeDecoder()
-packets = rdpcap('my_keystroke_file.pcap')
-result = decoder.decode_packets(packets)
-print(f'result is:\n{result.get_text()}')
-```
+    ```
+    python usb_keystroke_decoder.py <pcap_file>
+    ```
+
+1. From Python program:
+
+    ```
+    from scapy.all import *
+    from ctf_library.packet.usb_keystroke_decoder import USBKeystrokeDecoder
+
+    decoder = USBKeystrokeDecoder()
+    packets = rdpcap('my_keystroke_file.pcap')
+    result = decoder.decode_packets(packets)
+    print(f'result is:\n{result.get_text()}')
+    ```
+
+## Functions
+
+1. USBKeystrokeDecoder.decode_packets(packets): Decodes the captured USB keystroke packets and return the result.
+    1. result.get_text() will return the decoded text.
 
 ## References on USB Pcap Captures
 
@@ -67,4 +82,4 @@ Shift CapsLock
 
 ***
 
-*Updated on 28 June 2024*
+*Updated on 30 August 2024*

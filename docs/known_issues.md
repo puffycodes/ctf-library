@@ -10,6 +10,9 @@
 1. Hill Cipher (ctf_library.cipher.hill_cipher.py) is not working correctly when the plain text or
 cipher text does not match the block boundary exactly.
     - [Partial Resolution] Added padding and unpadding functions. Those functions are not called by the encrypt() and decrypt() functions automatically.
+1. Math Library pow() function (ctf_library.math.mathlib.MathLib.pow(x, n)) does not work properly when x is not integer.
+    - The algorithm is originally intended for integer value of x and positive integer n > 0.
+    - Interesting to find out why it did not work for non-integer, but not likely to be resolved soon.
 
 ## Resolved Issues
 
@@ -22,4 +25,4 @@ cipher text does not match the block boundary exactly.
 
 ***
 
-*Updated on 26 June 2024*
+*Updated on 30 August 2024*

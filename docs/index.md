@@ -41,6 +41,7 @@ Implemented in module ctf_library.language:
 
 Implemented in module ctf_library.math:
 
+1. [Math Library](math/mathlib.md) (ctf_library.math.mathlib.MathLib)
 1. Matrix Modular Inverse (ctf_library.math.integer_matrix_math.IntegerMatrixMath)
 
 ## Packet Tool
@@ -51,4 +52,4 @@ Implemented in module ctf_library.packet:
 
 ***
 
-*Updated on 3 August 2024*
+*Updated on 30 August 2024*
