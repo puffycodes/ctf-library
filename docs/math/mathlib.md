@@ -2,7 +2,7 @@
 
 ## Class MathLib
 
-1. Some common math functions implemented with algorithms found on the Internet.
+1. Some common math functions implemented using algorithms found on the Internet. (See [Reference](#references))
 
 ## Usage
 
@@ -28,7 +28,7 @@ Python has native implementations for many of these functions.
 
 ## References
 
-1. See source code.
+1. References are listed in the [source code](../../ctf_library/math/mathlib.py).
 
 ***
 *Updated on 30 August 2024*

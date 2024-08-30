@@ -21,7 +21,7 @@
 
 class MathLib:
 
-    # --- GCD Related
+    # --- Greatest Common Divisor (GCD) Related
     #     - Can use math.gcd() for Python 3.5 and above.
     #     - The Euclidean Algorithms may return a negative gcd value, which
     #       is different from math.gcd(). The return value is negative when
@@ -31,6 +31,8 @@ class MathLib:
     @staticmethod
     def gcd(a, b):
         return abs(MathLib.gcd_euclidean(a, b))
+    
+    # --- Euclidean Algorithms for finding GCD
     
     @staticmethod
     def gcd_euclidean(a, b):
@@ -62,7 +64,7 @@ class MathLib:
             a, b = b, a % b
         return a, prevx, prevy
         
-    # --- LCM Related
+    # --- Least Common Multiple (LCM) Related
     #     - Can use math.lcm() for Python 3.9.0 and above.
     #     - Return value of lcm() is always positive.
 
