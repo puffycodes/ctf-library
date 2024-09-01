@@ -6,6 +6,8 @@ Content
 
 1. [Blockchain](#blockchain)
     1. [Ethereum Virtual Machine (EVM)](#ethereum-virtual-machine-evm)
+1. [Compiler](#compiler)
+1. [Decompiler](#decompiler)
 1. [Steganography](#steganography)
 
 ## Blockchain
@@ -17,6 +19,19 @@ Content
 1. [Bytecode Decompiler](https://app.dedaub.com/decompile)
 1. [pyevmasm](https://github.com/crytic/pyevmasm)
 
+## Compiler
+
+1. [Compiler Explorer](https://godbolt.org/): See how your code are compiled.
+
+## Decompiler
+
+1. [Decompiler.com](https://www.decompiler.com/): Online decompiler for JAR, APK, etc.
+1. ELF Decompiler
+    1. [Decompiler Explorer](https://dogbolt.org/): Decompile ELF files. **Note: Uploaded binaries are retained by site.**
+    1. [Online ELF File Viewer and Editor](https://elfy.io/)
+    1. [Online ELF Viewer](http://www.sunshine2k.de/coding/javascript/onlineelfviewer/onlineelfviewer.html)
+1. [Ethereum Virtual Machine Decompiler](#ethereum-virtual-machine-evm)
+
 ## Steganography
 
 ### Hiding and Extracting Information in Images
@@ -27,4 +42,4 @@ Content
 
 ***
 
-*Updated on 30 August 2024*
+*Updated on 1 September 2024*
