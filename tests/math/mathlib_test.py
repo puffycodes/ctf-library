@@ -19,14 +19,7 @@ class MathLibTest(unittest.TestCase):
     def test_gcd(self):
         verbose = False
         for a, b, gcd_expected, _ in MathLibTest.test_cases_gcd_lcm:
-            g = MathLib.gcd(a, b)
-            g_e1 = MathLib.gcd_euclidean(a, b)
-            g_e2 = MathLib.gcd_euclidean_recursive(a, b)
-            if verbose:
-                print(f'gcd({a}, {b}) = {g}')
-            self.assertEqual(g, abs(gcd_expected))
-            self.assertEqual(g_e1, gcd_expected)
-            self.assertEqual(g_e2, gcd_expected)
+            self.do_check_gcd_all_methods(a, b, gcd_expected, verbose=verbose)
         return
     
     def test_xgcd(self):
@@ -72,7 +65,55 @@ class MathLibTest(unittest.TestCase):
                 self.do_check_pow_comparison(base, exponent, verbose=verbose)
         return
     
+    # [ <n>, <expected isqrt(n) value> ]
+    test_cases_isqrt = [
+        [ 0, 0 ], [ 1, 1 ], [ 2, 1 ], [ 3, 1 ], [ 4, 2 ], [ 5, 2 ], [ 6, 2 ],
+        [ 9, 3 ], [ 10, 3 ], [ 11, 3 ], [ 24, 4 ], [ 25, 5 ], [ 26, 5 ],
+        [ 4294836225, 65535 ], [ 4294836227, 65535 ],
+        [ 60493815061729, 7777777 ], [ 60493815061731, 7777777 ],
+    ]
+    
+    def test_isqrt_01(self):
+        verbose = False
+        for n, expected_value in MathLibTest.test_cases_isqrt:
+            self.do_check_isqrt_all_methods(
+                n, expected_value=expected_value, verbose=verbose
+            )
+        return
+    
+    def test_isqrt_02(self):
+        verbose = False
+        for n in range(-100, 0):
+            with self.assertRaises(ValueError):
+                result = MathLib.isqrt_newtons_method(n)
+            with self.assertRaises(ValueError):
+                result = MathLib.isqrt_newtons_method_faster(n)
+        return
+    
+    def test_isqrt_03(self):
+        verbose = False
+        for n in range(65536):
+            self.do_check_isqrt_all_methods(n, verbose=verbose)
+        for n in range(0, 1 << 512, 1 << 500):
+            self.do_check_isqrt_all_methods(n, verbose=verbose)
+        return
+    
     # --- Internal Functions
+    
+    def do_check_gcd_all_methods(self, a, b, expected_value, verbose=False):
+        g = MathLib.gcd(a, b)
+        g_e1 = MathLib.gcd_euclidean(a, b)
+        g_e2 = MathLib.gcd_euclidean_recursive(a, b)
+        if verbose:
+            print(f'gcd({a}, {b}) = {g}')
+        self.assertEqual(g, abs(expected_value))
+        self.assertEqual(g_e1, expected_value)
+        self.assertEqual(g_e2, expected_value)
+        for value in [ g, g_e1, g_e2 ]:
+            if value != 0:
+                self.assertEqual(a % value, 0)
+                self.assertEqual(b % value, 0)
+        return
     
     def do_check_pow(self, base, exponent, pow_function=MathLib.pow_exponentiation_by_squaring,
                      verbose=False):
@@ -101,6 +142,26 @@ class MathLibTest(unittest.TestCase):
         self.assertEqual(result_01_error, result_02_error)
         if result_01_error == False and result_02_error == False:
             self.assertEqual(result_01, result_02)
+        return
+    
+    def do_check_isqrt_all_methods(self, n, expected_value=-1, verbose=False):
+        result_01 = MathLib.isqrt_newtons_method(n)
+        result_02 = MathLib.isqrt_newtons_method_faster(n)
+        if verbose:
+            print(f'isqrt({n}) = {result_01}, {result_02}')
+        if expected_value >= 0:
+            self.assertEqual(expected_value, result_01)
+            self.assertEqual(expected_value, result_02)
+        self.assertEqual(result_01, result_02)
+        self.do_check_isqrt_correctness(n, result_01)
+        self.do_check_isqrt_correctness(n, result_02)
+        return
+
+    def do_check_isqrt_correctness(self, n, isqrt_n):
+        square_1 = isqrt_n * isqrt_n
+        square_2 = (isqrt_n + 1) * (isqrt_n + 1)
+        self.assertLessEqual(square_1, n)
+        self.assertGreater(square_2, n)
         return
     
 if __name__ == '__main__':

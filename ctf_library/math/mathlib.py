@@ -19,6 +19,11 @@
 # Exponentiation
 # - Ref: https://simple.wikipedia.org/wiki/Exponentiation_by_squaring
 
+# Integer Square Root
+# 1. Using Newton's Method
+#    - Ref: https://stackoverflow.com/questions/15390807/integer-square-root-in-python
+#    - Ref: https://en.wikipedia.org/wiki/Newton%27s_method
+
 class MathLib:
 
     # --- Greatest Common Divisor (GCD) Related
@@ -121,4 +126,40 @@ class MathLib:
             # n is odd and n > 2
             return x * MathLib.pow_exponentiation_by_squaring_recursive(x*x, (n-1)//2)
         
+    # --- Integer Square Root
+    #     - Can use gmpy2.isqrt().
+    #     - Can use math.isqrt() for Python 3.8 and above.
+
+    @staticmethod
+    def isqrt(n):
+        return MathLib.isqrt_newtons_method_faster(n)
+    
+    # --- Newton's Method
+    #     - Returns the largest integer x for which x * x does not exceed n.
+    @staticmethod
+    def isqrt_newtons_method(n):
+        if n >= 0:
+            x = n
+            y = (x + 1) // 2
+            while y < x:
+                x = y
+                y = (x + n // x) // 2
+            return x
+        else:
+            raise ValueError('square root not defined for negative numbers')
+        
+    @staticmethod
+    def isqrt_newtons_method_faster(n):
+        if n > 0:
+            x = 1 << (n.bit_length() + 1 >> 1)
+            while True:
+                y = (x + n // x) >> 1
+                if y >= x:
+                    return x
+                x = y
+        elif n == 0:
+            return 0
+        else:
+            raise ValueError('square root not defined for negative numbers')
+    
 # --- end of file --- #
