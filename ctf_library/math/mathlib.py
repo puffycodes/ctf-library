@@ -183,6 +183,10 @@ class MathLib:
     # --- A hybrid method that uses int(math.sqrt()) for smaller parameters,
     #     and Newton's Method for larger parameters.
     #     - Include for reference only.
+    #     - TODO: Locate the source of this code.
+    #     - TODO: The statement if n <= 1: will never be True, since
+    #             the statement if x < MathLib._1_50: will be True.
+    #             Something to investigate?
 
     _1_50 = 1 << 50  # 2**50 == 1,125,899,906,842,624
 
