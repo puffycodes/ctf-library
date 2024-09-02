@@ -25,6 +25,7 @@
 #    - Ref: http://code.activestate.com/recipes/577821-integer-square-root-function/
 #    - Ref: https://en.wikipedia.org/wiki/Newton%27s_method
 
+import math
 
 class MathLib:
 
@@ -178,5 +179,30 @@ class MathLib:
             if y >= x:
                 return x
             x = y
+
+    # --- A hybrid method that uses int(math.sqrt()) for smaller parameters,
+    #     and Newton's Method for larger parameters.
+    #     - Include for reference only.
+
+    _1_50 = 1 << 50  # 2**50 == 1,125,899,906,842,624
+
+    @staticmethod
+    def isqrt_hybrid(x):
+        """Return the integer part of the square root of x, even for very
+        large integer values."""
+        if x < 0:
+            raise ValueError('square root not defined for negative numbers')
+        if x < MathLib._1_50:
+            return int(math.sqrt(x))  # use math's sqrt() for small parameters
+        n = int(x)
+        if n <= 1:
+            return n  # handle sqrt(0)==0, sqrt(1)==1
+        # Make a high initial estimate of the result (a little lower is slower!!!)
+        r = 1 << ((n.bit_length() + 1) >> 1)
+        while True:
+            newr = (r + n // r) >> 1  # next estimate by Newton-Raphson
+            if newr >= r:
+                return r
+            r = newr      
     
 # --- end of file --- #
