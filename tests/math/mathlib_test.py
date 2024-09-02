@@ -147,14 +147,19 @@ class MathLibTest(unittest.TestCase):
     def do_check_isqrt_all_methods(self, n, expected_value=-1, verbose=False):
         result_01 = MathLib.isqrt_newtons_method(n)
         result_02 = MathLib.isqrt_newtons_method_faster(n)
+        result_03 = MathLib.isqrt_newtons_method_faster_02(n)
         if verbose:
-            print(f'isqrt({n}) = {result_01}, {result_02}')
+            print(f'isqrt({n}) = {result_01}, {result_02}, {result_03}')
         if expected_value >= 0:
             self.assertEqual(expected_value, result_01)
             self.assertEqual(expected_value, result_02)
+            self.assertEqual(expected_value, result_03)
         self.assertEqual(result_01, result_02)
+        self.assertEqual(result_01, result_03)
+        self.assertEqual(result_02, result_03)
         self.do_check_isqrt_correctness(n, result_01)
         self.do_check_isqrt_correctness(n, result_02)
+        self.do_check_isqrt_correctness(n, result_03)
         return
 
     def do_check_isqrt_correctness(self, n, isqrt_n):

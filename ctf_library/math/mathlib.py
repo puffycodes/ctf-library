@@ -22,7 +22,9 @@
 # Integer Square Root
 # 1. Using Newton's Method
 #    - Ref: https://stackoverflow.com/questions/15390807/integer-square-root-in-python
+#    - Ref: http://code.activestate.com/recipes/577821-integer-square-root-function/
 #    - Ref: https://en.wikipedia.org/wiki/Newton%27s_method
+
 
 class MathLib:
 
@@ -161,5 +163,20 @@ class MathLib:
             return 0
         else:
             raise ValueError('square root not defined for negative numbers')
+        
+    @staticmethod
+    def isqrt_newtons_method_faster_02(x):
+        if x < 0:
+            raise ValueError('square root not defined for negative numbers')
+        n = int(x)
+        if n == 0:
+            return 0
+        a, b = divmod(n.bit_length(), 2)
+        x = 2**(a+b)
+        while True:
+            y = (x + n//x)//2
+            if y >= x:
+                return x
+            x = y
     
 # --- end of file --- #
