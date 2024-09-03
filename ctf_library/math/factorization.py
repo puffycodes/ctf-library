@@ -77,8 +77,10 @@ class Factorization:
     #
     # Input: n should be odd
     # Return: one of the factor for n
+    #
+    # TODO: What is the termination condition of the while loop if a perfect square cannot be found?
     def fermat_factorization(n):
-        a = math.isqrt(n) + 1
+        a = math.isqrt(n) + 1   # original algorith uses ceil(sqrt(n))
         b2 = a * a - n
         while math.isqrt(b2) * math.isqrt(b2) != b2:
             a += 1
