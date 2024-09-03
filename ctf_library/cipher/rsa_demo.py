@@ -43,7 +43,6 @@ class RSADemo:
         def compute_private_key(p, q, e=-1, phi_function=euler_totient_function):
             # compute n and phi from p and q
             n = p * q
-            #phi = (p - 1) * (q - 1)
             phi = phi_function(p, q)
 
             # save original e for reporting later when needed
