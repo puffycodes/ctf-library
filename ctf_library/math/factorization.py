@@ -1,5 +1,7 @@
 # file: factorization.py
 
+import math
+
 class Factorization:
 
     # ----- Prime Factorization ----- #
@@ -68,6 +70,21 @@ class Factorization:
 
         return result
     
+    # ----- Fermat's Factorization -----
+
+    # Fermat's Factorization
+    # Ref: https://en.wikipedia.org/wiki/Fermat%27s_factorization_method
+    #
+    # Input: n should be odd
+    # Return: one of the factor for n
+    def fermat_factorization(n):
+        a = math.isqrt(n) + 1
+        b2 = a * a - n
+        while math.isqrt(b2) * math.isqrt(b2) != b2:
+            a += 1
+            b2 = a * a - n
+        return a - math.isqrt(b2)
+
     # ----- Other Factor Related Functions ----- #
 
     # Euler's totient function
