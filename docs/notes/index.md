@@ -8,6 +8,8 @@ Content
     1. [Ethereum Virtual Machine (EVM)](#ethereum-virtual-machine-evm)
 1. [Compiler](#compiler)
 1. [Decompiler](#decompiler)
+1. [Miscellaneous](#miscellaneous)
+1. [QR Code](#qr-code)
 1. [Steganography](#steganography)
 
 ## Blockchain
@@ -32,6 +34,15 @@ Content
     1. [Online ELF Viewer](http://www.sunshine2k.de/coding/javascript/onlineelfviewer/onlineelfviewer.html)
 1. [Ethereum Virtual Machine Decompiler](#ethereum-virtual-machine-evm)
 
+# Miscellaneous
+
+1. [Python Projects with Source Code](https://thecleverprogrammer.com/2021/01/14/python-projects-with-source-code/)
+
+## QR Code
+
+1. [Creating QR Code Using Python](https://thecleverprogrammer.com/2022/01/11/qr-code-using-python/)
+1. [Decoding QR Code Using Python](https://thecleverprogrammer.com/2022/01/18/decode-a-qr-code-using-python/)
+
 ## Steganography
 
 ### Hiding and Extracting Information in Images
@@ -42,4 +53,4 @@ Content
 
 ***
 
-*Updated on 1 September 2024*
+*Updated on 3 September 2024*
