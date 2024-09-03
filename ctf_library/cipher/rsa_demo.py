@@ -7,6 +7,9 @@
 # - Ref: https://en.wikipedia.org/wiki/RSA_(cryptosystem)
 # - Ref: https://www.askpython.com/python/examples/rsa-algorithm-in-python
 
+# Fermat Primes
+# - Ref: https://en.wikipedia.org/wiki/Fermat_number
+
 import math
 
 class RSADemo:
@@ -29,6 +32,7 @@ class RSADemo:
     class Helper:
 
         e_minimum_value = 3
+        e_common_choices = [ 3, 17, 65537 ] # Fermat Primes
 
         @staticmethod
         def euler_totient_function(p, q):
