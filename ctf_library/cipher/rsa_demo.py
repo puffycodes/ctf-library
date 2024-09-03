@@ -36,6 +36,7 @@ class RSADemo:
 
         @staticmethod
         def euler_totient_function(p, q):
+            # the computation is valid assuming that p, q are primes
             return (p - 1) * (q - 1)
 
         @staticmethod
