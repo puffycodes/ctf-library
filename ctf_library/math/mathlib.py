@@ -24,6 +24,8 @@
 #    - Ref: https://stackoverflow.com/questions/15390807/integer-square-root-in-python
 #    - Ref: http://code.activestate.com/recipes/577821-integer-square-root-function/
 #    - Ref: https://en.wikipedia.org/wiki/Newton%27s_method
+# 2. Other References:
+#    - Ref: https://fossies.org/linux/mpmath/mpmath/libmp/libintmath.py
 
 import math
 
