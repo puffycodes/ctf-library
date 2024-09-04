@@ -84,11 +84,16 @@ class FactorizationTest(unittest.TestCase):
         return
     
     def test_fermat_factorization_factor_list(self):
-        verbose = True
+        verbose = False
         for n in range(-1000, 1000):
             self.do_check_fermat_factorization_factor_list(n, verbose=verbose)
         for n, _, _ in FactorizationTest.test_cases_fermat_factorization:
             self.do_check_fermat_factorization_factor_list(n, verbose=verbose)
+        self.do_check_fermat_factorization_random(verbose=verbose)
+        self.do_check_fermat_factorization_random(
+            rounds=100, first_range=99999999999999999999, diff_range=999999,
+            verbose=verbose
+        )
         return
 
     # --- Internal Functions
@@ -124,11 +129,21 @@ class FactorizationTest(unittest.TestCase):
             self.assertEqual(number % factor, 0)
         return
     
-    def list_multiplication(self, number_list):
-        product = 1
-        for number in number_list:
-            product *= number
-        return product
+    def do_check_fermat_factorization_random(self, rounds=100,
+                                             first_range=99999999,
+                                             diff_range=9999,
+                                             verbose=False):
+        for _ in range(rounds):
+            first = random.randint(0, first_range)
+            diff = random.randint(0, diff_range)
+            second = first + diff
+            if first % 2 == 0:
+                first += 1
+            if second % 2 == 0:
+                second += 1
+            number = first * second
+            self.do_check_fermat_factorization_factor_list(number, verbose=verbose)
+        return
     
     def do_check_fermat_factorization_factor_list(self, n, verbose=False):
         result = Factorization.fermat_factorization_factor_list(n)
@@ -153,6 +168,12 @@ class FactorizationTest(unittest.TestCase):
         self.assertEqual(max(abs(f1), abs(f2)), abs(result_f2))
         self.assertEqual(result_f1 * result_f2, n)
         return
+    
+    def list_multiplication(self, number_list):
+        product = 1
+        for number in number_list:
+            product *= number
+        return product
     
 if __name__ == '__main__':
     unittest.main()
