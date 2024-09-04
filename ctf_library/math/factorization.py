@@ -187,5 +187,11 @@ class Factorization:
         for p in set(factors):
             phi_n *= p ** (factors.count(p) - 1) * (p - 1)
         return phi_n
+    
+    # Carmichael Lambda Function
+    # Ref: https://en.wikipedia.org/wiki/Carmichael_function
+    @staticmethod
+    def carmichael_lambda_function(number):
+        raise Exception('not implemented yet')
 
 # --- end of file --- #

@@ -69,7 +69,7 @@ class RSADemoTest(unittest.TestCase):
     # --- Internal Functions
     
     def do_check_compute_private_key(self, p, q, e, expected_d, expected_n,
-                                     phi_function=RSADemo.Helper.euler_totient_function,
+                                     phi_function=RSADemo.Helper.euler_totient_function_fast,
                                      verbose=False):
         new_e, d, n = RSADemo.Helper.compute_private_key(p, q, e, phi_function=phi_function)
         if verbose:
@@ -104,10 +104,10 @@ class RSADemoTest(unittest.TestCase):
     
     def get_totient_function(self, choice):
         if choice == 2:
-            return RSADemo.Helper.carmichael_totient_function
+            return RSADemo.Helper.carmichael_lambda_function_fast
         else:
             # include choice = 1
-            return RSADemo.Helper.euler_totient_function
+            return RSADemo.Helper.euler_totient_function_fast
     
 if __name__ == '__main__':
     unittest.main()

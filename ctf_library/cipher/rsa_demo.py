@@ -35,17 +35,17 @@ class RSADemo:
         e_common_choices = [ 3, 17, 65537 ] # Fermat Primes
 
         @staticmethod
-        def euler_totient_function(p, q):
+        def euler_totient_function_fast(p, q):
             # the computation is valid assuming that p, q are primes
             return (p - 1) * (q - 1)
 
         @staticmethod
-        def carmichael_totient_function(p, q):
+        def carmichael_lambda_function_fast(p, q):
             # the computation is valid assuming that p, q are primes
             return math.lcm(p - 1, q - 1)
         
         @staticmethod
-        def compute_private_key(p, q, e=-1, phi_function=euler_totient_function):
+        def compute_private_key(p, q, e=-1, phi_function=euler_totient_function_fast):
             # compute n and phi from p and q
             n = p * q
             phi = phi_function(p, q)
