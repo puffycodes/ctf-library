@@ -75,6 +75,10 @@ class Factorization:
     # Fermat's Factorization
     # Ref: https://en.wikipedia.org/wiki/Fermat%27s_factorization_method
 
+    @staticmethod
+    def fermat_factorization(n):
+        return Factorization.fermat_factorization_factor_list(n)
+
     # Fermat's Factorization (return one value)
     #
     # Input: n should be odd (but we do not check)
