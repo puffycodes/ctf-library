@@ -16,7 +16,7 @@ class FactorizationTest(unittest.TestCase):
             self.do_check_factorization(number)
         for number in [0, 1]:
             factors = Factorization.prime_factorization(number)
-            totient = Factorization.totient_function(number)
+            totient = Factorization.euler_totient_function(number)
             if verbose:
                 print(f'{number}: {factors} {totient}')
             self.assertEqual([], factors)
@@ -106,7 +106,7 @@ class FactorizationTest(unittest.TestCase):
     
     def do_check_factorization(self, number, verbose=False):
         factors = Factorization.prime_factorization(number)
-        totient = Factorization.totient_function(number)
+        totient = Factorization.euler_totient_function(number)
         product = self.list_multiplication(factors)
         if verbose:
             print(f'{number}: {factors} {totient}')

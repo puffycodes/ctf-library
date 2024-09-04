@@ -181,7 +181,7 @@ class Factorization:
     # Euler's totient function
     # Ref: https://en.wikipedia.org/wiki/Euler%27s_totient_function
     @staticmethod
-    def totient_function(number):
+    def euler_totient_function(number):
         factors = Factorization.prime_factorization(number)
         phi_n = 1
         for p in set(factors):
