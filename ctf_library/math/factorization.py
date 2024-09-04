@@ -74,6 +74,8 @@ class Factorization:
 
     # Fermat's Factorization
     # Ref: https://en.wikipedia.org/wiki/Fermat%27s_factorization_method
+
+    # Fermat's Factorization
     #
     # Input: n should be odd (but we do not check)
     # Return: one of the factors for n, always positive or zero
@@ -107,7 +109,53 @@ class Factorization:
             b2 = a * a - n
         return a - math.isqrt(b2)
     
-    # The basic Fermat's Factorization (For reference)
+    # Factorization using Fermat's Factorization Method
+    #
+    # Input: n
+    # Returns: a list of factors of n. the factors may not be all primes.
+    #
+    @staticmethod
+    def fermat_factorization_2(n):
+        factors = []
+        if n < 0:
+            factors.append(-1)
+            n *= -1
+            
+        if n == 0:
+            factors.append(0)
+            return factors
+        elif n == 1:
+            factors.append(1)
+            return factors
+        
+        while n % 2 == 0:
+            # ensure that n is odd
+            n = n // 2
+            factors.append(2)
+            if n == 1:
+                return factors
+            
+        a = math.isqrt(n)
+        if a * a == n:
+            # special case for a perfect square
+            factors.extend([a, a])
+            return factors
+            
+        result = Factorization.fermat_factorization_basic(n)
+        remaining = n // result
+        if n % result == 0:
+            if result != 1:
+                factors.append(result)
+            if remaining != 1:
+                factors.append(remaining)
+        else:
+            raise ValueError(
+                f'Fremat\'s Factorization returns {result} but it is not a factor of {n}.'
+            )
+        
+        return factors
+    
+    # The Basic Fermat's Factorization
     #
     # Input: n should be odd
     # Return: one of the factors for n
