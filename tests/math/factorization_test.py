@@ -71,19 +71,16 @@ class FactorizationTest(unittest.TestCase):
             [ 6, 1, 6 ], [ 10, 1, 10 ], [ 14, 1, 14 ], [ 82, 1, 82 ],
         ]
         for n, f1, f2 in test_cases:
-            result_f1 = Factorization.fermat_factorization(n)
-            if result_f1 != 0:
-                result_f2 = n // result_f1
-            else:
-                result_f2 = 0
-            if verbose:
-                print(f'fermat_factorization({n}) = {result_f1}: ', end='')
-                print(f'{n} = {result_f1} * {result_f2}')
-            # Factorization.fermat_factorization() always returns a positive number
-            self.assertEqual(min(abs(f1), abs(f2)), result_f1)
-            self.assertEqual(max(abs(f1), abs(f2)), abs(result_f2))
-            self.assertEqual(result_f1 * result_f2, n)
+            self.do_check_fermat_factorization(n, f1, f2, verbose=verbose)
         return
+    
+    def test_fermat_factorization_termination(self):
+        # check that the function terminates for small numbers
+        for n in range(1000):
+            result = Factorization.fermat_factorization(n)
+        return
+
+    # --- Internal Functions
     
     def do_check_factorization_random(self, rounds=100, start=-99999999, end=99999999, verbose=False):
         for _ in range(rounds):
@@ -121,6 +118,21 @@ class FactorizationTest(unittest.TestCase):
         for number in number_list:
             product *= number
         return product
+    
+    def do_check_fermat_factorization(self, n, f1, f2, verbose=False):
+        result_f1 = Factorization.fermat_factorization(n)
+        if result_f1 != 0:
+            result_f2 = n // result_f1
+        else:
+            result_f2 = 0
+        if verbose:
+            print(f'fermat_factorization({n}) = {result_f1}', end='')
+            print(f'; ({n}) = ({result_f1}) * ({result_f2})')
+        # Factorization.fermat_factorization() always returns a positive number
+        self.assertEqual(min(abs(f1), abs(f2)), result_f1)
+        self.assertEqual(max(abs(f1), abs(f2)), abs(result_f2))
+        self.assertEqual(result_f1 * result_f2, n)
+        return
     
 if __name__ == '__main__':
     unittest.main()
