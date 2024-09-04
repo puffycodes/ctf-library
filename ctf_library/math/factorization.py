@@ -70,7 +70,7 @@ class Factorization:
 
         return result
     
-    # ----- Fermat's Factorization -----
+    # ----- Fermat's Factorization ----- #
 
     # Fermat's Factorization
     # Ref: https://en.wikipedia.org/wiki/Fermat%27s_factorization_method
@@ -161,7 +161,7 @@ class Factorization:
     
     # The Basic Fermat's Factorization
     #
-    # Input: n should be odd
+    # Input: n should be odd and positive
     # Return: one of the factors for n
     #
     # Limitation: There is no limit for a so this function may loop forever.
