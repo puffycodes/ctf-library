@@ -83,20 +83,12 @@ class FactorizationTest(unittest.TestCase):
                 self.assertEqual(n % result, 0)
         return
     
-    def test_fermat_factorization_02(self):
+    def test_fermat_factorization_factor_list(self):
         verbose = True
-        for n in range(1000):
-            self.do_check_fermat_factorization_02(n, verbose=verbose)
+        for n in range(-1000, 1000):
+            self.do_check_fermat_factorization_factor_list(n, verbose=verbose)
         for n, _, _ in FactorizationTest.test_cases_fermat_factorization:
-            self.do_check_fermat_factorization_02(n, verbose=verbose)
-        return
-
-    def do_check_fermat_factorization_02(self, n, verbose=False):
-        result = Factorization.fermat_factorization_2(n)
-        product = self.list_multiplication(result)
-        if verbose:
-            print(f'fermat_factorization_2({n}) = {result}; prod = {product}')
-        self.assertEqual(n, product)
+            self.do_check_fermat_factorization_factor_list(n, verbose=verbose)
         return
 
     # --- Internal Functions
@@ -138,6 +130,15 @@ class FactorizationTest(unittest.TestCase):
             product *= number
         return product
     
+    def do_check_fermat_factorization_factor_list(self, n, verbose=False):
+        result = Factorization.fermat_factorization_factor_list(n)
+        product = self.list_multiplication(result)
+        if verbose:
+            print(f'fermat_factorization_factor_list({n}) = {result}', end='')
+            print(f'; product = {product}')
+        self.assertEqual(n, product)
+        return
+
     def do_check_fermat_factorization(self, n, f1, f2, verbose=False):
         result_f1 = Factorization.fermat_factorization(n)
         if result_f1 != 0:

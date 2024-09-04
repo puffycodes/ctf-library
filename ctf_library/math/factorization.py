@@ -75,7 +75,7 @@ class Factorization:
     # Fermat's Factorization
     # Ref: https://en.wikipedia.org/wiki/Fermat%27s_factorization_method
 
-    # Fermat's Factorization
+    # Fermat's Factorization (return one value)
     #
     # Input: n should be odd (but we do not check)
     # Return: one of the factors for n, always positive or zero
@@ -115,12 +115,12 @@ class Factorization:
     # Returns: a list of factors of n. the factors may not be all primes.
     #
     @staticmethod
-    def fermat_factorization_2(n):
+    def fermat_factorization_factor_list(n):
         factors = []
         if n < 0:
             factors.append(-1)
             n *= -1
-            
+
         if n == 0:
             factors.append(0)
             return factors
