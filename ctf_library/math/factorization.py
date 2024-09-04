@@ -76,10 +76,11 @@ class Factorization:
     # Ref: https://en.wikipedia.org/wiki/Fermat%27s_factorization_method
     #
     # Input: n should be odd (but we do not check)
-    # Return: one of the factor for n, always positive or zero
+    # Return: one of the factors for n, always positive or zero
     #
     # Limitation: The algorithm may return a trivial factor 1 for for smaller numbers.
     #
+    @staticmethod
     def fermat_factorization(n):
         if n < 0:
             # do factorization on the positive number
@@ -102,6 +103,23 @@ class Factorization:
         # set a (very loose) upper limit for a so that it will terminate
         # (TODO: Is this limit correct? Please check.)
         while a < n and math.isqrt(b2) * math.isqrt(b2) != b2:
+            a += 1
+            b2 = a * a - n
+        return a - math.isqrt(b2)
+    
+    # The basic Fermat's Factorization (For reference)
+    #
+    # Input: n should be odd
+    # Return: one of the factors for n
+    #
+    # Limitation: There is no limit for a so this function may loop forever.
+    #
+    @staticmethod
+    def fermat_factorization_basic(n):
+        a = math.isqrt(n) + 1   # original algorith uses ceil(sqrt(n))
+        b2 = a * a - n
+        # no other termination condition. this loop may not end.
+        while math.isqrt(b2) * math.isqrt(b2) != b2:
             a += 1
             b2 = a * a - n
         return a - math.isqrt(b2)
