@@ -164,7 +164,8 @@ class Factorization:
     # Input: n should be odd and positive
     # Return: one of the factors for n
     #
-    # Limitation: There is no limit for a so this function may loop forever.
+    # Limitation: There is no limit for a so this function may loop forever,
+    #             particularly in cases when n is even.
     #
     @staticmethod
     def fermat_factorization_basic(n):
