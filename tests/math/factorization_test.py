@@ -67,7 +67,7 @@ class FactorizationTest(unittest.TestCase):
             [ 4, 2, 2 ], [ 5, 1, 5 ], [ 7, 1, 7 ], [ 8, 2, 4 ],
             [ 11, 1, 11 ], [ 12, 2, 6 ], [ 13, 1, 13 ],
             [ 15, 3, 5 ], 
-            # this algorith give wrong results for the following small numbers
+            # this algorith gives 1 as the result for the following small numbers
             [ 6, 1, 6 ], [ 10, 1, 10 ], [ 14, 1, 14 ], [ 82, 1, 82 ],
         ]
         for n, f1, f2 in test_cases:
@@ -78,6 +78,8 @@ class FactorizationTest(unittest.TestCase):
         # check that the function terminates for small numbers
         for n in range(1000):
             result = Factorization.fermat_factorization(n)
+            if result != 0:
+                self.assertEqual(n % result, 0)
         return
 
     # --- Internal Functions
