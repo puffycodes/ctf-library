@@ -75,14 +75,33 @@ class Factorization:
     # Fermat's Factorization
     # Ref: https://en.wikipedia.org/wiki/Fermat%27s_factorization_method
     #
-    # Input: n should be odd
-    # Return: one of the factor for n
+    # Input: n should be odd (but we do not check)
+    # Return: one of the factor for n, always positive or zero
     #
-    # TODO: What is the termination condition of the while loop if a perfect square cannot be found?
+    # Limitation: The algorithm may return a trivial factor 1 for for smaller numbers.
+    #
     def fermat_factorization(n):
+        if n < 0:
+            # do factorization on the positive number
+            n *= -1
+        if n == 0:
+            # special case when n is zero
+            return 0
+        elif n <= 2:
+            # special case when n is 1 or 2
+            # result is 1 because this function returns the smaller factor
+            return 1
+        
+        a = math.isqrt(n)
+        if a * a == n:
+            # special case when n is a perfect square
+            return a
+        
         a = math.isqrt(n) + 1   # original algorith uses ceil(sqrt(n))
         b2 = a * a - n
-        while math.isqrt(b2) * math.isqrt(b2) != b2:
+        # set a (very loose) upper limit for a so that it will terminate
+        # (TODO: Is this limit correct? Please check.)
+        while a < n and math.isqrt(b2) * math.isqrt(b2) != b2:
             a += 1
             b2 = a * a - n
         return a - math.isqrt(b2)
