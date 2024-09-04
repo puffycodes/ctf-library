@@ -83,7 +83,7 @@ class Factorization:
     # Limitation: The algorithm may return a trivial factor 1 for for smaller numbers.
     #
     @staticmethod
-    def fermat_factorization(n):
+    def fermat_factorization_single_value(n):
         if n < 0:
             # do factorization on the positive number
             n *= -1

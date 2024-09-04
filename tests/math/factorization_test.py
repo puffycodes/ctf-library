@@ -69,16 +69,16 @@ class FactorizationTest(unittest.TestCase):
         [ 6, 1, 6 ], [ 10, 1, 10 ], [ 14, 1, 14 ], [ 82, 1, 82 ],
     ]
 
-    def test_fermat_factorization(self):
+    def test_fermat_factorization_single_value(self):
         verbose = False
         for n, f1, f2 in FactorizationTest.test_cases_fermat_factorization:
-            self.do_check_fermat_factorization(n, f1, f2, verbose=verbose)
+            self.do_check_fermat_factorization_single_value(n, f1, f2, verbose=verbose)
         return
     
-    def test_fermat_factorization_termination(self):
+    def test_fermat_factorization_single_value_termination(self):
         # check that the function terminates for small numbers
         for n in range(1000):
-            result = Factorization.fermat_factorization(n)
+            result = Factorization.fermat_factorization_single_value(n)
             if result != 0:
                 self.assertEqual(n % result, 0)
         return
@@ -139,8 +139,8 @@ class FactorizationTest(unittest.TestCase):
         self.assertEqual(n, product)
         return
 
-    def do_check_fermat_factorization(self, n, f1, f2, verbose=False):
-        result_f1 = Factorization.fermat_factorization(n)
+    def do_check_fermat_factorization_single_value(self, n, f1, f2, verbose=False):
+        result_f1 = Factorization.fermat_factorization_single_value(n)
         if result_f1 != 0:
             result_f2 = n // result_f1
         else:
