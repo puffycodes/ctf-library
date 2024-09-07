@@ -2,7 +2,9 @@
 
 # Ref: https://reversingfun.com/posts/how-to-extract-quarantine-files-from-windows-defender/
 
+import os
 from Crypto.Cipher import ARC4
+from common_util.dir_util import DirectoryUtility
 
 class WindowsDefenderQuarantineFile:
 
@@ -30,8 +32,36 @@ class WindowsDefenderQuarantineFile:
         0xA4, 0xC3, 0xDD, 0xAB, 0xDD, 0xBF, 0xF3, 0x82, 0x53
     ]
 
+    # Folder Names
+    default_main_folder = 'C:\\ProgramData\\Microsoft\\Windows Defender\\Quarantine'
+    entries_sub_folder = 'Entries'
+    resources_sub_folder = 'Resources'
+    resource_data_sub_folder = 'ResourceData'
+    all_sub_folders = [
+        entries_sub_folder, resources_sub_folder, resource_data_sub_folder,
+    ]
+
+    @staticmethod
+    def get_quarantine_file_list(dir_name=''):
+        if dir_name == '':
+            dir_name = WindowsDefenderQuarantineFile.default_main_folder
+        entries_files = DirectoryUtility.list_files(
+            os.path.join(dir_name, WindowsDefenderQuarantineFile.entries_sub_folder), '*',
+            recursive=True
+        )
+        resources_files = DirectoryUtility.list_files(
+            os.path.join(dir_name, WindowsDefenderQuarantineFile.resources_sub_folder), '*',
+            recursive=True
+        )
+        resource_data_files = DirectoryUtility.list_files(
+            os.path.join(dir_name, WindowsDefenderQuarantineFile.resource_data_sub_folder), '*',
+            recursive=True
+        )
+        return entries_files, resources_files, resource_data_files
+
     @staticmethod
     def get_cipher():
+        # RC4 cipher needs to be created for every data stream
         cipher = ARC4.new(bytes(WindowsDefenderQuarantineFile.decryption_key))
         return cipher
 
@@ -43,6 +73,7 @@ class WindowsDefenderQuarantineFile:
     
     @staticmethod
     def decrypt_entry_file_data(data):
+        # Hardcoded positions for data block in the entry file
         encrypted_data_blocks = [ data[:60], data[60:138], data[138:] ]
         decrypted_data_blocks = []
         for data_block in encrypted_data_blocks:
