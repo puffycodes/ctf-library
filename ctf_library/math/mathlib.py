@@ -1,5 +1,16 @@
 # file: mathlib.py
 
+'''
+A Random Collection of Math Functions
+
+Implements the following functions:
+ - Greatest Common Divisor (GCD)
+ - Extended GCD (XGCD)
+ - Least Common Multiple (LCM)
+ - Exponentiation (POW)
+ - Integer Square Root (ISQRT)
+'''
+
 # A random collection of math functions.
 
 # GCD (or HCF)
@@ -30,10 +41,6 @@
 import math
 
 class MathLib:
-
-    '''
-    A Random Collection of Math Functions.
-    '''
 
     # --- Greatest Common Divisor (GCD) Related
     #     - Can use math.gcd() for Python 3.5 and above.
