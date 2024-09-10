@@ -31,6 +31,10 @@ import math
 
 class MathLib:
 
+    '''
+    A Random Collection of Math Functions.
+    '''
+
     # --- Greatest Common Divisor (GCD) Related
     #     - Can use math.gcd() for Python 3.5 and above.
     #     - The Euclidean Algorithms may return a negative gcd value, which
@@ -40,12 +44,21 @@ class MathLib:
 
     @staticmethod
     def gcd(a, b):
+        '''
+        Returns the Greatest Common Divisor (GCD) for two numbers.
+        The value returns is always positive.
+        '''
         return abs(MathLib.gcd_euclidean(a, b))
     
     # --- Euclidean Algorithms for finding GCD
     
     @staticmethod
     def gcd_euclidean(a, b):
+        '''
+        Find the Greatest Common Divisor (GCD) for two numbers using
+        the Euclidean Algorithm.
+        The value return may be negative.
+        '''
         while b != 0:
             r = a % b
             a, b = b, r
@@ -53,6 +66,11 @@ class MathLib:
     
     @staticmethod
     def gcd_euclidean_recursive(a, b):
+        '''
+        Find the Greatest Common Divisor (GCD) for two numbers using
+        the Euclidean Algorithm in a recursive manner.
+        The value return may be negative.
+        '''
         if b == 0:
             return a
         else:
