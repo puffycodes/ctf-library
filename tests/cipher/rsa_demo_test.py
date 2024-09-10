@@ -7,7 +7,7 @@ from ctf_library.cipher.rsa_demo import RSADemo
 class RSADemoTest(unittest.TestCase):
 
     # [
-    #   <p>, <q>, <e>, <phi_function>, <expected_d>, <expected_n>,
+    #   <p>, <q>, <e>, <expected_d>, <expected_n>, <phi_function>,
     #   [ [<message>, <encrypted_message>], ... ]
     # ]
     # phi_function: 1 = eular totient function
@@ -64,6 +64,18 @@ class RSADemoTest(unittest.TestCase):
             random_e = random.randint(2, p-1)
             new_e, d, n = RSADemo.Helper.compute_private_key(p, q, random_e, phi_function=phi_function)
             self.do_check_encryption_decryption_random(new_e, d, n, verbose=verbose)
+        return
+    
+    def test_rsa_helper_03(self):
+        verbose = False
+        for p, q, e, _, _, totient_choice, _ in RSADemoTest.test_cases[0:1]:
+            phi_function = self.get_totient_function(totient_choice)
+            with self.assertRaises(ValueError) as err:
+                new_e, d, n = RSADemo.Helper.compute_private_key(p, q, 3120, phi_function=phi_function)
+                if verbose:
+                    print(f'{new_e = }; {d = }; {n = }')
+            if verbose:
+                print(f'Error: {err.exception}')
         return
     
     # --- Internal Functions
