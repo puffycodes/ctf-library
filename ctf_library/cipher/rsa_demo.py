@@ -67,7 +67,7 @@ class RSADemo:
 
             if not found_e:
                 raise ValueError(
-                    f'cannot find a suitable value for e between 1 and {phi}. e given is {e_input}.'
+                    f'cannot find a suitable value for e between the given e ({e_input}) and {phi}.'
                 )
             
             # compute d from e and phi
