@@ -4,14 +4,14 @@
 A Random Collection of Math Functions
 
 Implements the following functions:
- - Greatest Common Divisor (GCD)
- - Extended GCD (XGCD)
- - Least Common Multiple (LCM)
- - Exponentiation (POW)
- - Integer Square Root (ISQRT)
+ - Greatest Common Divisor (gcd)
+ - Extended GCD (xgcd)
+ - Least Common Multiple (lcm)
+ - Exponentiation (pow)
+ - Integer Square Root (isqrt)
 '''
 
-# A random collection of math functions.
+# References:
 
 # GCD (or HCF)
 # - Ref: https://simple.wikipedia.org/wiki/Greatest_common_divisor
@@ -52,8 +52,12 @@ class MathLib:
     @staticmethod
     def gcd(a, b):
         '''
-        Returns the Greatest Common Divisor (GCD) for two numbers.
-        The value returns is always positive.
+        Find the Greatest Common Divisor (GCD) for two numbers.
+
+        Params:
+            a and b: The two numbers
+        Returns:
+            The GCD for a and b. The value returns is always positive.
         '''
         return abs(MathLib.gcd_euclidean(a, b))
     
@@ -64,6 +68,7 @@ class MathLib:
         '''
         Find the Greatest Common Divisor (GCD) for two numbers using
         the Euclidean Algorithm.
+
         The value return may be negative.
         '''
         while b != 0:
@@ -76,6 +81,7 @@ class MathLib:
         '''
         Find the Greatest Common Divisor (GCD) for two numbers using
         the Euclidean Algorithm in a recursive manner.
+
         The value return may be negative.
         '''
         if b == 0:
@@ -84,12 +90,15 @@ class MathLib:
             return MathLib.gcd_euclidean_recursive(b, a % b)
         
     # --- Extended Euclidean Algorithm (XGCD)
-    #     - For two numbers a and b, return g, x and y,
-    #       where g = gcd(a, b) and g = ax + by.
-    #     - The value g may be negative.
 
     @staticmethod
     def xgcd(a, b):
+        '''
+        For two numbers a and b, returns g, x and y,
+        where g = gcd(a, b) and g = ax + by.
+
+        The value of g may be negative.
+        '''
         prevx, x = 1, 0
         prevy, y = 0, 1
         while b != 0:
