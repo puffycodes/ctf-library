@@ -1,12 +1,16 @@
 # file: windows_defender_quarantine_file.py
 
 # Ref: https://reversingfun.com/posts/how-to-extract-quarantine-files-from-windows-defender/
+# Ref: https://static.ernw.de/whitepaper/ERNW-Whitepaper-71_AV_Quarantine_signed.pdf
 
 import os
 from Crypto.Cipher import ARC4
+from common_util.bytes_util import BytesUtility
 from common_util.dir_util import DirectoryUtility
+from common_util.hexdump import HexDump
+from ctf_library.file_format.file_format import FileFormat
 
-class WindowsDefenderQuarantineFile:
+class WindowsDefenderQuarantineFile(FileFormat):
 
     # Decryption Key for Windows Defender Quarantine Files (RC4)
     decryption_key = [
@@ -40,6 +44,111 @@ class WindowsDefenderQuarantineFile:
     all_sub_folders = [
         entries_sub_folder, resources_sub_folder, resource_data_sub_folder,
     ]
+
+    # Header Values
+    entries_file_id = bytes([
+        0xdb, 0xe8, 0xc5, 0x01, 0x01, 0, 0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    ])
+    resource_data_file_id = bytes([
+        0x03, 0, 0, 0, 0x02, 0, 0, 0,
+    ])
+
+    @staticmethod
+    def parse_resource_data_file(resource_data_filename):
+        with open(resource_data_filename, 'rb') as fd:
+            resource_data_encrypted = fd.read()
+        resource_data_decrypted = WindowsDefenderQuarantineFile.decrypt_data(
+            resource_data_encrypted
+        )
+        end_pos = WindowsDefenderQuarantineFile.parse_resource_data(resource_data_decrypted)
+        return end_pos
+
+    @staticmethod
+    def parse_resource_data(data, offset=0, max_length=-1):
+        end_of_data_pos = WindowsDefenderQuarantineFile.compute_end_position(
+            data, offset=offset, max_length=max_length
+        )
+
+        data_length = end_of_data_pos - offset
+        print(f'data length: {data_length} (0x{data_length:x})')
+
+        curr_pos = offset
+
+        header_length_fixed = 8 + 4 + 8
+
+        if end_of_data_pos >= curr_pos + header_length_fixed:
+            file_id = BytesUtility.extract_bytes(data, 0, 8, pos=curr_pos)
+            binary_data_length = BytesUtility.extract_integer(data, 8, 4, pos=curr_pos, endian='little')
+            padding_01 = BytesUtility.extract_bytes(data, 12, 8, pos=curr_pos)
+            file_id_hex = HexDump.to_hex(file_id)
+            padding_01_hex = HexDump.to_hex(padding_01)
+            if file_id == WindowsDefenderQuarantineFile.resource_data_file_id:
+                print(f'file id: {file_id_hex}')
+            else:
+                print(f'unknown file id: {file_id_hex}')
+            print(f'binary data length: {binary_data_length} (0x{binary_data_length:x})')
+            print(f'padding: {padding_01_hex}')
+        else:
+            return WindowsDefenderQuarantineFile.error_insufficient_data(
+                data, header_length_fixed, pos=curr_pos
+            )
+        
+        curr_pos += header_length_fixed
+
+        if end_of_data_pos >= curr_pos + binary_data_length:
+            binary_data = BytesUtility.extract_bytes(data, 0, binary_data_length, pos=curr_pos)
+            binary_data_label = f'binary data at {curr_pos} (0x{curr_pos:x}):'
+            HexDump.hexdump_and_print([binary_data], label_list=[binary_data_label])
+        else:
+            return WindowsDefenderQuarantineFile.error_insufficient_data(
+                data, binary_data_length, pos=curr_pos
+            )
+        
+        curr_pos += binary_data_length
+
+        header_2_length_fixed = 8 + 8 + 4
+
+        if end_of_data_pos >= curr_pos + header_2_length_fixed:
+            padding_02 = BytesUtility.extract_bytes(data, 0, 8, pos=curr_pos)
+            malware_file_length = BytesUtility.extract_integer(
+                data, 8, 8, pos=curr_pos, endian='little'
+            )
+            padding_03 = BytesUtility.extract_bytes(data, 16, 4, pos=curr_pos)
+            padding_02_hex = HexDump.to_hex(padding_02)
+            padding_03_hex = HexDump.to_hex(padding_03)
+            print(f'padding: {padding_02_hex}')
+            print(f'malware file length: {malware_file_length} (0x{malware_file_length:x})')
+            print(f'padding: {padding_03_hex}')
+        else:
+            return WindowsDefenderQuarantineFile.error_insufficient_data(
+                data, header_2_length_fixed, pos=curr_pos
+            )
+        
+        curr_pos += header_2_length_fixed
+
+        if end_of_data_pos >= curr_pos + malware_file_length:
+            malware_file_data = BytesUtility.extract_bytes(
+                data, 0, malware_file_length, pos=curr_pos
+            )
+            malware_file_data_label = f'malware file data at {curr_pos} (0x{curr_pos:x}):'
+            HexDump.hexdump_and_print([malware_file_data], label_list=[malware_file_data_label])
+        else:
+            return WindowsDefenderQuarantineFile.error_insufficient_data(
+                data, malware_file_length, pos=curr_pos
+            )
+        
+        curr_pos += malware_file_length
+
+        remaining_data_length = end_of_data_pos - curr_pos
+        remaining_data = BytesUtility.extract_bytes(data, 0, remaining_data_length, pos=curr_pos)
+        remaining_data_label = f'remaining data at {curr_pos} (0x{curr_pos:x}):'
+        HexDump.hexdump_and_print([remaining_data], label_list=[remaining_data_label])
+
+        curr_pos += remaining_data_length
+
+        print(f'parsing ends at {curr_pos} (0x{curr_pos:x})')
+
+        return curr_pos
 
     @staticmethod
     def get_quarantine_file_list(dir_name=''):
