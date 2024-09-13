@@ -53,17 +53,80 @@ class WindowsDefenderQuarantineFile(FileFormat):
         0x03, 0, 0, 0, 0x02, 0, 0, 0,
     ])
 
+    # Header Lengths
+    entries_file_part_1_length = 0x3c
+    entries_file_part_2_length_offset = 0x28
+    entries_file_part_3_length_offset = 0x28 + 4
+
+    @staticmethod
+    def parse_entries_file(entries_file_name):
+        with open(entries_file_name, 'rb') as fd:
+            entries_data_encrypted = fd.read()
+        end_pos = WindowsDefenderQuarantineFile.parse_entries_file_data(entries_data_encrypted)
+        return end_pos
+
     @staticmethod
     def parse_resource_data_file(resource_data_filename):
         with open(resource_data_filename, 'rb') as fd:
             resource_data_encrypted = fd.read()
-        end_pos = WindowsDefenderQuarantineFile.parse_resource_data(
+        end_pos = WindowsDefenderQuarantineFile.parse_resource_data_file_data(
             resource_data_encrypted, is_encrypted=True
         )
         return end_pos
+    
+    @staticmethod
+    def parse_entries_file_data(data, offset=0, max_length=-1):
+        end_of_data_pos = WindowsDefenderQuarantineFile.compute_end_position(
+            data, offset=offset, max_length=max_length
+        )
+
+        data_length = end_of_data_pos - offset
+        print(f'data length: {data_length} (0x{data_length:x})')
+
+        curr_pos = offset
+
+        header_length_fixed = WindowsDefenderQuarantineFile.entries_file_part_1_length
+
+        if end_of_data_pos >= curr_pos + header_length_fixed:
+            decrypted_part_1_data = WindowsDefenderQuarantineFile.decrypt_data(
+                data[:WindowsDefenderQuarantineFile.entries_file_part_1_length]
+            )
+            file_id = BytesUtility.extract_bytes(decrypted_part_1_data, 0, 0x10, pos=curr_pos)
+            unknown_id = BytesUtility.extract_bytes(
+                decrypted_part_1_data, 0x10, 0x18, pos=curr_pos
+            )
+            length_2, length_3 = WindowsDefenderQuarantineFile.get_entries_file_parts_length(
+                decrypted_part_1_data, is_encrypted=False
+            )
+            print(f'length #1: {length_2} (0x{length_2:x})')
+            print(f'length #2: {length_3} (0x{length_3:x})')
+        else:
+            WindowsDefenderQuarantineFile.error_insufficient_data(
+                data, header_length_fixed, pos=curr_pos
+            )
+
+        curr_pos += header_length_fixed
+
+        if end_of_data_pos >= curr_pos + length_2:
+            pass
+        else:
+            WindowsDefenderQuarantineFile.error_insufficient_data(data, length_2, pos=0)
+
+        curr_pos += length_2
+
+        if end_of_data_pos >= curr_pos + length_3:
+            pass
+        else:
+            WindowsDefenderQuarantineFile.error_insufficient_data(data, length_3, pos=0)
+
+        curr_pos += length_3
+
+        print(f'parsing ends at {curr_pos} (0x{curr_pos:x})')
+
+        return curr_pos
 
     @staticmethod
-    def parse_resource_data(data, offset=0, max_length=-1, is_encrypted=True):
+    def parse_resource_data_file_data(data, offset=0, max_length=-1, is_encrypted=True):
         if is_encrypted:
             data = WindowsDefenderQuarantineFile.decrypt_data(data)
 
@@ -188,7 +251,7 @@ class WindowsDefenderQuarantineFile(FileFormat):
         return decrypted_data
     
     @staticmethod
-    def decrypt_entry_file_data(data):
+    def decrypt_entries_file_data_zzz(data):
         # Hardcoded positions for data block in the entry file
         encrypted_data_blocks = [ data[:60], data[60:138], data[138:] ]
         decrypted_data_blocks = []
@@ -196,5 +259,51 @@ class WindowsDefenderQuarantineFile(FileFormat):
             data_block_decrypted = WindowsDefenderQuarantineFile.decrypt_data(data_block)
             decrypted_data_blocks.append(data_block_decrypted)
         return encrypted_data_blocks, decrypted_data_blocks
+    
+    @staticmethod
+    def decrypt_entries_file_data(data):
+        # TODO: to add error checkings when there is insufficient data
+        encrypted_part_1_data = BytesUtility.extract_bytes(
+            data, 0, WindowsDefenderQuarantineFile.entries_file_part_1_length, pos=0
+        )
+        decrypted_part_1_data = WindowsDefenderQuarantineFile.decrypt_data(encrypted_part_1_data)
+
+        part_2_length, part_3_length = WindowsDefenderQuarantineFile.get_entries_file_parts_length(
+            decrypted_part_1_data, is_encrypted=False
+        )
+        part_2_offset = WindowsDefenderQuarantineFile.entries_file_part_1_length
+        encrypted_part_2_data = BytesUtility.extract_bytes(data, part_2_offset, part_2_length, pos=0)
+        decrypted_part_2_data = WindowsDefenderQuarantineFile.decrypt_data(encrypted_part_2_data)
+
+        part_3_offset = part_2_offset + part_2_length
+        encrypted_part_3_data = BytesUtility.extract_bytes(data, part_3_offset, part_3_length, pos=0)
+        decrypted_part_3_data = WindowsDefenderQuarantineFile.decrypt_data(encrypted_part_3_data)
+
+        encrypted_data_blocks = [
+            encrypted_part_1_data, encrypted_part_2_data, encrypted_part_3_data,
+        ]
+        decrypted_data_blocks = [
+            decrypted_part_1_data, decrypted_part_2_data, decrypted_part_3_data,
+        ]
+        pos_labels = [ 0, part_2_offset, part_3_offset, ]
+
+        return encrypted_data_blocks, decrypted_data_blocks, pos_labels
+    
+    @staticmethod
+    def get_entries_file_parts_length(part_1_data, is_encrypted=False):
+        # TODO: to add error checkings when there is insufficient data
+        if is_encrypted:
+            part_1_data = WindowsDefenderQuarantineFile.decrypt_data(part_1_data)
+        part_2_length = BytesUtility.extract_integer(
+            part_1_data,
+            WindowsDefenderQuarantineFile.entries_file_part_2_length_offset, 4,
+            endian='little'
+        )
+        part_3_length = BytesUtility.extract_integer(
+            part_1_data,
+            WindowsDefenderQuarantineFile.entries_file_part_3_length_offset, 4,
+            endian='little'
+        )
+        return part_2_length, part_3_length
 
 # --- end of file --- #
