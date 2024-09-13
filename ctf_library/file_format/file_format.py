@@ -46,6 +46,11 @@ class FileFormat:
                 f' end: {self.end} (0x{self.end:x});' \
                 f' length: {self.length} (0x{self.length:x})'
             return result
+        
+    class Extraction:
+
+        LENGTH_GUID = 16
+        LENGTH_WIN_FILE_TIME = 8
     
     # --- Common functions
 
