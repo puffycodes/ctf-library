@@ -57,14 +57,19 @@ class WindowsDefenderQuarantineFile(FileFormat):
     def parse_resource_data_file(resource_data_filename):
         with open(resource_data_filename, 'rb') as fd:
             resource_data_encrypted = fd.read()
-        resource_data_decrypted = WindowsDefenderQuarantineFile.decrypt_data(
-            resource_data_encrypted
+        # resource_data_decrypted = WindowsDefenderQuarantineFile.decrypt_data(
+        #     resource_data_encrypted
+        # )
+        end_pos = WindowsDefenderQuarantineFile.parse_resource_data(
+            resource_data_encrypted, is_encrypted=True
         )
-        end_pos = WindowsDefenderQuarantineFile.parse_resource_data(resource_data_decrypted)
         return end_pos
 
     @staticmethod
-    def parse_resource_data(data, offset=0, max_length=-1):
+    def parse_resource_data(data, offset=0, max_length=-1, is_encrypted=False):
+        if is_encrypted:
+            data = WindowsDefenderQuarantineFile.decrypt_data(data)
+
         end_of_data_pos = WindowsDefenderQuarantineFile.compute_end_position(
             data, offset=offset, max_length=max_length
         )
@@ -88,6 +93,7 @@ class WindowsDefenderQuarantineFile(FileFormat):
                 print(f'unknown file id: {file_id_hex}')
             print(f'binary data length: {binary_data_length} (0x{binary_data_length:x})')
             print(f'padding: {padding_01_hex}')
+            print()
         else:
             return WindowsDefenderQuarantineFile.error_insufficient_data(
                 data, header_length_fixed, pos=curr_pos
@@ -98,7 +104,8 @@ class WindowsDefenderQuarantineFile(FileFormat):
         if end_of_data_pos >= curr_pos + binary_data_length:
             binary_data = BytesUtility.extract_bytes(data, 0, binary_data_length, pos=curr_pos)
             binary_data_label = f'binary data at {curr_pos} (0x{curr_pos:x}):'
-            HexDump.hexdump_and_print([binary_data], label_list=[binary_data_label])
+            HexDump.hexdump_and_print([binary_data], label_list=[binary_data_label],
+                                      pos_label_list=[curr_pos])
         else:
             return WindowsDefenderQuarantineFile.error_insufficient_data(
                 data, binary_data_length, pos=curr_pos
@@ -119,6 +126,7 @@ class WindowsDefenderQuarantineFile(FileFormat):
             print(f'padding: {padding_02_hex}')
             print(f'malware file length: {malware_file_length} (0x{malware_file_length:x})')
             print(f'padding: {padding_03_hex}')
+            print()
         else:
             return WindowsDefenderQuarantineFile.error_insufficient_data(
                 data, header_2_length_fixed, pos=curr_pos
@@ -131,7 +139,8 @@ class WindowsDefenderQuarantineFile(FileFormat):
                 data, 0, malware_file_length, pos=curr_pos
             )
             malware_file_data_label = f'malware file data at {curr_pos} (0x{curr_pos:x}):'
-            HexDump.hexdump_and_print([malware_file_data], label_list=[malware_file_data_label])
+            HexDump.hexdump_and_print([malware_file_data], label_list=[malware_file_data_label],
+                                      pos_label_list=[curr_pos])
         else:
             return WindowsDefenderQuarantineFile.error_insufficient_data(
                 data, malware_file_length, pos=curr_pos
@@ -142,7 +151,8 @@ class WindowsDefenderQuarantineFile(FileFormat):
         remaining_data_length = end_of_data_pos - curr_pos
         remaining_data = BytesUtility.extract_bytes(data, 0, remaining_data_length, pos=curr_pos)
         remaining_data_label = f'remaining data at {curr_pos} (0x{curr_pos:x}):'
-        HexDump.hexdump_and_print([remaining_data], label_list=[remaining_data_label])
+        HexDump.hexdump_and_print([remaining_data], label_list=[remaining_data_label],
+                                  pos_label_list=[curr_pos])
 
         curr_pos += remaining_data_length
 
