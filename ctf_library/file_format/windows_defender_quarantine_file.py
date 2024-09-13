@@ -57,16 +57,13 @@ class WindowsDefenderQuarantineFile(FileFormat):
     def parse_resource_data_file(resource_data_filename):
         with open(resource_data_filename, 'rb') as fd:
             resource_data_encrypted = fd.read()
-        # resource_data_decrypted = WindowsDefenderQuarantineFile.decrypt_data(
-        #     resource_data_encrypted
-        # )
         end_pos = WindowsDefenderQuarantineFile.parse_resource_data(
             resource_data_encrypted, is_encrypted=True
         )
         return end_pos
 
     @staticmethod
-    def parse_resource_data(data, offset=0, max_length=-1, is_encrypted=False):
+    def parse_resource_data(data, offset=0, max_length=-1, is_encrypted=True):
         if is_encrypted:
             data = WindowsDefenderQuarantineFile.decrypt_data(data)
 
