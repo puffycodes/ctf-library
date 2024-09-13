@@ -89,8 +89,11 @@ class WindowsDefenderQuarantineFile(FileFormat):
         header_length_fixed = WindowsDefenderQuarantineFile.entries_file_part_1_length
 
         if end_of_data_pos >= curr_pos + header_length_fixed:
+            encrypted_part_1_data = BytesUtility.extract_bytes(
+                data, 0, WindowsDefenderQuarantineFile.entries_file_part_1_length, pos=curr_pos
+            )
             decrypted_part_1_data = WindowsDefenderQuarantineFile.decrypt_data(
-                data[:WindowsDefenderQuarantineFile.entries_file_part_1_length]
+                encrypted_part_1_data
             )
             file_id = BytesUtility.extract_bytes(decrypted_part_1_data, 0, 0x10, pos=curr_pos)
             unknown_data_01 = BytesUtility.extract_bytes(
@@ -114,8 +117,9 @@ class WindowsDefenderQuarantineFile(FileFormat):
             print(f'length #2: {length_3} (0x{length_3:x})')
             print(f'unknown data #2: {unknown_data_02_hex}')
             print()
-            HexDump.hexdump_and_print([ decrypted_part_1_data ], [ 'entries file part #1:' ],
-                                      [ curr_pos ] )
+            HexDump.hexdump_and_print(
+                [ decrypted_part_1_data ], [ 'entries file part #1:' ], [ curr_pos ]
+            )
         else:
             WindowsDefenderQuarantineFile.error_insufficient_data(
                 data, header_length_fixed, pos=curr_pos
@@ -124,14 +128,32 @@ class WindowsDefenderQuarantineFile(FileFormat):
         curr_pos += header_length_fixed
 
         if end_of_data_pos >= curr_pos + length_2:
-            pass
+            encrypted_part_2_data = BytesUtility.extract_bytes(
+                data, 0, length_2, pos=curr_pos
+            )
+            decrypted_part_2_data = WindowsDefenderQuarantineFile.decrypt_data(
+                encrypted_part_2_data
+            )
+            # TODO: Extract and print fields
+            HexDump.hexdump_and_print(
+                [ decrypted_part_2_data ], [ 'entries file part #2:' ], [ curr_pos ]
+            )
         else:
             WindowsDefenderQuarantineFile.error_insufficient_data(data, length_2, pos=0)
 
         curr_pos += length_2
 
         if end_of_data_pos >= curr_pos + length_3:
-            pass
+            encrypted_part_3_data = BytesUtility.extract_bytes(
+                data, 0, length_3, pos=curr_pos
+            )
+            decrypted_part_3_data = WindowsDefenderQuarantineFile.decrypt_data(
+                encrypted_part_3_data
+            )
+            # TODO: Extract and print fields
+            HexDump.hexdump_and_print(
+                [ decrypted_part_3_data ], [ 'entries file part #3:' ], [ curr_pos ]
+            )
         else:
             WindowsDefenderQuarantineFile.error_insufficient_data(data, length_3, pos=0)
 
