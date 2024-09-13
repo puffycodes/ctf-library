@@ -59,18 +59,29 @@ class WindowsDefenderQuarantineFile(FileFormat):
     entries_file_part_3_length_offset = 0x28 + 4
 
     @staticmethod
-    def parse_entries_file(entries_file_name):
-        with open(entries_file_name, 'rb') as fd:
-            entries_data_encrypted = fd.read()
-        end_pos = WindowsDefenderQuarantineFile.parse_entries_file_data(entries_data_encrypted)
+    def parse_entries_file(entries_filename):
+        with open(entries_filename, 'rb') as fd:
+            entries_file_data_encrypted = fd.read()
+        end_pos = WindowsDefenderQuarantineFile.parse_entries_file_data(
+            entries_file_data_encrypted
+        )
+        return end_pos
+    
+    @staticmethod
+    def parse_resources_file(resources_filename):
+        with open(resources_filename, 'rb') as fd:
+            resources_file_data_encrypted = fd.read()
+        end_pos = WindowsDefenderQuarantineFile.parse_resources_file_data(
+            resources_file_data_encrypted
+        )
         return end_pos
 
     @staticmethod
     def parse_resource_data_file(resource_data_filename):
         with open(resource_data_filename, 'rb') as fd:
-            resource_data_encrypted = fd.read()
+            resource_data_file_data_encrypted = fd.read()
         end_pos = WindowsDefenderQuarantineFile.parse_resource_data_file_data(
-            resource_data_encrypted, is_encrypted=True
+            resource_data_file_data_encrypted, is_encrypted=True
         )
         return end_pos
     
@@ -158,6 +169,29 @@ class WindowsDefenderQuarantineFile(FileFormat):
             WindowsDefenderQuarantineFile.error_insufficient_data(data, length_3, pos=0)
 
         curr_pos += length_3
+
+        print(f'parsing ends at {curr_pos} (0x{curr_pos:x})')
+
+        return curr_pos
+
+    @staticmethod
+    def parse_resources_file_data(data, offset=0, max_length=-1, is_encrypted=True):
+        if is_encrypted:
+            data = WindowsDefenderQuarantineFile.decrypt_data(data)
+
+        end_of_data_pos = WindowsDefenderQuarantineFile.compute_end_position(
+            data, offset=offset, max_length=max_length
+        )
+
+        data_length = end_of_data_pos - offset
+        print(f'data length: {data_length} (0x{data_length:x})')
+        print()
+
+        curr_pos = offset
+
+        # TODO: to implement
+        print(f'not implemented yet')
+        print()
 
         print(f'parsing ends at {curr_pos} (0x{curr_pos:x})')
 
