@@ -82,6 +82,7 @@ class WindowsDefenderQuarantineFile(FileFormat):
 
         data_length = end_of_data_pos - offset
         print(f'data length: {data_length} (0x{data_length:x})')
+        print()
 
         curr_pos = offset
 
@@ -92,14 +93,29 @@ class WindowsDefenderQuarantineFile(FileFormat):
                 data[:WindowsDefenderQuarantineFile.entries_file_part_1_length]
             )
             file_id = BytesUtility.extract_bytes(decrypted_part_1_data, 0, 0x10, pos=curr_pos)
-            unknown_id = BytesUtility.extract_bytes(
+            unknown_data_01 = BytesUtility.extract_bytes(
                 decrypted_part_1_data, 0x10, 0x18, pos=curr_pos
             )
             length_2, length_3 = WindowsDefenderQuarantineFile.get_entries_file_parts_length(
                 decrypted_part_1_data, is_encrypted=False
             )
+            unknown_data_02 = BytesUtility.extract_bytes(
+                decrypted_part_1_data, 0x30, 0x0c, pos=curr_pos
+            )
+            file_id_hex = HexDump.to_hex(file_id)
+            unknown_data_01_hex = HexDump.to_hex(unknown_data_01)
+            unknown_data_02_hex = HexDump.to_hex(unknown_data_02)
+            if file_id == WindowsDefenderQuarantineFile.entries_file_id:
+                print(f'file id: {file_id_hex}')
+            else:
+                print(f'unknown file id: {file_id_hex}')
+            print(f'unknown data #1: {unknown_data_01_hex}')
             print(f'length #1: {length_2} (0x{length_2:x})')
             print(f'length #2: {length_3} (0x{length_3:x})')
+            print(f'unknown data #2: {unknown_data_02_hex}')
+            print()
+            HexDump.hexdump_and_print([ decrypted_part_1_data ], [ 'entries file part #1:' ],
+                                      [ curr_pos ] )
         else:
             WindowsDefenderQuarantineFile.error_insufficient_data(
                 data, header_length_fixed, pos=curr_pos
@@ -136,6 +152,7 @@ class WindowsDefenderQuarantineFile(FileFormat):
 
         data_length = end_of_data_pos - offset
         print(f'data length: {data_length} (0x{data_length:x})')
+        print()
 
         curr_pos = offset
 
@@ -237,10 +254,12 @@ class WindowsDefenderQuarantineFile(FileFormat):
             recursive=True
         )
         return entries_files, resources_files, resource_data_files
+    
+    # --- Internal Functions
 
     @staticmethod
     def get_cipher():
-        # RC4 cipher needs to be created for every data stream
+        # RC4 cipher needs to be created for the decryption of every data stream
         cipher = ARC4.new(bytes(WindowsDefenderQuarantineFile.decryption_key))
         return cipher
 
@@ -251,18 +270,12 @@ class WindowsDefenderQuarantineFile(FileFormat):
         return decrypted_data
     
     @staticmethod
-    def decrypt_entries_file_data_zzz(data):
-        # Hardcoded positions for data block in the entry file
-        encrypted_data_blocks = [ data[:60], data[60:138], data[138:] ]
-        decrypted_data_blocks = []
-        for data_block in encrypted_data_blocks:
-            data_block_decrypted = WindowsDefenderQuarantineFile.decrypt_data(data_block)
-            decrypted_data_blocks.append(data_block_decrypted)
-        return encrypted_data_blocks, decrypted_data_blocks
-    
-    @staticmethod
     def decrypt_entries_file_data(data):
-        # TODO: to add error checkings when there is insufficient data
+        required_length = WindowsDefenderQuarantineFile.entries_file_part_1_length
+        data_length = len(data)
+        if data_length < required_length:
+            raise ValueError(f'insufficient data: length = {data_length}; required = {required_length}')
+        
         encrypted_part_1_data = BytesUtility.extract_bytes(
             data, 0, WindowsDefenderQuarantineFile.entries_file_part_1_length, pos=0
         )
@@ -271,6 +284,13 @@ class WindowsDefenderQuarantineFile(FileFormat):
         part_2_length, part_3_length = WindowsDefenderQuarantineFile.get_entries_file_parts_length(
             decrypted_part_1_data, is_encrypted=False
         )
+
+        required_length = WindowsDefenderQuarantineFile.entries_file_part_1_length + \
+            part_2_length + part_3_length
+        data_length = len(data)
+        if data_length < required_length:
+            raise ValueError(f'insufficient data: length = {data_length}; required = {required_length}')
+
         part_2_offset = WindowsDefenderQuarantineFile.entries_file_part_1_length
         encrypted_part_2_data = BytesUtility.extract_bytes(data, part_2_offset, part_2_length, pos=0)
         decrypted_part_2_data = WindowsDefenderQuarantineFile.decrypt_data(encrypted_part_2_data)
@@ -291,9 +311,14 @@ class WindowsDefenderQuarantineFile(FileFormat):
     
     @staticmethod
     def get_entries_file_parts_length(part_1_data, is_encrypted=False):
-        # TODO: to add error checkings when there is insufficient data
         if is_encrypted:
             part_1_data = WindowsDefenderQuarantineFile.decrypt_data(part_1_data)
+            
+        required_length = WindowsDefenderQuarantineFile.entries_file_part_3_length_offset + 4
+        data_length = len(part_1_data)
+        if data_length < required_length:
+            raise ValueError(f'insufficient data: length = {data_length}; required = {required_length}')
+        
         part_2_length = BytesUtility.extract_integer(
             part_1_data,
             WindowsDefenderQuarantineFile.entries_file_part_2_length_offset, 4,
@@ -304,6 +329,7 @@ class WindowsDefenderQuarantineFile(FileFormat):
             WindowsDefenderQuarantineFile.entries_file_part_3_length_offset, 4,
             endian='little'
         )
+
         return part_2_length, part_3_length
 
 # --- end of file --- #
