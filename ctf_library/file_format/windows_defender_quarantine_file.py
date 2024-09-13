@@ -251,14 +251,13 @@ class WindowsDefenderQuarantineFile(FileFormat):
                     curr_offset += 1
                 entries_data_list.append(curr_entries_data.decode('utf-16').strip())
 
-            hexdump_array = HexDump.hexdump(
-                decrypted_part_3_data, offset=curr_offset, pos=0, pos_label=curr_pos+curr_offset
+            remaining_data_label = f'remaining data at {curr_pos+curr_offset} (0x{(curr_pos+curr_offset):x})'
+            HexDump.hexdump_and_print(
+                [ decrypted_part_3_data[curr_offset:] ],
+                label_list=[ remaining_data_label ], pos_label_list=[ curr_pos + curr_offset ]
             )
-            print(f'remaining data at {curr_pos+curr_offset} (0x{(curr_pos+curr_offset):x})')
-            HexDump.print_hexdump(hexdump_array)
-            print()
 
-            # TODO: Continue the extraction of fields
+            # TODO: Continue the extraction and printing of fields
 
             print(f'number of entries: {number_of_entries}')
             print(f'offsets:')
