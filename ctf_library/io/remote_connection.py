@@ -31,6 +31,9 @@ class RemoteConnection:
 
         Usage:
             asyncio.run(RemoteConnection.open_connection_async(host, port, shell))
+        or
+            # When event_loop is already running, e.g. in Jupyter Notebook
+            await RemoteConnection.open_connection_async(host, port, shell)
         '''
         reader, writer = await telnetlib3.open_connection(
             host, port, shell=shell
@@ -47,6 +50,21 @@ class RemoteConnection:
         coro = telnetlib3.create_server(port=port, shell=shell)
         server = loop.run_until_complete(coro)
         loop.run_until_complete(server.wait_closed())
+        return
+    
+    @staticmethod
+    async def create_server_async(port, shell):
+        '''
+        Wait for connections on port and process using shell
+
+        Usage:
+            # Create a non-blocking server task
+            server_task = asyncio.create_task(
+                RemoteConnection.create_server_async(port, shell)
+            )
+        '''
+        server = await telnetlib3.create_server(port=port, shell=shell)
+        await server.wait_closed()
         return
     
 # --- end of file --- #
