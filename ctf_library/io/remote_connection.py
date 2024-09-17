@@ -53,18 +53,18 @@ class RemoteConnection:
         return
     
     @staticmethod
-    def create_server(port, shell):
+    def create_server(port, shell, host=None):
         '''
         Wait for connections on port and process using shell
         '''
         loop = asyncio.get_event_loop()
-        coro = telnetlib3.create_server(port=port, shell=shell)
+        coro = telnetlib3.create_server(host=host, port=port, shell=shell)
         server = loop.run_until_complete(coro)
         loop.run_until_complete(server.wait_closed())
         return
     
     @staticmethod
-    async def create_server_async(port, shell):
+    async def create_server_async(port, shell, host=None):
         '''
         Wait for connections on port and process using shell
 
@@ -77,7 +77,7 @@ class RemoteConnection:
             # Wait on the completion of the server task
             await RemoteConnection.create_server_async(port, shell)
         '''
-        server = await telnetlib3.create_server(port=port, shell=shell)
+        server = await telnetlib3.create_server(host=host, port=port, shell=shell)
         await server.wait_closed()
         return
     
