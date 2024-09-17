@@ -62,6 +62,9 @@ class RemoteConnection:
             server_task = asyncio.create_task(
                 RemoteConnection.create_server_async(port, shell)
             )
+        or
+            # A blocking server task
+            await RemoteConnection.create_server_async(port, shell)
         '''
         server = await telnetlib3.create_server(port=port, shell=shell)
         await server.wait_closed()
