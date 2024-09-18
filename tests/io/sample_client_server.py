@@ -1,5 +1,11 @@
 # file: sample_client_server.py
 
+'''
+Client and Server Demo
+
+Provide a sample client and a sample server
+'''
+
 import random
 import argparse
 import asyncio
@@ -9,8 +15,14 @@ default_host = 'localhost'
 default_port = 8000
 
 class ClientServerDemoShell:
+    '''
+    Contain both the client and server shells, and other variables
+    '''
 
     def __init__(self):
+        '''
+        Initializes the variables
+        '''
         self.client_responses = [
             'I am good.',
             'I like python but I don\'t like snakes.',
@@ -20,6 +32,9 @@ class ClientServerDemoShell:
         return
 
     async def server_shell(self, reader, writer):
+        '''
+        Handle the server communication with one connected client
+        '''
         writer.write('What do you have to say? ')
         inp = await reader.readline()
         if inp:
@@ -31,6 +46,9 @@ class ClientServerDemoShell:
         return
 
     async def client_shell(self, reader, writer):
+        '''
+        Handle the client communication with server
+        '''
         # read something
         inp = await reader.readuntil(separator=b'? ')
         if not inp:
@@ -94,6 +112,9 @@ async def start_client_and_server_async(host, port, rounds=10, terminate=True):
     return
 
 def start_client_and_server(host, port):
+    '''
+    Start both client and server
+    '''
     asyncio.run(start_client_and_server_async(host, port))
     return
 
