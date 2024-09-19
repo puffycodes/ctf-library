@@ -8,6 +8,7 @@ of server and client code.
 '''
 
 # Ref: https://github.com/jquast/telnetlib3/
+# Ref: https://telnetlib3.readthedocs.io/en/latest/
 # Ref: https://stackoverflow.com/questions/75778543/python-telnetlib3-examples
 
 import asyncio, telnetlib3

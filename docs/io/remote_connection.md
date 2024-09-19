@@ -3,6 +3,7 @@
 ## Telnetlib3 References
 
 1. [Telnetlib3](https://github.com/jquast/telnetlib3/)
+1. [Read The Docs](https://telnetlib3.readthedocs.io/en/latest/)
 1. [Telnetlib3 Examples](https://stackoverflow.com/questions/75778543/python-telnetlib3-examples)
 
 ## Asyncio References
