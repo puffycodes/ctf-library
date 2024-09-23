@@ -19,6 +19,10 @@ import pathlib
 import sys
 sys.path.insert(0, pathlib.Path(__file__).parents[3].resolve().as_posix())
 
+autodoc_mock_imports = [
+    'Crypto',
+]
+
 # Sphinx extensions that we are using
 extensions = [
     'sphinx.ext.duration',
