@@ -10,4 +10,5 @@ Contents
 .. toctree::
    :maxdepth: 3
 
+   classes/math/mathlib
    api
