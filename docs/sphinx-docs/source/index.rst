@@ -11,4 +11,5 @@ Contents
    :maxdepth: 3
 
    classes/math/mathlib
+   classes/math/factorization
    api
