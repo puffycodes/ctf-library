@@ -1,16 +1,5 @@
 # file: mathlib.py
 
-'''
-A Random Collection of Math Functions
-
-Implements the following functions:
- - Greatest Common Divisor (gcd)
- - Extended GCD (xgcd)
- - Least Common Multiple (lcm)
- - Exponentiation (pow)
- - Integer Square Root (isqrt)
-'''
-
 # References:
 
 # GCD (or HCF)
@@ -41,6 +30,16 @@ Implements the following functions:
 import math
 
 class MathLib:
+    '''
+    A Random Collection of Math Functions
+
+    Implements the following functions:
+    (a) Greatest Common Divisor (gcd),
+    (b) Extended GCD (xgcd),
+    (c) Least Common Multiple (lcm),
+    (d) Exponentiation (pow),
+    (e) Integer Square Root (isqrt)
+    '''
 
     # --- Greatest Common Divisor (GCD) Related
     #     - Can use math.gcd() for Python 3.5 and above.
@@ -52,12 +51,16 @@ class MathLib:
     @staticmethod
     def gcd(a, b):
         '''
-        Find the Greatest Common Divisor (GCD) for two numbers.
+        Find the Greatest Common Divisor (GCD) of two numbers.
 
-        Params:
-            a and b: The two numbers
-        Returns:
-            The GCD for a and b. The value returns is always positive.
+        :param a: first number
+        :param b: second number
+        :type a: int
+        :type b: int
+
+        :return: The Greatest Common Divisor (GCD) of a and b.
+            The value returns is always positive.
+        :rtype: int
         '''
         return abs(MathLib.gcd_euclidean(a, b))
     
@@ -66,10 +69,18 @@ class MathLib:
     @staticmethod
     def gcd_euclidean(a, b):
         '''
-        Find the Greatest Common Divisor (GCD) for two numbers using
+        Find the Greatest Common Divisor (GCD) of two numbers using
         the Euclidean Algorithm.
 
-        The value return may be negative.
+        :meta private:
+        :param a: first number
+        :param b: second number
+        :type a: int
+        :type b: int
+
+        :return: The Greatest Common Divisor (GCD) of a and b.
+            The value returns may be negative.
+        :rtype: int
         '''
         while b != 0:
             r = a % b
@@ -79,10 +90,18 @@ class MathLib:
     @staticmethod
     def gcd_euclidean_recursive(a, b):
         '''
-        Find the Greatest Common Divisor (GCD) for two numbers using
+        Find the Greatest Common Divisor (GCD) of two numbers using
         the Euclidean Algorithm in a recursive manner.
 
-        The value return may be negative.
+        :meta private:
+        :param a: first number
+        :param b: second number
+        :type a: int
+        :type b: int
+
+        :return: The Greatest Common Divisor (GCD) of a and b.
+            The value returns may be negative.
+        :rtype: int
         '''
         if b == 0:
             return a
@@ -97,7 +116,15 @@ class MathLib:
         For two numbers a and b, returns g, x and y,
         where g = gcd(a, b) and g = ax + by.
 
-        The value of g may be negative.
+        :param a: first number
+        :param b: second number
+        :type a: int
+        :type b: int
+
+        :return: (g, x, y) where g is the Greatest Common Divisor (GCD)
+            of a and b, and g = ax + by.
+            The value of g may be negative.
+        :rtype: tuple
         '''
         prevx, x = 1, 0
         prevy, y = 0, 1
@@ -114,6 +141,18 @@ class MathLib:
 
     @staticmethod
     def lcm(a, b):
+        '''
+        Find the Least Common Multiple (LCM) of two numbers.
+
+        :param a: first number
+        :param b: second number
+        :type a: int
+        :type b: int
+
+        :return: The Least Common Multiple (LCM) of a and b.
+            The value returns is always positive.
+        :rtype: int
+        '''
         if a == 0 and b == 0:
             # special case
             return 0
@@ -124,6 +163,17 @@ class MathLib:
 
     @staticmethod
     def pow(x, n):
+        '''
+        Find the value of x to the power of n.
+
+        :param x: base
+        :param n: exponent
+        :type x: int
+        :type n: int
+
+        :return: The value of x to the power of n.
+        :rtype: int
+        '''
         return MathLib.pow_exponentiation_by_squaring(x, n)
     
     # --- Exponentation by Squaring
@@ -136,6 +186,19 @@ class MathLib:
 
     @staticmethod
     def pow_exponentiation_by_squaring(x, n):
+        '''
+        Find the value of x to the power of n using the exponentiation
+        by squaring method.
+
+        :meta private:
+        :param x: base
+        :param n: exponent
+        :type x: int
+        :type n: int
+
+        :return: The value of x to the power of n.
+        :rtype: int
+        '''
         result = 1
         if n < 0:
             # special case when n < 0
@@ -150,6 +213,19 @@ class MathLib:
     
     @staticmethod
     def pow_exponentiation_by_squaring_recursive(x, n):
+        '''
+        Find the value of x to the power of n using the exponentiation
+        by squaring method in a recursive manner.
+
+        :meta private:
+        :param x: base
+        :param n: exponent
+        :type x: int
+        :type n: int
+
+        :return: The value of x to the power of n.
+        :rtype: int
+        '''
         if n < 0:
             # special case when n < 0
             raise ValueError('exponent cannot be negative: {n}')
@@ -171,12 +247,33 @@ class MathLib:
 
     @staticmethod
     def isqrt(n):
+        '''
+        Find the integer square root of n, which is the largest integer x
+        for which x * x does not exceed n.
+
+        :param n: the value
+        :type n: int
+
+        :return: the integer square root of n
+        :rtype: int
+        '''
         return MathLib.isqrt_newtons_method_faster(n)
     
     # --- Newton's Method
     #     - Returns the largest integer x for which x * x does not exceed n.
     @staticmethod
     def isqrt_newtons_method(n):
+        '''
+        Find the integer square root of n, which is the largest integer x
+        for which x * x does not exceed n, using the Newton's Method.
+
+        :meta private:
+        :param n: the value
+        :type n: int
+
+        :return: the integer square root of n
+        :rtype: int
+        '''
         if n >= 0:
             x = n
             y = (x + 1) // 2
@@ -189,6 +286,17 @@ class MathLib:
         
     @staticmethod
     def isqrt_newtons_method_faster(n):
+        '''
+        Find the integer square root of n, which is the largest integer x
+        for which x * x does not exceed n, using the Newton's Method.
+
+        :meta private:
+        :param n: the value
+        :type n: int
+
+        :return: the integer square root of n
+        :rtype: int
+        '''
         if n > 0:
             x = 1 << (n.bit_length() + 1 >> 1)
             while True:
@@ -203,6 +311,17 @@ class MathLib:
         
     @staticmethod
     def isqrt_newtons_method_faster_02(x):
+        '''
+        Find the integer square root of n, which is the largest integer x
+        for which x * x does not exceed n, using the Newton's Method.
+
+        :meta private:
+        :param n: the value
+        :type n: int
+
+        :return: the integer square root of n
+        :rtype: int
+        '''
         if x < 0:
             raise ValueError('square root not defined for negative numbers')
         n = int(x)
@@ -228,8 +347,17 @@ class MathLib:
 
     @staticmethod
     def isqrt_hybrid(x):
-        """Return the integer part of the square root of x, even for very
-        large integer values."""
+        '''
+        Return the integer part of the square root of x, even for very
+        large integer values.
+
+        :meta private:
+        :param n: the value
+        :type n: int
+
+        :return: the integer square root of n
+        :rtype: int
+        '''
         if x < 0:
             raise ValueError('square root not defined for negative numbers')
         if x < MathLib._1_50:
