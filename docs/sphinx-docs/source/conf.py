@@ -19,6 +19,7 @@ import pathlib
 import sys
 sys.path.insert(0, pathlib.Path(__file__).parents[3].resolve().as_posix())
 
+# Mock import for autodoc
 autodoc_mock_imports = [
     'Crypto',
 ]
@@ -34,6 +35,8 @@ extensions = [
 
 templates_path = ['_templates']
 exclude_patterns = []
+
+autodoc_member_order = 'groupwise'
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
