@@ -42,7 +42,6 @@ class MathLib:
     '''
 
     # --- Greatest Common Divisor (GCD) Related
-    #     - Can use math.gcd() for Python 3.5 and above.
     #     - The Euclidean Algorithms may return a negative gcd value, which
     #       is different from math.gcd(). The return value is negative when
     #       the second value is negative.
@@ -52,6 +51,8 @@ class MathLib:
     def gcd(a, b):
         '''
         Find the Greatest Common Divisor (GCD) of two numbers.
+
+        Alternative: Use math.gcd() for Python 3.5 and above.
 
         :param a: first number
         :param b: second number
@@ -136,13 +137,13 @@ class MathLib:
         return a, prevx, prevy
         
     # --- Least Common Multiple (LCM) Related
-    #     - Can use math.lcm() for Python 3.9.0 and above.
-    #     - Return value of lcm() is always positive.
 
     @staticmethod
     def lcm(a, b):
         '''
         Find the Least Common Multiple (LCM) of two numbers.
+
+        Alternative: Use math.lcm() for Python 3.9.0 and above.
 
         :param a: first number
         :param b: second number
@@ -159,12 +160,13 @@ class MathLib:
         return abs(a * b) // abs(MathLib.gcd(a, b))
 
     # --- Exponentiation Related
-    #     - Can use Python built-in function pow().
 
     @staticmethod
     def pow(x, n):
         '''
         Find the value of x to the power of n.
+
+        Alternative: Use Python built-in function pow().
 
         :param x: base
         :param n: exponent
@@ -242,14 +244,16 @@ class MathLib:
             return x * MathLib.pow_exponentiation_by_squaring_recursive(x*x, (n-1)//2)
         
     # --- Integer Square Root
-    #     - Can use gmpy2.isqrt().
-    #     - Can use math.isqrt() for Python 3.8 and above.
 
     @staticmethod
     def isqrt(n):
         '''
         Find the integer square root of n, which is the largest integer x
         for which x * x does not exceed n.
+
+        Alternative:
+            (a) Use gmpy2.isqrt().
+            (b) Use math.isqrt() for Python 3.8 and above.
 
         :param n: the value
         :type n: int
@@ -261,6 +265,7 @@ class MathLib:
     
     # --- Newton's Method
     #     - Returns the largest integer x for which x * x does not exceed n.
+
     @staticmethod
     def isqrt_newtons_method(n):
         '''
@@ -344,6 +349,9 @@ class MathLib:
     #             Something to investigate?
 
     _1_50 = 1 << 50  # 2**50 == 1,125,899,906,842,624
+    '''
+    Constant used by function isqrt_hybrid(). Equal to 2 ** 50.
+    '''
 
     @staticmethod
     def isqrt_hybrid(x):
