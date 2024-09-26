@@ -17,7 +17,7 @@ class PNGFileFormat(FileFormat):
     PNGHeaderLength = len(PNGHeader)
 
     @staticmethod
-    def parse(data, offset=0, max_length=-1, with_header=True):
+    def parse(data, offset=0, max_length=-1, with_header=True, brief=True):
         end_of_data_pos = PNGFileFormat.compute_end_position(
             data, offset=offset, max_length=max_length
         )
@@ -54,6 +54,10 @@ class PNGFileFormat(FileFormat):
                 f'offset: {curr_pos}; type: {chunk_type}; length: {chunk_length};'
                 f' crc: {chunk_crc_hexdump} ({chunk_crc_computed_hex})'
             )
+            if not brief:
+                HexDump.hexdump_and_print(
+                    [ chunk_data ], pos_label_list=[ curr_pos + 8 ], max_bytes_show=48, prefix='    '
+                )
             curr_pos += 12 + chunk_length
 
             if chunk_type == b'IEND':
