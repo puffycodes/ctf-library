@@ -8,24 +8,33 @@ Usage
 
     from ctf_library.math.mathlib import MathLib
 
-.. Class (Public Functions Only)
-.. -----------------------------
-
-.. .. autoclass:: ctf_library.math.mathlib.MathLib
-..     :members:
-..     :undoc-members:
-..     :no-index:
-
-Class Methods
--------------
+Public Functions
+----------------
 
 .. autoclass:: ctf_library.math.mathlib.MathLib
-    :members: gcd, xgcd, lcm, pow, isqrt
-    :private-members: gcd_euclidean, gcd_euclidean_recursive,
-        pow_exponentiation_by_squaring, pow_exponentiation_by_squaring_recursive,
-        isqrt_newtons_method, isqrt_newtons_method_faster,
-        isqrt_newtons_method_faster_02, isqrt_hybrid
+    :members:
+    :private-members:
     :undoc-members:
+    :member-order: groupwise
+
+.. Other Functions
+.. ---------------
+
+.. .. autoclass:: ctf_library.math.mathlib.MathLib
+..     :private-members:
+..     :undoc-members:
+..     :member-order: groupwise
+
+.. Class Methods
+.. -------------
+
+.. .. autoclass:: ctf_library.math.mathlib.MathLib
+..     :members: gcd, xgcd, lcm, pow, isqrt
+..     :private-members: gcd_euclidean, gcd_euclidean_recursive,
+..         pow_exponentiation_by_squaring, pow_exponentiation_by_squaring_recursive,
+..         isqrt_newtons_method, isqrt_newtons_method_faster,
+..         isqrt_newtons_method_faster_02, isqrt_hybrid
+..     :undoc-members:
 ..    :no-index:
 
 .. Functions
