@@ -4,6 +4,7 @@
 
 Content
 
+1. [Base Converison](#base-conversion)
 1. [Blockchain](#blockchain)
     1. [Ethereum Virtual Machine (EVM)](#ethereum-virtual-machine-evm)
 1. [Compiler](#compiler)
@@ -11,6 +12,14 @@ Content
 1. [Miscellaneous](#miscellaneous)
 1. [QR Code](#qr-code)
 1. [Steganography](#steganography)
+
+## Base Conversion
+
+1. Base64
+1. Base85
+1. Base58
+1. [Base91](https://sourceforge.net/projects/base91/)
+1. [Base Convert](https://pypi.org/project/baseconvert/)
 
 ## Blockchain
 
