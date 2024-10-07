@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+#name = "puffy_ctf_library"
+name = "ctf_library"
+version = "0.0.1"
+authors = [
+    { name="Puffy Codes", email="as1234dfgh@gmail.com" },
+]
+description = "CTF Library for Python"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["ctf_library"]
+
+[project.scripts]
+usb_keystroke_decoder = "ctf_library.packet.usb_keystroke_decoder:USBKeystrokeDecoderMain.main"
+
+[project.urls]
+Homepage = "https://github.com/puffycodes/ctf-library"
+Issues = "https://github.com/puffycodes/ctf-library/docs/known_issue.md"
