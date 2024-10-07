@@ -1,6 +1,7 @@
 # file: requirements.txt
 
 # PyPI requirement for this project
-# none at the moment
+
+scapy
 
 # --- end of file --- #
