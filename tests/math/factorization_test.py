@@ -9,11 +9,11 @@ class FactorizationTest(unittest.TestCase):
     def test_factorization(self):
         verbose = False
         for number in range(2, 5000):
-            self.do_check_factorization(number, verbose=verbose)
+            self.do_check_factorization_and_totient(number, verbose=verbose)
         for number in range(-1, -50, -1):
-            self.do_check_factorization(number, verbose=verbose)
+            self.do_check_factorization_and_totient(number, verbose=verbose)
         for number in [ 65535, 65536, 1234567890 ]:
-            self.do_check_factorization(number)
+            self.do_check_factorization_and_totient(number)
         for number in [0, 1]:
             factors = Factorization.prime_factorization(number)
             totient = Factorization.euler_totient_function(number)
@@ -107,10 +107,10 @@ class FactorizationTest(unittest.TestCase):
     def do_check_factorization_random(self, rounds=100, start=-99999999, end=99999999, verbose=False):
         for _ in range(rounds):
             number = random.randint(start, end)
-            self.do_check_factorization_only(number, verbose=verbose)
+            self.do_check_factorization(number, verbose=verbose)
         return
     
-    def do_check_factorization(self, number, verbose=False):
+    def do_check_factorization_and_totient(self, number, verbose=False):
         factors = Factorization.prime_factorization(number)
         totient = Factorization.euler_totient_function(number)
         product = self.list_multiplication(factors)
@@ -119,7 +119,7 @@ class FactorizationTest(unittest.TestCase):
         self.assertEqual(product, number)
         return
     
-    def do_check_factorization_only(self, number, verbose=False):
+    def do_check_factorization(self, number, verbose=False):
         factors = Factorization.prime_factorization(number)
         product = self.list_multiplication(factors)
         if verbose:
