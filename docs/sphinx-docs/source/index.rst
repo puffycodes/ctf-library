@@ -9,11 +9,10 @@ Contents
 
 .. toctree::
    :maxdepth: 3
+   :glob:
 
    classes/math/mathlib
-   classes/math/factorization
-   classes/math/modular_arithmetic
-   classes/math/integer_matrix_math
-   classes/math/chinese_remainder_theorem
-   classes/file_format/windows_defender_quarantine_file
+   classes/math/*
+   classes/file_format/file_format
+   classes/file_format/*
    api
