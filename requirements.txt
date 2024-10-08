@@ -2,6 +2,7 @@
 
 # PyPI requirement for this project
 
+pycryptodome
 scapy
 
 # --- end of file --- #
