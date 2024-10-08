@@ -4,6 +4,7 @@
 # Ref: https://static.ernw.de/whitepaper/ERNW-Whitepaper-71_AV_Quarantine_signed.pdf
 
 import os
+import argparse
 from Crypto.Cipher import ARC4
 from common_util.bytes_util import BytesUtility
 from common_util.dir_util import DirectoryUtility
@@ -486,5 +487,43 @@ class WindowsDefenderQuarantineFile(FileFormat):
         )
 
         return part_2_length, part_3_length
+    
+    @staticmethod
+    def main_list_quarantine_files():
+        parser = argparse.ArgumentParser(
+            prog='list_quarantine_files',
+            description='List Windows Defender Quarantine Files'
+        )
+        parser.add_argument('-d', '--directory', default='')
+        args = parser.parse_args()
+        kwargs = {
+            'dir_name': args.directory,
+        }
+        entries_files, resources_files, resource_data_files = \
+            WindowsDefenderQuarantineFile.get_quarantine_file_list(**kwargs)
+        print(f'Entries Files:')
+        if len(entries_files) <= 0:
+            print(f'  no entries files')
+        else:
+            for file in entries_files:
+                print(f'{  file}')
+        print()
+        print(f'Resources Files:')
+        if len(resources_files) <= 0:
+            print(f'  no resources files')
+        else:
+            for file in resources_files:
+                print(f'  {file}')
+        print()
+        print(f'Resource Data Files:')
+        if len(resource_data_files) <= 0:
+            print(f'  no resource data files')
+        else:
+            for file in resource_data_files:
+                print(f'  {file}')
+        return
+    
+if __name__ == '__main__':
+    WindowsDefenderQuarantineFile.main_list_quarantine_files()
 
 # --- end of file --- #
