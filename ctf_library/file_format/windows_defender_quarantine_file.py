@@ -523,6 +523,22 @@ class WindowsDefenderQuarantineFile(FileFormat):
                 print(f'  {file}')
         return
     
+    @staticmethod
+    def main():
+        params = {
+            'prog': 'parse_windows_defender_files',
+            'description': 'Parse and list content of Windows Defender Files',
+            'file_arg_name': 'defender_file',
+            'file_arg_name_help': 'defender file to parse',
+            'file_actions': {
+                'parse': WindowsDefenderQuarantineFile.parse_entries_file_data,
+                'parse_data': WindowsDefenderQuarantineFile.parse_resource_data_file_data,
+                'parse_resource': WindowsDefenderQuarantineFile.parse_resources_file_data,
+            }
+        }
+        FileFormat.main(params)
+        return
+    
 if __name__ == '__main__':
     WindowsDefenderQuarantineFile.main_list_quarantine_files()
 
