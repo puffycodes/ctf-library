@@ -11,6 +11,7 @@ Contents
    :maxdepth: 3
    :glob:
 
+   classes/cipher/*
    classes/math/mathlib
    classes/math/*
    classes/file_format/file_format
