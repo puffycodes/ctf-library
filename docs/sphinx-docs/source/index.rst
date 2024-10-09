@@ -12,8 +12,9 @@ Contents
    :glob:
 
    classes/cipher/*
-   classes/math/mathlib
-   classes/math/*
    classes/file_format/file_format
    classes/file_format/*
+   classes/io/*
+   classes/math/mathlib
+   classes/math/*
    api
