@@ -6,16 +6,20 @@ This is an implementation of the Brainfuck language interpreter based on the vid
 
 Test examples:
 
-This will output 'A'
+This will output 'A':
+
     > python bf.py '++++++++[>++++++++<-]>+.'
     
-This will output 'abc'
+This will output 'abc':
+
     > echo 'abcde' | python bf.py '+++[>,.<-]'
     
-This will output 'abcde'
+This will output 'abcde':
+
     > echo 'abcde' | python bf.py '+[>,.<]'
     
-This will output 'hello'
+This will output 'hello':
+
     > echo hello | python bf.py '+++++++++[<+++++>-],[[-<--.++<+>>]<+.-<[->.<]>>,]' | xargs python bf.py
 '''
 
