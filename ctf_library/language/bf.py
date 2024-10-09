@@ -26,6 +26,16 @@ This will output 'hello':
 import sys
 
 def parse_parens(code):
+    '''
+    (Internal) Parse through the code to obtain the pairing of the parenthesis
+
+    :meta private:
+    :param code: the code to parse
+    :type code: str
+
+    :return: a dictionary indicting the matching parenthesis in the code
+    :rtype: dict
+    '''
     result = {}
     stack = []
     for i, c in enumerate(code):
@@ -43,6 +53,17 @@ assert parse_parens('[.]') == { 0: 2, 2: 0 }
 assert parse_parens('[.[]]') == { 0: 4, 4: 0, 2: 3, 3: 2 }
 
 def bf(code, in_stream=''):
+    '''
+    Run code with the provided input and return the result
+
+    :param code: the code to run
+    :type code: str
+    :param in_stream: the input to the code
+    :type in_stream: str, optional
+
+    :return: the result from running the code
+    :rtype: str
+    '''
     out_stream = []
 
     def get():
@@ -60,6 +81,18 @@ def bf(code, in_stream=''):
     return ''.join(out_stream)
 
 def brainfuck(code, getchar=lambda: sys.stdin.read(1), putchar=sys.stdout.write):
+    '''
+    Run the code on the interpreter
+
+    :param code: the code to run
+    :type code: str
+    :param getchar: the function to read the next input char
+    :param putchar: the function to write the output char
+    :type getchar: function, optional
+    :type putchar: function, optional
+
+    :return: nothing is returned from this function
+    '''
     memory = [0] * 40000
     memory_ptr = 0
     instruction_ptr = 0
@@ -110,6 +143,15 @@ assert bf('.') == '\0'
 assert bf('>+++++[-<+++>]<.') == '\x0f'
 
 def main():
+    '''
+    The main function to call the intepreter
+    
+    The input is read from sys.stdin and output is written to sys.stdout
+
+    Usage:
+
+        python bf.py <code>
+    '''
     assert len(sys.argv) == 2, "usage: bf.py <code>"
     _, code = sys.argv
     brainfuck(code)
