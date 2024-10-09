@@ -41,8 +41,11 @@ class RemoteConnection:
         Open a connection to host:port and run shell
 
         Usage:
+
             asyncio.run(RemoteConnection.open_connection_async(host, port, shell))
+
         or
+
             # When event_loop is already running, e.g. in Jupyter Notebook,
             # simply wait on the coroutine to complete.
             await RemoteConnection.open_connection_async(host, port, shell)
@@ -70,11 +73,12 @@ class RemoteConnection:
         Wait for connections on port and process using shell
 
         Usage:
+
             # Create and run a separate server task
-            server_task = asyncio.create_task(
-                RemoteConnection.create_server_async(port, shell)
-            )
+            server_task = asyncio.create_task(RemoteConnection.create_server_async(port, shell))
+
         or
+
             # Wait on the completion of the server task
             await RemoteConnection.create_server_async(port, shell)
         '''
