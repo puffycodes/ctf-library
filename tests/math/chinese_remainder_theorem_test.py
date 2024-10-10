@@ -54,6 +54,24 @@ class ChineseRemainderTheoremTest(unittest.TestCase):
                 self.assertEqual(expected_result, ChineseRemainderTheoremTest.error_result_marker)
         return
     
+    def test_solve_extended(self):
+        verbose = False
+        for coef_list, _, expected_result in ChineseRemainderTheoremTest.test_cases_extended:
+            try:
+                result = ChineseRemainderTheorem.solve_extended(coef_list)
+                if verbose:
+                    print(f'coef_list: {coef_list}')
+                    print(f'result: {result}')
+                    print(f'expected result: {expected_result}')
+                self.assertEqual(expected_result, result)
+            except ValueError as e:
+                if verbose:
+                    print(f'coef_list: {coef_list}')
+                    print(f'error: {e}')
+                # verified that this is an error test case
+                self.assertEqual(expected_result, ChineseRemainderTheoremTest.error_result_marker)
+        return
+    
     def test_reduce(self):
         verbose = False
         for coef_list, coef_list_2, _ in ChineseRemainderTheoremTest.test_cases_extended:

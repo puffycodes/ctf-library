@@ -64,6 +64,14 @@ class ChineseRemainderTheorem:
         return [a, n]
     
     @staticmethod
+    def solve_extended(coef_list, verbose=False):
+        reduced_coef_list = [
+            ChineseRemainderTheorem.reduce(coef, verbose=verbose) for coef in coef_list
+        ]
+        result = ChineseRemainderTheorem.solve(reduced_coef_list, verbose=verbose)
+        return result
+    
+    @staticmethod
     def reduce(coef, verbose=False):
         '''
         Reduce m * x = a mod n to x = a_prime mod n_prime
