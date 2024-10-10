@@ -65,6 +65,28 @@ class ChineseRemainderTheorem:
     
     @staticmethod
     def solve_extended(coef_list, verbose=False):
+        '''
+        Solve the given equations using Chinese Remainder Theorem
+
+        Solve
+
+            m1 * x = a1 mod n1
+            m2 * x = a2 mod n2
+            ...
+            mk * x = ak mod nk
+
+        as solution
+
+            x = a mod n
+
+        :param coef_list: a list of tuple (m, a, n)
+        :type coef_list: list of tuple
+        :param verbose: when True print some debugging information
+        :type verbose: bool, optional
+
+        :return: the tuple (a, n)
+        :rtype: tuple
+        '''
         reduced_coef_list = [
             ChineseRemainderTheorem.reduce(coef, verbose=verbose) for coef in coef_list
         ]
@@ -78,6 +100,8 @@ class ChineseRemainderTheorem:
 
         :param coef: the tuple (m, a, n)
         :type coef: tuple
+        :param verbose: when True print some debugging information
+        :type verbose: bool, optional
 
         :return: the tuple a_prime, n_prime
         :rtype: tuple
