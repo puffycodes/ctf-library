@@ -6,7 +6,9 @@
 # Ref: http://homepages.math.uic.edu/~leon/mcs425-s08/handouts/chinese_remainder.pdf
 # Ref: https://crypto.stanford.edu/pbc/notes/numbertheory/crt.html
 
+import math
 from ctf_library.math.mathlib import MathLib
+from ctf_library.math.modular_arithmetic import ModularArithmetic
 
 class ChineseRemainderTheorem:
 
@@ -60,5 +62,33 @@ class ChineseRemainderTheorem:
             print('xgcd:', g, m1, m2)
             print('result:', a, n)
         return [a, n]
+    
+    @staticmethod
+    def reduce(coef, verbose=False):
+        '''
+        Reduce m * x = a mod n to x = a_prime mod n_prime
+
+        :param coef: the tuple (m, a, n)
+        :type coef: tuple
+
+        :return: the tuple a_prime, n_prime
+        :rtype: tuple
+        '''
+        (m, a, n) = coef
+        gcd = math.gcd(*coef)
+        if verbose:
+            print(f'{gcd=}')
+        if gcd > 1:
+            m, a, n = m // gcd, a // gcd, n // gcd
+        if m == 1:
+            a_prime = a
+            n_prime = n
+        else:
+            m_inv = ModularArithmetic.mod_inv(m, n)
+            if verbose:
+                print(f'{m_inv=}')
+            a_prime = (a * m_inv) % n
+            n_prime = n
+        return (a_prime, n_prime)
     
 # --- end of file --- #
