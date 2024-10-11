@@ -160,4 +160,53 @@ class ModularArithmetic:
         
         return result
     
+    # ----- Linear Equations ----- #
+
+    # TODO: create test cases for this
+    @staticmethod
+    def mod_solve_linear_equation(m, modulo, verbose=False):
+        '''
+        Solve a set of linear equations:
+
+            m(1,1) * x(1) + m(1,2) * x(2) + ... + m(1,k) * x(k) = c(1) mod modulo
+
+            m(2,1) * x(2) * m(2,2) * x(2) + ... + m(2,k) * x(k) = c(2) mod modulo
+
+            ...
+
+            m(k,1) * x(1) + m(k,2) * x(2) + ... + m(k,k) * x(k) = c(k) mod modulo
+
+        for solution:
+            
+            x(1), x(2), ..., x(k)
+
+        :param m: the coef matrix consists of m and c
+        :type m: numpy array
+        :param modulo: the modulo for the set of linear equations
+        :type modulo: int
+        :param verbose: when True, print some debugging information
+        :type verbose: bool, optional
+
+        :return: the coef matrix with (hopefully) the solution
+        :rtype: numpy array
+        '''
+        n_row, n_col = m.shape
+
+        for row in range(n_row):
+            pivot = m[row][row]
+            pivot_inv = ModularArithmetic.mod_inv(pivot, modulo)
+            if verbose:
+                print('%4d: %8d, %8d' % (row, pivot, pivot_inv), end='\r')
+            for col in range(n_col):
+                m[row][col] = (m[row][col] * pivot_inv) % modulo
+
+            for row_2 in range(n_row):
+                if row == row_2:
+                    continue
+                v2 = m[row_2][row]
+                for col in range(n_col):
+                    m[row_2][col] = (m[row_2][col] - m[row][col] * v2) % modulo
+
+        return m
+    
 # --- end of file --- #
