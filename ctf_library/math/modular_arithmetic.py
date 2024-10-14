@@ -162,11 +162,14 @@ class ModularArithmetic:
     
     # ----- Linear Equations ----- #
 
+    # Ref: https://www.britannica.com/science/linear-equation
+    # Ref: https://www.cuemath.com/algebra/linear-equations/
+
     # TODO: create test cases for this
     @staticmethod
     def mod_solve_linear_equation(m, modulo, verbose=False):
         '''
-        Solve a set of linear equations:
+        Solve a set of linear equations with modulo:
 
             m(1,1) * x(1) + m(1,2) * x(2) + ... + m(1,k) * x(k) = c(1) mod modulo
 
