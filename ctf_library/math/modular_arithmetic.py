@@ -190,23 +190,24 @@ class ModularArithmetic:
         :return: the coef matrix with (hopefully) the solution
         :rtype: numpy array
         '''
-        n_row, n_col = m.shape
+        result = m.copy()
+        n_row, n_col = result.shape
 
         for row in range(n_row):
-            pivot = m[row][row]
+            pivot = result[row][row]
             pivot_inv = ModularArithmetic.mod_inv(pivot, modulo)
             if verbose:
                 print('%4d: %8d, %8d' % (row, pivot, pivot_inv), end='\r')
             for col in range(n_col):
-                m[row][col] = (m[row][col] * pivot_inv) % modulo
+                result[row][col] = (result[row][col] * pivot_inv) % modulo
 
             for row_2 in range(n_row):
                 if row == row_2:
                     continue
-                v2 = m[row_2][row]
+                v2 = result[row_2][row]
                 for col in range(n_col):
-                    m[row_2][col] = (m[row_2][col] - m[row][col] * v2) % modulo
+                    result[row_2][col] = (result[row_2][col] - result[row][col] * v2) % modulo
 
-        return m
+        return result
     
 # --- end of file --- #
