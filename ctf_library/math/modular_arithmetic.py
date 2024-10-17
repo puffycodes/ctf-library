@@ -203,7 +203,7 @@ class ModularArithmetic:
             pivot = result[pivot_row][pivot_row]
             pivot_inv = ModularArithmetic.mod_inv(pivot, modulo)
             if verbose:
-                print('%4d: %8d, %8d' % (pivot_row, pivot, pivot_inv), end='\r')
+                print('  ** %4d: %8d, %8d, %8d' % (pivot_row, pivot, pivot_inv, modulo))
             # multiply the pivot row with the modulo inverse of the pivot
             # this will make the pivot equal to 1
             for col in range(n_col):
