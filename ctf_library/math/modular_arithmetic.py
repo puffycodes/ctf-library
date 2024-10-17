@@ -183,12 +183,15 @@ class ModularArithmetic:
             
             x(1), x(2), ..., x(k)
 
-        :param m: the coef matrix consists of m and c
+        :param m: the coef matrix consists of m and c;
+            dimensions of the coef matrix is (k+1, k)
         :type m: numpy array
         :param modulo: the modulo for the set of linear equations
         :type modulo: int
         :param verbose: when True, print some debugging information
         :type verbose: bool, optional
+
+        :raise: ValueError
 
         :return: the coef matrix with (hopefully) the solution
         :rtype: numpy array
