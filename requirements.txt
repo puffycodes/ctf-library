@@ -2,6 +2,7 @@
 
 # PyPI requirement for this project
 
+numpy
 pycryptodome
 scapy
 
