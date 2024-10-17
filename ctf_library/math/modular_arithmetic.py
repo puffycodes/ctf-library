@@ -185,7 +185,7 @@ class ModularArithmetic:
 
         :param m: the coef matrix consists of m and c;
             (a) the dimensions of the coef matrix is (k, k+1)
-        :type m: numpy array
+        :type m: numpy array of int
         :param modulo: the modulo for the set of linear equations
         :type modulo: int
         :param verbose: when True, print some debugging information
