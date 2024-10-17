@@ -217,7 +217,10 @@ class ModularArithmetic:
             for curr_row in range(n_row):
                 # - for every other row, subtract a multiple of the pivot row
                 # - the multiple is the coef m(curr_row, pivot_row)
-                # - this will make the coef m(curr_row, pivot_row) equal to 0
+                # - this will make the coef m(curr_row, pivot_row) equal to 0 for every row other than
+                #   the pivot row
+                # - in other words, the pivot column (which is equal to pivot_row) will be all zeroes,
+                #   except for the pivot, which will be 1.
                 if pivot_row == curr_row:
                     continue
                 v2 = result[curr_row][pivot_row]
