@@ -39,13 +39,13 @@ class ModularArithmetic:
     # Modular Multiplicative Inverse
     # - Can use pow(number, -1, modulo) for Python 3.8 and above.
     # - Returns inverse where (number * inverse) = 1 mod modulo.
-    # - The return value is made positive because MathLib.xgcs() may return
+    # - The return value is made positive because MathLib.xgcd() may return
     #   a negative x.
     @staticmethod
     def multiplicative_inverse(number, modulo):
         g, x, _ = MathLib.xgcd(number, modulo)
         if g != 1:
-            raise ValueError('modular multiplicative inverse does not exist.')
+            raise ValueError(f'modular multiplicative inverse does not exist: mod_inv({number}, {modulo}).')
         else:
             return (x % modulo + modulo) % modulo
         
