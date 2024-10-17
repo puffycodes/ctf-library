@@ -193,26 +193,28 @@ class ModularArithmetic:
         :return: the coef matrix with (hopefully) the solution
         :rtype: numpy array
         '''
-        # make a copy of m and get the dimensions
+        # - make a copy of matrix m and get the dimensionsof the matrix
         result = m.copy()
         n_row, n_col = result.shape
 
         for pivot_row in range(n_row):
-            # for every row in the coef matrix, find the modulo inverse of the pivot in the row
-            # the pivot in a row is the coef m(pivot_row, pivot_row)
+            # - for every row in the coef matrix, find the modulo inverse of the pivot in the row
+            # - the pivot in a row is the coef m(pivot_row, pivot_row)
             pivot = result[pivot_row][pivot_row]
             pivot_inv = ModularArithmetic.mod_inv(pivot, modulo)
             if verbose:
                 print('  ** %4d: %8d, %8d, %8d' % (pivot_row, pivot, pivot_inv, modulo))
-            # multiply the pivot row with the modulo inverse of the pivot
-            # this will make the pivot equal to 1
+            # - multiply the pivot row with the modulo inverse of the pivot
+            # - this will make the pivot equal to 1
+            # - note that the coef that come before the pivot in the pivot row would have been reduced
+            #   to zero in previous rounds
             for col in range(n_col):
                 result[pivot_row][col] = (result[pivot_row][col] * pivot_inv) % modulo
 
             for curr_row in range(n_row):
-                # for every other row, subtract a multiple of the pivot row
-                # the multiple is the coef m(curr_row, pivot_row)
-                # this will make the coef m(curr_row, pivot_row) equal to 0
+                # - for every other row, subtract a multiple of the pivot row
+                # - the multiple is the coef m(curr_row, pivot_row)
+                # - this will make the coef m(curr_row, pivot_row) equal to 0
                 if pivot_row == curr_row:
                     continue
                 v2 = result[curr_row][pivot_row]
