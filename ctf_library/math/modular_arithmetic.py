@@ -197,14 +197,21 @@ class ModularArithmetic:
         n_row, n_col = result.shape
 
         for row in range(n_row):
+            # for every row in the coef matrix, find the modulo inverse of the pivot in current row
+            # the pivot in a row is the coef m(pivot_row, pivot_row)
             pivot = result[row][row]
             pivot_inv = ModularArithmetic.mod_inv(pivot, modulo)
             if verbose:
                 print('%4d: %8d, %8d' % (row, pivot, pivot_inv), end='\r')
+            # multiply the current row with the modulo inverse of the pivot
+            # this will make the pivot equal to 1
             for col in range(n_col):
                 result[row][col] = (result[row][col] * pivot_inv) % modulo
 
             for row_2 in range(n_row):
+                # for every other row, subtract a multiple of the pivot row
+                # the multiple is the coef m(curr_row, pivot_row)
+                # this will make the coef m(curr_row, pivot_row) equal to 0
                 if row == row_2:
                     continue
                 v2 = result[row_2][row]
