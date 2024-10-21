@@ -14,6 +14,7 @@
 # Ref: https://stackoverflow.com/questions/51010662/getting-the-adjugate-of-matrix-in-python/75566371#75566371
 #
 # Matrix Determinant
+# Ref: https://en.wikipedia.org/wiki/Determinant
 # Ref: https://byjus.com/maths/determinant-of-a-matrix/
 
 import numpy as np
