@@ -16,6 +16,10 @@
 # - Tonelli–Shanks algorithm
 #   Ref: https://en.wikipedia.org/wiki/Tonelli%E2%80%93Shanks_algorithm
 
+# Linear Equations
+# - Ref: https://www.britannica.com/science/linear-equation
+# - Ref: https://www.cuemath.com/algebra/linear-equations/
+
 from ctf_library.math.mathlib import MathLib
 
 class ModularArithmetic:
@@ -161,9 +165,6 @@ class ModularArithmetic:
         return result
     
     # ----- Linear Equations ----- #
-
-    # Ref: https://www.britannica.com/science/linear-equation
-    # Ref: https://www.cuemath.com/algebra/linear-equations/
 
     # TODO: create test cases for this
     @staticmethod
