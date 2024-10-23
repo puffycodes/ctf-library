@@ -1,5 +1,13 @@
 # A Library of Tools and Utilities for CTF
 
+## Installation
+
+1. Installation with pip
+
+    ```
+    pip install ctf_library@git+https://github.com/puffycodes/ctf-library
+    ```
+
 ## Documentation
 
 1. [Documentation for CTF Library](docs/index.md)
