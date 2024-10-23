@@ -1,5 +1,9 @@
 # Some Random Notes
 
+## Archives of Past CTF Events
+
+1. [HeroCTF](https://github.com/HeroCTF)
+
 ## Tools and Resources Online
 
 Content
