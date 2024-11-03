@@ -51,7 +51,7 @@ class InteractiveClientShell:
                 break
         return
 
-    async def interactive(self, reader, writer, user_prompt='$ ', server_prompt='> '):
+    async def interactive(self, reader, writer, user_prompt='> ', server_prompt='\n'):
         while True:
             user_input = input(user_prompt)
             if self.debug:
@@ -63,7 +63,7 @@ class InteractiveClientShell:
                 break
         return
     
-    async def get_response(self, reader, writer, until='> '):
+    async def get_response(self, reader, writer, until='\n'):
         if len(until) <= 0:
             raise ValueError(f'value of until cannot be empty')
         until_length = len(until)
