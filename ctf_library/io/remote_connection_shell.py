@@ -28,9 +28,10 @@ class InteractiveClientShell:
 
     def __init__(self, debug=False):
         self.debug = debug
+        self.eof = False
         return
 
-    async def interactive(self, reader, writer):
+    async def interactive_old(self, reader, writer):
         #while not reader.at_eof():
         while True:
             # read user input, which does not include newline '\n'
@@ -48,4 +49,36 @@ class InteractiveClientShell:
                 break
         return
 
+    async def interactive(self, reader, writer, user_prompt='$ ', server_prompt='> '):
+        while True:
+            user_input = input(user_prompt)
+            if self.debug:
+                print(f'DEBUG: user input: "{user_input}"')
+            writer.write(user_input + '\n')
+            await writer.drain()
+            await self.get_response(reader, writer, until=server_prompt)
+            if self.eof == True:
+                break
+        return
+    
+    async def get_response(self, reader, writer, until='> '):
+        if len(until) <= 0:
+            raise ValueError(f'value of until cannot be empty')
+        until_length = len(until)
+        response = []
+        while True:
+            inp = await reader.read(1)
+            if inp:
+                response.append(inp)
+                print(f'{inp}', end='')
+                if len(response) >= until_length and ''.join(response[-until_length:]) == until:
+                    break
+            else:
+                self.eof = True
+                print(f'<EOF>', end='')
+                break
+        #if self.debug:
+        #    print(HexDump.to_text(''.join(response).encode()))
+        return
+        
 # --- end of file --- #
