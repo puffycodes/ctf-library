@@ -1,5 +1,7 @@
 # file: remote_connection_shell.py
 
+#from common_util.hexdump import HexDump
+
 class EchoServerShell:
 
     def __init__(self, debug=False):
@@ -71,9 +73,11 @@ class InteractiveClientShell:
             if inp:
                 response.append(inp)
                 print(f'{inp}', end='')
+                # break because we have come to the server prompt
                 if len(response) >= until_length and ''.join(response[-until_length:]) == until:
                     break
             else:
+                # break because we have come to the EOF
                 self.eof = True
                 print(f'<EOF>', end='')
                 break
