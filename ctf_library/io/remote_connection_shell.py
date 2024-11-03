@@ -69,6 +69,9 @@ class InteractiveClientShell:
         until_length = len(until)
         response = []
         while True:
+            # use reader.read(1) instead of reader.readuntil(separator=until) because we want
+            # to see what comes before the character stream (usually the server prompt) that
+            # we are looking for
             inp = await reader.read(1)
             if inp:
                 response.append(inp)
