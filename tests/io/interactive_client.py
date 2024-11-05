@@ -16,14 +16,21 @@ def main():
                         help=f'host name to connect to (default={default_host})')
     parser.add_argument('--port', type=int, default=default_port,
                         help=f'port number to connection to (default={default_port})')
+    parser.add_argument('--single_line', action='store_true', default=False,
+                        help='use an interactive shell that read a single line')
     parser.add_argument('--debug', action='store_true', default=False,
                         help='run in debug mode')
     args = parser.parse_args()
     
     shell = InteractiveClientShell(debug=args.debug)
-    RemoteConnection.open_connection(
-        args.host, args.port, shell.interactive_unbounded
-    )
+    if args.single_line:
+        RemoteConnection.open_connection(
+            args.host, args.port, shell.interactive
+        )
+    else:
+        RemoteConnection.open_connection(
+            args.host, args.port, shell.interactive_unbounded
+        )
     return
 
 if __name__ == '__main__':
