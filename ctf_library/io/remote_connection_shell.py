@@ -118,15 +118,16 @@ class InteractiveClientShell:
     async def read_user_input(self, reader, writer, user_prompt='> '):
         if self.debug:
             print(f'DEBUG: entered read_user_input()')
-        while not reader.at_eof():
+        while not self.eof: #reader.at_eof():
+            # need this for it to work (because read_server_input needs to run)
+            # do before getting user input to let any data from server to arrive
+            await asyncio.sleep(1)
             # read user input, which does not include newline '\n'
             user_inp = input(user_prompt)
             if self.debug:
                 print(f'DEBUG: user input: "{user_inp}"')
             writer.write(f'{user_inp}\n')
             await writer.drain()
-            # need this for it to work
-            await asyncio.sleep(1)
         if self.debug:
             print(f'DEBUG: exited read_user_input()')
         return
