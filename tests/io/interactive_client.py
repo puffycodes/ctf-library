@@ -22,7 +22,7 @@ def main():
     
     shell = InteractiveClientShell(debug=args.debug)
     RemoteConnection.open_connection(
-        args.host, args.port, shell.interactive
+        args.host, args.port, shell.interactive_unbounded
     )
     return
 
