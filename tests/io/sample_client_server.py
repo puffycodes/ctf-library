@@ -36,11 +36,12 @@ class ClientServerDemoShell:
         Handle the server communication with one connected client
         '''
         writer.write('What do you have to say? ')
+        # readline() result has '\n'
         inp = await reader.readline()
         if inp:
             print(f'client says this: {inp}', end='')
             writer.write(f'You said this: {inp}')
-            writer.write(f'It is not easy to do echo.')
+            writer.write(f'It is not easy to do echo.\n')
             await writer.drain()
         writer.close()
         return
