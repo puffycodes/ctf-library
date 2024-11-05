@@ -101,7 +101,7 @@ class InteractiveClientShell:
 
     # --- Interactive shell that continueously reads data from server --- #
         
-    async def interactive_unbounded(self, reader, writer):
+    async def interactive_unbounded(self, reader, writer, user_prompt='> '):
         '''
         An interactive client shell when the data from the server is not
         terminated by any specific string.
@@ -110,17 +110,17 @@ class InteractiveClientShell:
         # task2 = asyncio.create_task(self.read_server_input(reader, writer))
         # await asyncio.join(task1, task2)
         await asyncio.gather(
-            self.read_user_input(reader, writer),
+            self.read_user_input(reader, writer, user_prompt='> '),
             self.read_server_input(reader, writer),
         )
         return
     
-    async def read_user_input(self, reader, writer):
+    async def read_user_input(self, reader, writer, user_prompt='> '):
         if self.debug:
             print(f'DEBUG: entered read_user_input()')
         while not reader.at_eof():
             # read user input, which does not include newline '\n'
-            user_inp = input('> ')
+            user_inp = input(user_prompt)
             if self.debug:
                 print(f'DEBUG: user input: "{user_inp}"')
             writer.write(f'{user_inp}\n')
