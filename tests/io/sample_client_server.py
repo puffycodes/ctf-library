@@ -71,7 +71,6 @@ class ClientServerDemoShell:
                 print(f'EOF', end='')
             else:
                 print(f'{inp}', end='')
-        print()
         return
 
 def start_server(port):
