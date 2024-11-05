@@ -1,10 +1,12 @@
 # file: remote_connection_shell.py
 
 #from common_util.hexdump import HexDump
+import asyncio
 
 class EchoServerShell:
 
-    def __init__(self, debug=False):
+    def __init__(self, echo_count=1, debug=False):
+        self.echo_count = echo_count
         self.debug = debug
         return
 
@@ -15,7 +17,8 @@ class EchoServerShell:
             if inp:
                 if self.debug:
                     print(f'DEBUG: from client: "{inp}"')
-                writer.write(f'{inp}')
+                for _ in range(self.echo_count):
+                    writer.write(f'{inp}')
                 await writer.drain()
                 if self.debug:
                     print(f'DEBUG: send to client "{inp}"')
@@ -36,6 +39,8 @@ class InteractiveClientShell:
         self.debug = debug
         self.eof = False
         return
+    
+    # --- Old interactive shell, can be removed --- #
 
     async def interactive_old(self, reader, writer):
         #while not reader.at_eof():
@@ -54,6 +59,8 @@ class InteractiveClientShell:
                     print(f'DEBUG: EOF')
                 break
         return
+    
+    # --- Interactive shell that reads data until a specific pattern --- #
 
     async def interactive(self, reader, writer, user_prompt='> ', server_prompt='\n'):
         while True:
@@ -91,5 +98,53 @@ class InteractiveClientShell:
         #if self.debug:
         #    print(HexDump.to_text(''.join(response).encode()))
         return
+
+    # --- Interactive shell that continueously reads data from server --- #
         
+    async def interactive_unbounded(self, reader, writer):
+        '''
+        An interactive client shell when the data from the server is not
+        terminated by any specific string.
+        '''
+        # task1 = asyncio.create_task(self.read_user_input(reader, writer))
+        # task2 = asyncio.create_task(self.read_server_input(reader, writer))
+        # await asyncio.join(task1, task2)
+        await asyncio.gather(
+            self.read_user_input(reader, writer),
+            self.read_server_input(reader, writer),
+        )
+        return
+    
+    async def read_user_input(self, reader, writer):
+        if self.debug:
+            print(f'DEBUG: entered read_user_input()')
+        while not reader.at_eof():
+            # read user input, which does not include newline '\n'
+            user_inp = input('> ')
+            if self.debug:
+                print(f'DEBUG: user input: "{user_inp}"')
+            writer.write(f'{user_inp}\n')
+            await writer.drain()
+            # need this for it to work
+            await asyncio.sleep(1)
+        if self.debug:
+            print(f'DEBUG: exited read_user_input()')
+        return
+    
+    async def read_server_input(self, reader, writer):
+        if self.debug:
+            print(f'DEBUG: entered read_server_input()')
+        while True:
+            inp = await reader.read(1)
+            if inp:
+                print(f'{inp}', end='')
+            else:
+                self.eof = True
+                if self.debug:
+                    print(f'DEBUG: EOF')
+                break
+        if self.debug:
+            print(f'DEBUG: exited read_server_input()')
+        return
+
 # --- end of file --- #
