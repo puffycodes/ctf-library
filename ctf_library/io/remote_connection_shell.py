@@ -17,12 +17,16 @@ class EchoServerShell:
                     print(f'DEBUG: from client: "{inp}"')
                 writer.write(f'{inp}')
                 await writer.drain()
+                if self.debug:
+                    print(f'DEBUG: send to client "{inp}"')
                 if inp == 'bye\n':
                     if self.debug:
                         print(f'DEBUG: ending session')
                     writer.close()
                     break
             else:
+                if self.debug:
+                    print(f'DEBUG: <EOF> reached')
                 break
         return
     
