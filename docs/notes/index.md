@@ -8,6 +8,7 @@
 
 Content
 
+1. [Auto Scanning Tools](#auto-scanning-tools)
 1. [Base Converison](#base-conversion)
 1. [Blockchain](#blockchain)
     1. [Ethereum Virtual Machine (EVM)](#ethereum-virtual-machine-evm)
@@ -16,6 +17,10 @@ Content
 1. [Miscellaneous](#miscellaneous)
 1. [QR Code](#qr-code)
 1. [Steganography](#steganography)
+
+## Auto Scanning Tools
+
+1. [AutoRecon](https://github.com/Tib3rius/AutoRecon)
 
 ## Base Conversion
 
