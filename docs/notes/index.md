@@ -22,6 +22,10 @@ Content
 
 1. [AutoRecon](https://github.com/Tib3rius/AutoRecon)
 
+    Tools for AutoRecon:
+    1. [Feroxbuster](https://github.com/epi052/feroxbuster)
+    1. [dnsrecon](https://github.com/darkoperator/dnsrecon)
+
 ## Base Conversion
 
 1. Base64
