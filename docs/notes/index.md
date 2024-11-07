@@ -22,9 +22,13 @@ Content
 
 1. [AutoRecon](https://github.com/Tib3rius/AutoRecon)
 
-    Tools for AutoRecon:
+    Tools for AutoRecon and [Installation](autorecon-installation.md):
+    1. [SecLists Project](https://github.com/danielmiessler/SecLists)
+    1. [curl](https://curl.se/)
     1. [Feroxbuster](https://github.com/epi052/feroxbuster)
     1. [dnsrecon](https://github.com/darkoperator/dnsrecon)
+    1. [enum4linux](https://github.com/CiscoCXSecurity/enum4linux)
+    1. ...
 
 ## Base Conversion
 
@@ -75,4 +79,4 @@ Content
 
 ***
 
-*Updated on 3 September 2024*
+*Updated on 7 November 2024*
