@@ -20,6 +20,18 @@ $ source bin/activate
 
 ## Install Tools on MacOS
 
+1. SecLists:
+
+    Small:
+    ```
+    (autorecon) $ git clone --depth 1 https://github.com/danielmiessler/SecLists.git
+    ```
+
+    Complete:
+    ```
+    (autorecon) $ git clone https://github.com/danielmiessler/SecLists.git
+    ```
+
 1. curl:
 
     Already installed? Test with:
@@ -46,7 +58,7 @@ $ source bin/activate
 
 ## Links to AutoRecon and Tools
 
-1. [AutoRecon and Tools](index.md#auto-scanning-tools)
+1. Repositories of [AutoRecon and Tools](index.md#auto-scanning-tools)
 
 ***
 *Updated on 7 November 2024*
