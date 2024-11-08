@@ -3,7 +3,6 @@
 ## Install AutoRecon
 
 Set up a virtual environment:
-
 ```
 $ mkdir autorecon
 $ cd autorecon
@@ -12,10 +11,37 @@ $ source bin/activate
 (autorecon) $ pip install autorecon
 ```
 
+Install from Git instead of PyPI:
+```
+(autorecon) $ python3 -m pip install git+https://github.com/Tib3rius/AutoRecon.git
+```
+
 ## Install Tools on Kali Linux
 
 ```
 (autorecon) $ sudo apt install seclists curl dnsrecon enum4linux feroxbuster gobuster impacket-scripts nbtscan nikto nmap onesixtyone oscanner redis-tools smbclient smbmap snmp sslscan sipvicious tnscmd10g whatweb wkhtmltopdf
+```
+
+## Install Tools on Ubuntu
+
+Install virtualenv:
+```
+$ sudo apt install python3-virtualenv
+```
+
+Using apt:
+```
+(autorecon) $ sudo apt install curl dnsrecon gobuster nbtscan nikto nmap onesixtyone redis-tools smbclient smbmap sslscan whatweb wkhtmltopdf
+```
+
+Using snap:
+```
+(autorecon) $ snap install seclists enum4linux feroxbuster
+```
+
+TODO: No such  on apt or snap
+```
+impacket-scripts oscanner snmpwalk svwar tnscmd10g
 ```
 
 ## Install Tools on MacOS
