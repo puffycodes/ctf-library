@@ -24,28 +24,41 @@ Install from Git instead of PyPI:
 
 ## Install Tools on Ubuntu
 
-Install virtualenv:
+Install Python virtualenv:
 ```
 $ sudo apt install python3-virtualenv
 ```
 
+Install Java:
+```
+$ sudo apt install default-jre
+```
+
 Using apt:
 ```
-(autorecon) $ sudo apt install curl dnsrecon gobuster nbtscan nikto nmap onesixtyone redis-tools smbclient smbmap sslscan whatweb wkhtmltopdf
+$ sudo apt install curl dnsrecon gobuster nbtscan nikto nmap onesixtyone redis-tools smbclient smbmap sslscan whatweb wkhtmltopdf
 ```
 
 Using snap:
 ```
-(autorecon) $ snap install seclists enum4linux feroxbuster
+$ snap install seclists enum4linux feroxbuster
 ```
 
-TODO: No such  on apt or snap
+TODO: No such package on apt or snap
 ```
 impacket-scripts oscanner snmpwalk svwar tnscmd10g
 ```
 
+For snmpwalk:
 ```
-(autorecon) $ git clone https://gitlab.com/kalilinux/packages/oscanner.git
+$ sudo apt install snmp
+```
+
+Git Repositories:
+- oscanner needs Java.
+```
+$ git clone https://gitlab.com/kalilinux/packages/impacket-scripts.git
+$ git clone https://gitlab.com/kalilinux/packages/oscanner.git
 ```
 
 ## Install Tools on MacOS
