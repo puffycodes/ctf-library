@@ -44,6 +44,10 @@ TODO: No such  on apt or snap
 impacket-scripts oscanner snmpwalk svwar tnscmd10g
 ```
 
+```
+(autorecon) $ git clone https://gitlab.com/kalilinux/packages/oscanner.git
+```
+
 ## Install Tools on MacOS
 
 1. SecLists:
