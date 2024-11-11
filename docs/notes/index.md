@@ -21,16 +21,7 @@ Content
 
 ## Auto Scanning Tools
 
-1. [AutoRecon](https://github.com/Tib3rius/AutoRecon)
-
-    Tools for AutoRecon and [Installation](autorecon-installation.md):
-    1. [SecLists Project](https://github.com/danielmiessler/SecLists)
-    1. [curl](https://curl.se/)
-    1. [feroxbuster](https://github.com/epi052/feroxbuster)
-    1. [dnsrecon](https://github.com/darkoperator/dnsrecon)
-    1. [enum4linux](https://github.com/CiscoCXSecurity/enum4linux)
-    1. [gobuster](https://github.com/OJ/gobuster)
-    1. ...
+1. [AutoRecon](autorecon-installation.md)
 
 ## Base Conversion
 
@@ -86,4 +77,4 @@ Content
 
 ***
 
-*Updated on 7 November 2024*
+*Updated on 11 November 2024*

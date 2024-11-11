@@ -1,3 +1,19 @@
+# AutoRecon
+
+## Resources
+
+1. [AutoRecon](https://github.com/Tib3rius/AutoRecon)
+
+## Tools used by AutoRecon
+
+1. [SecLists Project](https://github.com/danielmiessler/SecLists)
+1. [curl](https://curl.se/)
+1. [feroxbuster](https://github.com/epi052/feroxbuster)
+1. [dnsrecon](https://github.com/darkoperator/dnsrecon)
+1. [enum4linux](https://github.com/CiscoCXSecurity/enum4linux)
+1. [gobuster](https://github.com/OJ/gobuster)
+1. ...
+
 # Installation of AutoRecon
 
 ## Install AutoRecon
@@ -16,6 +32,8 @@ Install from Git instead of PyPI:
 (autorecon) $ python3 -m pip install git+https://github.com/Tib3rius/AutoRecon.git
 ```
 
+# Installation of Tools used by AutoRecon
+
 ## Install Tools on Kali Linux
 
 ```
@@ -23,6 +41,8 @@ Install from Git instead of PyPI:
 ```
 
 ## Install Tools on Ubuntu
+
+### Pre-requisites:
 
 Install Python virtualenv:
 ```
@@ -34,17 +54,19 @@ Install Java:
 $ sudo apt install default-jre
 ```
 
-Using apt:
+### Installation of Tools
+
+Tools installed using apt:
 ```
 $ sudo apt install curl dnsrecon gobuster nbtscan nikto nmap onesixtyone redis-tools smbclient smbmap sslscan whatweb wkhtmltopdf
 ```
 
-Using snap:
+Tools installed using snap:
 ```
 $ snap install seclists enum4linux feroxbuster
 ```
 
-TODO: No such package on apt or snap
+Tools that does not have a package on apt or snap (TODO)
 ```
 impacket-scripts oscanner snmpwalk svwar tnscmd10g
 ```
@@ -99,9 +121,5 @@ $ git clone https://gitlab.com/kalilinux/packages/oscanner.git
 
 1. ...
 
-## Links to AutoRecon and Tools
-
-1. Repositories of [AutoRecon and Tools](index.md#auto-scanning-tools)
-
 ***
-*Updated on 7 November 2024*
+*Updated on 11 November 2024*
