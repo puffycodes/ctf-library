@@ -85,7 +85,7 @@ $ sudo apt install snmp
 
 Missing Commands at this point:
 ```
-oscanner
+oscanner tnscmd10g
 ```
 
 Git Repositories:
