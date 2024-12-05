@@ -44,15 +44,22 @@ Install from Git instead of PyPI:
 
 ### Pre-requisites:
 
-Install Python virtualenv:
+Install Pip and Python virtualenv:
 ```
-$ sudo apt install python3-virtualenv
+$ sudo apt install python3-pip python3-virtualenv
 ```
 
 Install Java:
 ```
 $ sudo apt install default-jre
 ```
+
+Install Snap:
+```
+$ sudo apt install snapd
+```
+
+***
 
 ### Installation of Tools
 
@@ -74,6 +81,11 @@ impacket-scripts oscanner snmpwalk svwar tnscmd10g
 For snmpwalk:
 ```
 $ sudo apt install snmp
+```
+
+Missing Commands at this point:
+```
+oscanner
 ```
 
 Git Repositories:
