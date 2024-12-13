@@ -6,6 +6,10 @@ from ctf_library.math.modular_arithmetic import ModularArithmetic
 
 class ModularLinearEquationTest(unittest.TestCase):
 
+    def __init__(self, *args, **kwargs):
+        unittest.TestCase.__init__(self, *args, **kwargs)
+        return
+
     def test_mod_solve_linear_equation(self):
         verbose = True
         debug = False
