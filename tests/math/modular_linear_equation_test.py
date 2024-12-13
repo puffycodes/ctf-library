@@ -7,6 +7,7 @@ from ctf_library.math.modular_arithmetic import ModularArithmetic
 class ModularLinearEquationTest(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
+        # Just to show how to write a customized __init__ for unittest.TestCase
         unittest.TestCase.__init__(self, *args, **kwargs)
         return
 
