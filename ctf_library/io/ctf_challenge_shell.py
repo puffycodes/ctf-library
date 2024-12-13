@@ -31,7 +31,7 @@ class HTVChallengeShell:
                 search_target = match_result.group(2)
                 if search_target == "'0'*6":
                     search_target = '000000'
-                reply = HashSearch.search_hash_htv(prefix, search_target)
+                reply = HashSearch.hash_search_htv_2024(prefix, search_target)
                 if reply == None:
                     print(f'cannot find a hash')
                     exit()
