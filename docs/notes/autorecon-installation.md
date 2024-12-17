@@ -24,6 +24,10 @@ $ mkdir autorecon
 $ cd autorecon
 $ python -m virtualenv -p python3 .
 $ source bin/activate
+```
+
+Install from PyPI:
+```
 (autorecon) $ pip install autorecon
 ```
 
@@ -65,7 +69,7 @@ $ sudo apt install snapd
 
 Tools installed using apt:
 ```
-$ sudo apt install curl dnsrecon gobuster nbtscan nikto nmap onesixtyone redis-tools smbclient smbmap sslscan whatweb wkhtmltopdf
+$ sudo apt install curl dnsrecon gobuster nbtscan nikto nmap onesixtyone redis-tools smbclient smbmap snmp sslscan sipvicious whatweb wkhtmltopdf
 ```
 
 Tools installed using snap:
@@ -75,12 +79,7 @@ $ snap install seclists enum4linux feroxbuster
 
 Tools that does not have a package on apt or snap (TODO)
 ```
-impacket-scripts oscanner snmpwalk svwar tnscmd10g
-```
-
-For snmpwalk:
-```
-$ sudo apt install snmp
+impacket-scripts oscanner tnscmd10g
 ```
 
 Missing Commands at this point:
@@ -134,4 +133,4 @@ $ git clone https://gitlab.com/kalilinux/packages/oscanner.git
 1. ...
 
 ***
-*Updated on 11 November 2024*
+*Updated on 17 December 2024*
