@@ -77,6 +77,21 @@ Tools installed using snap:
 $ snap install seclists enum4linux feroxbuster
 ```
 
+[Download and install enum4linux](https://labs.portcullis.co.uk/tools/enum4linux/):
+```
+$ curl -sLO https://labs.portcullis.co.uk/download/enum4linux-0.8.9.tar.gz
+$ tar -xvzf enum4linux-0.8.9.tar.gz
+$ cp enum4linux-0.8.9/enum4linux.pl /usr/bin/enum4linux
+```
+
+[Install feroxbuster from .deb download](https://epi052.github.io/feroxbuster-docs/docs/installation/):
+
+```
+$ curl -sLO https://github.com/epi052/feroxbuster/releases/latest/download/feroxbuster_amd64.deb.zip
+$ unzip feroxbuster_amd64.deb.zip
+$ sudo apt install ./feroxbuster_*_amd64.deb
+```
+
 Tools that does not have a package on apt or snap (TODO)
 ```
 impacket-scripts oscanner tnscmd10g
@@ -133,4 +148,4 @@ $ git clone https://gitlab.com/kalilinux/packages/oscanner.git
 1. ...
 
 ***
-*Updated on 17 December 2024*
+*Updated on 19 December 2024*
