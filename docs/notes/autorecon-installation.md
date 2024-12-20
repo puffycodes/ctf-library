@@ -44,6 +44,8 @@ Install from Git instead of PyPI:
 (autorecon) $ sudo apt install seclists curl dnsrecon enum4linux feroxbuster gobuster impacket-scripts nbtscan nikto nmap onesixtyone oscanner redis-tools smbclient smbmap snmp sslscan sipvicious tnscmd10g whatweb wkhtmltopdf
 ```
 
+[Kali Source Packages](https://gitlab.com/kalilinux/packages)
+
 ## Install Tools on Ubuntu
 
 ### Pre-requisites:
@@ -77,11 +79,17 @@ Tools installed using snap:
 $ snap install seclists enum4linux feroxbuster
 ```
 
+Obtain seclists from Git Repository:
+```
+$ git clone --depth 1 https://github.com/danielmiessler/SecLists.git
+```
+
 [Download and install enum4linux](https://labs.portcullis.co.uk/tools/enum4linux/):
 ```
 $ curl -sLO https://labs.portcullis.co.uk/download/enum4linux-0.8.9.tar.gz
 $ tar -xvzf enum4linux-0.8.9.tar.gz
-$ cp enum4linux-0.8.9/enum4linux.pl /usr/bin/enum4linux
+$ ln ./enum4linux-0.8.9/enum4linux.pl /usr/bin/enum4linux.pl
+$ ln ./enum4linux-0.8.9/enum4linux.pl /usr/bin/enum4linux
 ```
 
 [Install feroxbuster from .deb download](https://epi052.github.io/feroxbuster-docs/docs/installation/):
@@ -102,11 +110,23 @@ Missing Commands at this point:
 oscanner tnscmd10g
 ```
 
-Git Repositories:
-- oscanner needs Java.
+Get impacket-scripts from Git Repositories:
 ```
 $ git clone https://gitlab.com/kalilinux/packages/impacket-scripts.git
+```
+
+Get oscanner from Git Repositories:
+- oscanner needs Java.
+```
 $ git clone https://gitlab.com/kalilinux/packages/oscanner.git
+```
+
+Install tnscmd10g from Git Repositories:
+```
+$ git clone https://github.com/hacktrackgnulinux/tnscmd10g.git
+chmod +x ./tnscmd10g/tnscmd10g.pl
+ln -vs ./tnscmd10g/tnscmd10g.pl /usr/bin/tnscmd10g.pl
+ln -vs ./tnscmd10g/tnscmd10g.pl /usr/bin/tnscmd10g
 ```
 
 ## Install Tools on MacOS
