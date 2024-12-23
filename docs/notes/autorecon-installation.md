@@ -121,9 +121,10 @@ $ git clone https://gitlab.com/kalilinux/packages/impacket-scripts.git
 
 Get oscanner from Git Repositories:
 - oscanner needs Java.
-- TODO: how to install?
 ```
 $ git clone https://gitlab.com/kalilinux/packages/oscanner.git
+ln -vs ./oscanner /usr/share/oscanner
+ln -vs ./oscanner/debian/helper-script/oscanner /usr/bin/oscanner
 ```
 
 Install tnscmd10g from Git Repositories:
