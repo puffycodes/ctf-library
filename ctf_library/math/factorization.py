@@ -4,6 +4,13 @@ import math
 
 class Factorization:
 
+    '''
+    Factiorization
+
+    Alternative:
+    Use sympy.factorint(n)
+    '''
+
     # ----- Prime Factorization ----- #
 
     @staticmethod
