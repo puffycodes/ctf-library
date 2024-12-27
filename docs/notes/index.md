@@ -3,6 +3,7 @@
 ## Archives of Past CTF Events
 
 1. [HeroCTF](https://github.com/HeroCTF)
+1. [niteCTF 2023](https://github.com/Cryptonite-MIT/niteCTF-2023.git)
 1. [niteCTF 2024](https://github.com/Cryptonite-MIT/niteCTF-2024.git)
 
 ## Tools and Resources Online
