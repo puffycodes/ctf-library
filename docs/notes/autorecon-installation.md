@@ -80,9 +80,9 @@ $ snap install seclists enum4linux feroxbuster
 ```
 
 Obtain seclists from Git Repository:
-- TODO: how and where to install?
 ```
 $ git clone --depth 1 https://github.com/danielmiessler/SecLists.git
+$ ln ./SecLists /usr/share/seclists
 ```
 
 [Download and install enum4linux](https://labs.portcullis.co.uk/tools/enum4linux/):
