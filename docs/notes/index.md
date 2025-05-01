@@ -16,6 +16,7 @@ Content
     1. [Ethereum Virtual Machine (EVM)](#ethereum-virtual-machine-evm)
 1. [Compiler](#compiler)
 1. [Decompiler](#decompiler)
+1. [Factorization Tools](#factorization-tools)
 1. [File Conversion](#file-conversion)
 1. [Miscellaneous](#miscellaneous)
 1. [QR Code](#qr-code)
@@ -54,6 +55,11 @@ Content
     1. [Online ELF File Viewer and Editor](https://elfy.io/)
     1. [Online ELF Viewer](http://www.sunshine2k.de/coding/javascript/onlineelfviewer/onlineelfviewer.html)
 1. [Ethereum Virtual Machine Decompiler](#ethereum-virtual-machine-evm)
+
+# Factorization Tools
+
+1. [FactorDB](https://factordb.com/)
+1. [Alpertron ECM](http://www.alpertron.com.ar/ECM.HTM)
 
 # File Conversion
 
