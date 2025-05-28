@@ -6,6 +6,10 @@
 1. [niteCTF 2023](https://github.com/Cryptonite-MIT/niteCTF-2023.git)
 1. [niteCTF 2024](https://github.com/Cryptonite-MIT/niteCTF-2024.git)
 
+## Online Computer Science Courses
+
+1. [Open Source Society University](https://github.com/ossu/computer-science)
+
 ## Tools and Resources Online
 
 Content
