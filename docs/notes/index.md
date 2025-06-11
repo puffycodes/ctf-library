@@ -24,6 +24,7 @@ Content
 1. [File Conversion](#file-conversion)
 1. [Miscellaneous](#miscellaneous)
 1. [QR Code](#qr-code)
+1. [Speech Recognition](#speech-recognition)
 1. [Steganography](#steganography)
 
 ## Auto Scanning Tools
@@ -60,17 +61,17 @@ Content
     1. [Online ELF Viewer](http://www.sunshine2k.de/coding/javascript/onlineelfviewer/onlineelfviewer.html)
 1. [Ethereum Virtual Machine Decompiler](#ethereum-virtual-machine-evm)
 
-# Factorization Tools
+## Factorization Tools
 
 1. [FactorDB](https://factordb.com/)
 1. [Alpertron ECM](http://www.alpertron.com.ar/ECM.HTM)
 
-# File Conversion
+## File Conversion
 
 1. [PDF to Text](https://www.pdf2go.com/pdf-to-text)
 1. [PDF to Text](https://xodo.com/pdf-to-text)
 
-# Miscellaneous
+## Miscellaneous
 
 1. [Python Projects with Source Code](https://thecleverprogrammer.com/2021/01/14/python-projects-with-source-code/)
 
@@ -78,6 +79,22 @@ Content
 
 1. [Creating QR Code Using Python](https://thecleverprogrammer.com/2022/01/11/qr-code-using-python/)
 1. [Decoding QR Code Using Python](https://thecleverprogrammer.com/2022/01/18/decode-a-qr-code-using-python/)
+
+## Speech Recognition
+
+### Tools
+
+1. [Vosk](https://alphacephei.com/vosk/)
+    1. [Vosk API](https://github.com/alphacep/vosk-api)
+        ```
+        git clone https://github.com/alphacep/vosk-api.git
+        ```
+
+### Sample Audio
+1. [Sample Audio File](https://www.kaggle.com/datasets/pavanelisetty/sample-audio-files-for-speech-recognition)
+1. [Audio Quality Testing Sample](https://github.com/voxserv/audio_quality_testing_samples)
+1. [MelNet - Audio Samples](https://audio-samples.github.io/)
+    1. [Uncompressed Data](https://github.com/audio-samples/audio-samples.github.io)
 
 ## Steganography
 
@@ -89,4 +106,4 @@ Content
 
 ***
 
-*Updated on 11 November 2024*
+*Updated on 11 June 2025*
